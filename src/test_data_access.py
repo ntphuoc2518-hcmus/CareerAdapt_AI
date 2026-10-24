@@ -13,7 +13,7 @@ except ImportError as exc:
     psycopg2 = None
     IMPORT_ERROR = exc
 
-@unittest.skipIf(psycopg2 is None, "psycopg2/python-dotenv are not installed")
+@unittest.skipIf(psycopg2 is None or "DB_USER" not in os.environ, "psycopg2 not installed or DB_USER not configured in environment")
 class DataAccessIntegrationTests(unittest.TestCase):
     def test_cross_user_is_hidden_and_audited(self):
         conn = None
