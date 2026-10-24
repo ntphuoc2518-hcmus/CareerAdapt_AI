@@ -23,6 +23,23 @@ class APIErrorResponse(BaseModel):
 
 
 # ==========================================
+# Authentication & Identity
+# ==========================================
+class LoginRequest(BaseModel):
+    email_or_token: str = Field(description="Email đăng nhập hoặc mã demo token")
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user_id: uuid.UUID
+    email: str
+    full_name: str
+    role: str
+
+
+
+# ==========================================
 # F01: Hồ sơ và mục tiêu nghề nghiệp
 # ==========================================
 class SelfReportedSkillInput(BaseModel):
@@ -174,6 +191,11 @@ class UnscheduledActivityItem(BaseModel):
     reason: str
 
 
+class RoadmapGenerateRequest(BaseModel):
+    weekly_hours_budget: Optional[float] = Field(default=None, gt=0, le=60, description="Tùy chọn ghi đè số giờ/tuần")
+    target_timeline_weeks: Optional[int] = Field(default=None, ge=1, le=52, description="Tùy chọn ghi đè số tuần tối đa")
+
+
 class RoadmapResponse(BaseModel):
     roadmap_version_id: uuid.UUID
     user_id: uuid.UUID
@@ -207,6 +229,21 @@ class ProgressResponse(BaseModel):
     total_count: int
     percentage: float
     records: list[ProgressRecordItem]
+
+
+class ProgressHistoryItem(BaseModel):
+    activity_id: str
+    previous_status: Optional[str] = None
+    new_status: str
+    hours_spent: float = 0.0
+    timestamp: datetime
+
+
+class ProgressHistoryResponse(BaseModel):
+    user_id: uuid.UUID
+    total_events: int
+    history: list[ProgressHistoryItem]
+
 
 
 # ==========================================

@@ -165,6 +165,7 @@ class MemoryStore:
         self.assessments: dict[uuid.UUID, dict] = {}  # keyed by submission_id
         self.roadmaps: dict[uuid.UUID, list[dict]] = {} # keyed by user_id -> list of roadmap versions
         self.progress: dict[uuid.UUID, dict[str, dict]] = {} # user_id -> {activity_id: progress_dict}
+        self.progress_history: dict[uuid.UUID, list[dict]] = {} # user_id -> list of progress history events
         self.reminders: dict[uuid.UUID, list[dict]] = {} # user_id -> list of reminders
         self.idempotency_keys: dict[str, uuid.UUID] = {} # idempotency_key -> submission_id
         self.content_publications: list[dict] = []

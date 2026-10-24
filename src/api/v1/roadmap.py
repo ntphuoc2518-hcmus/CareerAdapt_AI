@@ -1,10 +1,12 @@
 """F06: DAG Roadmap Generator and Versioning Endpoints (TV3 / F06)."""
 import uuid
 from datetime import datetime, timezone
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from auth import AuthenticatedUser, get_current_user
 from schemas.models import (
-    RoadmapResponse, RoadmapActivityItem, UnscheduledActivityItem
+    RoadmapResponse, RoadmapActivityItem, UnscheduledActivityItem,
+    RoadmapGenerateRequest
 )
 from services.store import store
 from domain.scheduler import ActivityNode, generate_roadmap
@@ -12,16 +14,53 @@ from domain.scheduler import ActivityNode, generate_roadmap
 router = APIRouter(prefix="/roadmap", tags=["F06 - Roadmap DAG"])
 
 
+def _enrich_roadmap_with_live_progress(roadmap_data: dict, uid: uuid.UUID) -> RoadmapResponse:
+    """Enrich roadmap schedule items with current live progress status."""
+    user_progress = store.progress.get(uid, {})
+    enriched_schedule: list[RoadmapActivityItem] = []
+    for item in roadmap_data.get("schedule", []):
+        item_copy = dict(item)
+        if item_copy["activity_id"] in user_progress:
+            item_copy["status"] = user_progress[item_copy["activity_id"]]["status"]
+        enriched_schedule.append(RoadmapActivityItem(**item_copy))
+
+    unscheduled = [UnscheduledActivityItem(**u) for u in roadmap_data.get("unscheduled", [])]
+    return RoadmapResponse(
+        roadmap_version_id=roadmap_data["roadmap_version_id"],
+        user_id=roadmap_data["user_id"],
+        total_weeks=roadmap_data["total_weeks"],
+        weekly_hours_budget=roadmap_data["weekly_hours_budget"],
+        total_hours=roadmap_data["total_hours"],
+        schedule=enriched_schedule,
+        unscheduled=unscheduled,
+        generated_at=roadmap_data["generated_at"]
+    )
+
+
 @router.post("/generate", response_model=RoadmapResponse, status_code=status.HTTP_201_CREATED)
-def generate_user_roadmap(current_user: AuthenticatedUser = Depends(get_current_user)):
+def generate_user_roadmap(
+    body: Optional[RoadmapGenerateRequest] = None,
+    current_user: AuthenticatedUser = Depends(get_current_user)
+):
     """Generate a personalized, topologically-sorted roadmap honoring DAG constraints and weekly hours."""
     uid = current_user.user_id
     now = datetime.now(timezone.utc)
 
-    # 1. Fetch user profile weekly hours budget
+    # 1. Fetch user profile weekly hours budget and allow optional override
     profile = store.profiles.get(uid, {})
     weekly_hours = profile.get("weekly_hours_budget", 10.0)
     max_weeks = profile.get("target_timeline_weeks", 8)
+
+    if body:
+        if body.weekly_hours_budget is not None:
+            weekly_hours = body.weekly_hours_budget
+            # Update profile for consistency (Task T3.6)
+            if uid in store.profiles:
+                store.profiles[uid]["weekly_hours_budget"] = weekly_hours
+        if body.target_timeline_weeks is not None:
+            max_weeks = body.target_timeline_weeks
+            if uid in store.profiles:
+                store.profiles[uid]["target_timeline_weeks"] = max_weeks
 
     # 2. Build ActivityNodes from catalog
     activity_nodes = [
@@ -51,7 +90,6 @@ def generate_user_roadmap(current_user: AuthenticatedUser = Depends(get_current_
 
     # 4. Save new immutable roadmap version (Preserves history)
     roadmap_version_id = uuid.uuid4()
-    
     user_progress = store.progress.get(uid, {})
 
     scheduled_items: list[RoadmapActivityItem] = []
@@ -105,7 +143,7 @@ def generate_user_roadmap(current_user: AuthenticatedUser = Depends(get_current_
 
 @router.get("/latest", response_model=RoadmapResponse)
 def get_latest_roadmap(current_user: AuthenticatedUser = Depends(get_current_user)):
-    """Retrieve the latest active roadmap version for the authenticated user."""
+    """Retrieve the latest active roadmap version for the authenticated user with live progress status."""
     uid = current_user.user_id
     versions = store.roadmaps.get(uid, [])
     if not versions:
@@ -113,8 +151,7 @@ def get_latest_roadmap(current_user: AuthenticatedUser = Depends(get_current_use
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Chưa có lộ trình nào được khởi tạo. Hãy gọi POST /api/v1/roadmap/generate."
         )
-    latest = versions[-1]
-    return RoadmapResponse(**latest)
+    return _enrich_roadmap_with_live_progress(versions[-1], uid)
 
 
 @router.get("/versions", response_model=list[RoadmapResponse])
@@ -122,4 +159,22 @@ def list_roadmap_versions(current_user: AuthenticatedUser = Depends(get_current_
     """List all historical roadmap versions generated for this user."""
     uid = current_user.user_id
     versions = store.roadmaps.get(uid, [])
-    return [RoadmapResponse(**v) for v in versions]
+    return [_enrich_roadmap_with_live_progress(v, uid) for v in versions]
+
+
+@router.get("/{roadmap_version_id}", response_model=RoadmapResponse)
+def get_roadmap_by_version(
+    roadmap_version_id: uuid.UUID,
+    current_user: AuthenticatedUser = Depends(get_current_user)
+):
+    """Retrieve a specific historical roadmap version by its ID."""
+    uid = current_user.user_id
+    versions = store.roadmaps.get(uid, [])
+    for v in versions:
+        if v["roadmap_version_id"] == roadmap_version_id:
+            return _enrich_roadmap_with_live_progress(v, uid)
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Không tìm thấy phiên bản lộ trình '{roadmap_version_id}' cho người dùng hiện tại."
+    )
+

@@ -262,3 +262,71 @@ class TestAPIEndpoints:
         patch_resp = client.patch(f"/api/v1/reminders/{rem_id}/read", headers=headers)
         assert patch_resp.status_code == 200
         assert patch_resp.json()["is_read"] is True
+
+    def test_auth_login_endpoint(self):
+        """Auth: Test login with demo token, demo email, and invalid credentials."""
+        # 1. Login with demo token
+        resp1 = client.post("/api/v1/auth/login", json={"email_or_token": "token_student_1"})
+        assert resp1.status_code == 200
+        data1 = resp1.json()
+        assert data1["access_token"] == "token_student_1"
+        assert data1["role"] == "STUDENT"
+
+        # 2. Login with email
+        resp2 = client.post("/api/v1/auth/login", json={"email_or_token": "admin@test.local"})
+        assert resp2.status_code == 200
+        data2 = resp2.json()
+        assert data2["access_token"] == "token_admin"
+        assert data2["role"] == "ADMIN"
+
+        # 3. Login with invalid credentials -> 401
+        resp3 = client.post("/api/v1/auth/login", json={"email_or_token": "nonexistent@test.com"})
+        assert resp3.status_code == 401
+        assert "không hợp lệ" in resp3.json()["error"]["message"]
+
+    def test_progress_patch_history_and_roadmap_live_sync(self):
+        """F06 & F07: Verify PATCH progress, history tracking, and roadmap status synchronization."""
+        headers = {"Authorization": STUDENT_TOKEN}
+
+        # 1. Generate roadmap
+        gen_resp = client.post("/api/v1/roadmap/generate", json={"weekly_hours_budget": 12.0}, headers=headers)
+        assert gen_resp.status_code == 201
+        roadmap_id = gen_resp.json()["roadmap_version_id"]
+
+        # 2. Progress update with PATCH
+        patch_resp = client.patch("/api/v1/progress", json={
+            "activity_id": "ACT_SQL_01",
+            "new_status": "COMPLETED",
+            "hours_spent": 4.5
+        }, headers=headers)
+        assert patch_resp.status_code == 200
+
+        # 3. Check progress history
+        hist_resp = client.get("/api/v1/progress/history", headers=headers)
+        assert hist_resp.status_code == 200
+        hist_data = hist_resp.json()
+        assert hist_data["total_events"] >= 1
+        assert hist_data["history"][0]["activity_id"] == "ACT_SQL_01"
+        assert hist_data["history"][0]["new_status"] == "COMPLETED"
+
+        # 4. Negative hours validation -> 400 Bad Request
+        neg_resp = client.put("/api/v1/progress", json={
+            "activity_id": "ACT_SQL_01",
+            "new_status": "IN_PROGRESS",
+            "hours_spent": -2.0
+        }, headers=headers)
+        assert neg_resp.status_code == 400
+        assert "không được là số âm" in neg_resp.json()["error"]["message"]
+
+        # 5. Check that roadmap/latest reflects COMPLETED status dynamically!
+        latest_resp = client.get("/api/v1/roadmap/latest", headers=headers)
+        assert latest_resp.status_code == 200
+        act_sql = next((a for a in latest_resp.json()["schedule"] if a["activity_id"] == "ACT_SQL_01"), None)
+        assert act_sql is not None
+        assert act_sql["status"] == "COMPLETED"
+
+        # 6. Fetch roadmap by version ID
+        ver_resp = client.get(f"/api/v1/roadmap/{roadmap_id}", headers=headers)
+        assert ver_resp.status_code == 200
+        assert ver_resp.json()["roadmap_version_id"] == roadmap_id
+

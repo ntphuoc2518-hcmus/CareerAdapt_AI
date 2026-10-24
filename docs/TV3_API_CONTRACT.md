@@ -35,6 +35,13 @@ Mọi phản hồi lỗi (4xx, 5xx) tuân thủ cấu trúc thống nhất:
 
 ## 2. Chi tiết API Contract theo chức năng (F01 – F10)
 
+### Xác thực & Danh tính (Authentication)
+* **`POST /api/v1/auth/login`**
+  * *Body:* `{"email_or_token": "token_student_1"}` hoặc `{"email_or_token": "admin@test.local"}`
+  * *Response 200:* Trả về `access_token`, `token_type: "bearer"`, cùng thông tin danh tính `user_id`, `email`, `role`, `full_name`.
+* **`GET /api/v1/auth/me`**: Lấy thông tin tài khoản hiện tại từ token.
+* **`GET /api/v1/auth/demo-tokens`**: Danh sách demo tokens phục vụ kiểm thử nhanh.
+
 ### F01: Hồ sơ & Mục tiêu nghề nghiệp
 * **`GET /api/v1/profiles/me`**
   * *Header:* `Authorization: Bearer <token>`
@@ -132,20 +139,25 @@ Mọi phản hồi lỗi (4xx, 5xx) tuân thủ cấu trúc thống nhất:
 ### F06: Lập lịch Roadmap (DAG)
 * **`POST /api/v1/roadmap/generate`**
   * *Mục đích:* Tự động lập lịch học tập theo tuần dựa trên cây phụ thuộc tiền quyết và quỹ giờ/tuần của người học.
+  * *Body (tùy chọn):* `{"weekly_hours_budget": 12.0, "target_timeline_weeks": 8}` cho phép ghi đè linh hoạt và đồng bộ vào profile.
   * *Tính năng:*
     * Phát hiện chu trình (cycle detection): báo lỗi rõ ràng nếu có vòng lặp phụ thuộc.
     * Hoạt động không thể xếp (vượt giờ hoặc thiếu tiền quyết) được đưa vào danh sách `unscheduled` kèm lý do chi tiết, không âm thầm loại bỏ.
     * Tạo phiên bản roadmap mới độc lập, bảo toàn lịch sử.
-* **`GET /api/v1/roadmap/latest`**: Lấy lộ trình mới nhất của người dùng.
+* **`GET /api/v1/roadmap/latest`**: Lấy lộ trình mới nhất của người dùng, tự động đồng bộ trạng thái thực tế (`COMPLETED`, `IN_PROGRESS`) từ F07.
 * **`GET /api/v1/roadmap/versions`**: Lấy danh sách các phiên bản lộ trình đã từng sinh.
+* **`GET /api/v1/roadmap/{roadmap_version_id}`**: Lấy chi tiết phiên bản lộ trình cụ thể theo ID.
 
 ---
 
 ### F07: Theo dõi tiến độ
-* **`PUT /api/v1/progress`**
+* **`PUT /api/v1/progress`** hoặc **`PATCH /api/v1/progress`**
   * *Body:* `{"activity_id": "ACT_SQL_01", "new_status": "COMPLETED", "hours_spent": 4.0}`
+  * *Validation:* Kiểm tra trạng thái hợp lệ, mã hoạt động tồn tại và `hours_spent >= 0`.
   * *Nguyên tắc:* Hoàn thành hoạt động ghi nhận tỷ lệ % hoàn thành lộ trình nhưng **không** tự động nâng mức năng lực khi chưa có đánh giá lại.
 * **`GET /api/v1/progress`**: Thống kê số lượng hoạt động đã hoàn thành, tổng số và tỷ lệ phần trăm.
+* **`GET /api/v1/progress/history`**: Lấy toàn bộ nhật ký sự kiện chuyển đổi trạng thái (audit log) có timestamp phục vụ kiểm toán và báo cáo.
+
 
 ---
 
