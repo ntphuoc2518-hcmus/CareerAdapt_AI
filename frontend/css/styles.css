@@ -1,0 +1,236 @@
+/* RESET & FONT ARIAL */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, button, input, select, textarea {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+body {
+    background-color: #f8fafc;
+    color: #0f172a;
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 2 CỘT SPLIT SCREEN */
+#login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.auth-split-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1120px;
+    min-height: 580px;
+    margin: auto;
+    padding: 24px;
+    align-items: center;
+}
+
+.auth-hero-left {
+    flex: 1;
+    padding-right: 48px;
+}
+
+.auth-form-right {
+    width: 420px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+}
+
+/* CARDS TÀI KHOẢN ĐÃ LƯU BÊN CỘT TRÁI (LIKE FACEBOOK) */
+.saved-acc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.saved-acc-card {
+    position: relative;
+    width: 150px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.saved-acc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.12);
+    border-color: #0866ff;
+}
+
+.saved-acc-avatar {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    background-color: #f1f5f9;
+}
+
+.saved-acc-info {
+    padding: 10px 8px;
+    background: #ffffff;
+}
+
+.saved-acc-name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.saved-acc-role {
+    font-size: 10px;
+    color: #0866ff;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.saved-acc-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: background 0.2s;
+}
+
+.saved-acc-remove:hover {
+    background: #e11d48;
+}
+
+/* Thẻ Thêm tài khoản mới ở cột trái */
+.saved-acc-add-card {
+    width: 150px;
+    height: 178px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #0866ff;
+    background: #f8fafc;
+    transition: all 0.2s;
+}
+
+.saved-acc-add-card:hover {
+    border-color: #0866ff;
+    background: #f0f5ff;
+}
+
+/* BUTTONS FACEBOOK STYLE */
+.fb-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.fb-btn-primary { background-color: #0866ff; color: #ffffff; }
+.fb-btn-primary:hover { background-color: #0055d4; }
+
+.fb-btn-secondary { background-color: #f0f2f5; color: #050505; }
+.fb-btn-secondary:hover { background-color: #e4e6eb; }
+
+.auth-pill-tabs {
+    display: flex;
+    background-color: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.auth-pill-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: bold;
+    color: #64748b;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.auth-pill-btn.active {
+    background-color: #ffffff;
+    color: #0866ff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 6px; }
+
+.input-wrapper { position: relative; }
+
+.input-control {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    font-weight: bold;
+    background-color: #ffffff;
+}
+
+.input-control:focus {
+    border-color: #0866ff;
+    box-shadow: 0 0 0 3px rgba(8, 102, 255, 0.15);
+}
+
+.input-icon-left { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+.input-icon-right { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; }
+.has-icon-left { padding-left: 36px; }
+.has-icon-right { padding-right: 36px; }
+
+@media (max-width: 868px) {
+    .auth-split-wrapper { flex-direction: column; }
+    .auth-hero-left { padding-right: 0; text-align: center; margin-bottom: 24px; }
+    .saved-acc-grid { justify-content: center; }
+    .auth-form-right { width: 100%; }
+}

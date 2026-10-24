@@ -1,0 +1,36 @@
+{
+  "tasks": [
+    {
+      "id": "DA01",
+      "title": "Doanh thu cửa hàng",
+      "durationMinutes": 35,
+      "skills": [
+        "SKILL_SQL",
+        "SKILL_DATA_QUALITY"
+      ],
+      "status": "available",
+      "description": "Làm sạch dữ liệu đơn hàng và tính doanh thu thuần bằng SQL."
+    },
+    {
+      "id": "DA02",
+      "title": "Biểu đồ và Python",
+      "durationMinutes": 40,
+      "skills": [
+        "SKILL_DATA_VIZ",
+        "SKILL_PYTHON"
+      ],
+      "status": "prototype",
+      "description": "Bài thử dự kiến đánh giá Python phân tích dữ liệu và trực quan hóa."
+    },
+    {
+      "id": "DA03",
+      "title": "Báo cáo phân tích",
+      "durationMinutes": 25,
+      "skills": [
+        "SKILL_WRITTEN_COMM"
+      ],
+      "status": "prototype",
+      "description": "Bài thử dự kiến đánh giá khả năng giải thích số liệu bằng văn bản."
+    }
+  ]
+}
