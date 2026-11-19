@@ -25,11 +25,20 @@ if PROJECT_ROOT not in sys.path:
 
 import uvicorn
 
+from backend import config  # loads .env, so HOST and PORT below can come from it
+
+# HOST and PORT come from .env or the environment (see .env.example); the defaults keep the server on this computer.
+HOST = os.getenv("HOST", "127.0.0.1").strip() or "127.0.0.1"
+PORT = int(os.getenv("PORT", "8000"))
+# Listening on every interface is still reached locally through 127.0.0.1.
+LOCAL_HOST = "127.0.0.1" if HOST in {"0.0.0.0", "::"} else HOST
+BASE_URL = f"http://{LOCAL_HOST}:{PORT}"
+
 
 def open_browser_delayed():
     """Open the UI only after FastAPI is responding to health checks."""
-    app_url = "http://127.0.0.1:8000/login"
-    health_url = "http://127.0.0.1:8000/health"
+    app_url = f"{BASE_URL}/login"
+    health_url = f"{BASE_URL}/health"
     for _ in range(60):
         try:
             with urlopen(health_url, timeout=1) as response:
@@ -52,24 +61,24 @@ def main():
     print("=" * 80)
     print("   CAREERADAPT AI - PHÁT TRIỂN NĂNG LỰC DATA ANALYST CÓ BẰNG CHỨNG")
     print("=" * 80)
-    print("\n[INFO] Đang khởi động máy chủ trên http://127.0.0.1:8000 ...")
-    print("       - Trang đăng nhập:  http://127.0.0.1:8000/login")
-    print("       - Tài liệu API:     http://127.0.0.1:8000/docs")
-    print("       - Kiểm tra máy chủ: http://127.0.0.1:8000/health")
+    print(f"\n[INFO] Đang khởi động máy chủ trên {BASE_URL} ...")
+    print(f"       - Trang đăng nhập:  {BASE_URL}/login")
+    print(f"       - Tài liệu API:     {BASE_URL}/docs")
+    print(f"       - Kiểm tra máy chủ: {BASE_URL}/health")
     print("=" * 80)
 
-    # Launch browser in a background thread
-    threading.Thread(target=open_browser_delayed, daemon=True).start()
+    # Launch browser in a background thread (CAREERADAPT_OPEN_BROWSER=false skips it, e.g. on a server).
+    if os.getenv("CAREERADAPT_OPEN_BROWSER", "true").strip().lower() not in {"0", "false", "no"}:
+        threading.Thread(target=open_browser_delayed, daemon=True).start()
 
     # Run uvicorn server
     # Only the listed proxies may set X-Forwarded-For; login limits then count the real client address.
-    from backend import config
     # CAREERADAPT_WORKERS > 1 starts that many server processes on the same database (5.34). They share
     # learner data through SQLite: each request takes the learner's lock and reloads what another process changed.
     workers = max(1, int(os.getenv("CAREERADAPT_WORKERS", "1")))
     if workers > 1:
         print(f"[INFO] Chạy {workers} tiến trình máy chủ dùng chung cơ sở dữ liệu.")
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, log_level="info", proxy_headers=True, forwarded_allow_ips=config.TRUSTED_PROXIES, workers=workers)
+    uvicorn.run("backend.main:app", host=HOST, port=PORT, log_level="info", proxy_headers=True, forwarded_allow_ips=config.TRUSTED_PROXIES, workers=workers)
 
 
 if __name__ == "__main__":

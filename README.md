@@ -76,6 +76,8 @@ Sao chép `.env.example` thành `.env` nếu cần đổi cấu hình.
 | `LLM_MAX_RETRIES`, `LLM_TIMEOUT_SECONDS`, `AI_REQUEST_DEADLINE_SECONDS` | Số lần thử lại, thời gian chờ mỗi lần và tổng thời gian của một lượt hỏi. |
 | `AI_CHAT_PER_MINUTE`, `AI_DAILY_TOKENS_PER_USER`, `AI_DAILY_TOKENS_TOTAL` | Giới hạn tốc độ và token theo ngày. Vượt tốc độ trả về 429; hết token thì Trợ lý trả lời không qua AI. |
 | `AI_MAX_TOOL_ROUNDS`, `AI_CONTEXT_MESSAGES` | Số vòng gọi công cụ và số tin nhắn gửi kèm mỗi lượt. Phần cũ hơn được tóm tắt. |
+| `PORT`, `HOST` | Cổng và địa chỉ máy chủ khi chạy `run.py` hoặc `start.bat` (mặc định `8000`, `127.0.0.1`). Đổi `PORT` nếu cổng 8000 đã có chương trình khác dùng. |
+| `CAREERADAPT_OPEN_BROWSER` | `false` thì không tự mở trình duyệt khi khởi động. |
 | `CAREERADAPT_ENABLE_DEMO_TOOLS` | Hiện nút "Giả lập đến hạn". Luôn tắt ở production. |
 | `CAREERADAPT_ENABLE_FAULT_INJECTION` | Cho phép mô phỏng AI timeout, JSON sai, bất đồng, trích dẫn giả. Luôn tắt ở production. |
 | `CAREERADAPT_AUTO_LINK_CHECK` | Tự kiểm tra lại link học liệu đến hạn (cần Internet). |
