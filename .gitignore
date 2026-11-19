@@ -13,8 +13,6 @@ data/*.lock
 data/learner_state_v1.json
 data/learner_state_v1.json.*.tmp
 data/question_bank_overrides_v1.json
-data/i18n/
-data/knowledge/
 *.sqlite3
 *.db
 
