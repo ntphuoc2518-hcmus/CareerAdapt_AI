@@ -19,12 +19,13 @@ import { renderFinalExam } from "./pages/roadmap.js";
 import { renderContribute } from "./pages/contribute.js";
 import { initEffects } from "./effects.js";
 import { initLayout } from "./layout.js";
+import { companionRoute } from "./companion.js";
 
 const NAV = [
     ["Tổng quan", [["#/", "Bảng điều khiển", "dashboard"]]],
     ["Career Adapt", [["#/process", "Quy trình Career Adapt", "journey"], ["#/plan", "Kế hoạch Career Adapt", "plan"]]],
-    ["Tài nguyên", [["#/resources", "Học liệu", "book"], ["#/tests", "Kiểm tra kiến thức", "quiz"]]],
-    ["Tài khoản", [["#/profile", "Hồ sơ", "user"]]],
+    ["Tài nguyên", [["#/resources", "Học liệu", "learn"], ["#/tests", "Kiểm tra kiến thức", "test"]]],
+    ["Tài khoản", [["#/profile", "Hồ sơ", "account"]]],
 ];
 
 // [pattern, title, header icon, render]
@@ -34,16 +35,16 @@ const ROUTES = [
     [/^\/flow(?:\/(.*))?$/, "Quy trình Career Adapt", "journey", m => renderFlow(m[1] || "")],
     [/^\/plan(?:\/(da|backend|qa))?(?:\/(overview|exam|review|gap|rank|roadmap|progress))?(?:\/(.+))?$/, "Kế hoạch Career Adapt", "plan", m => renderPlan(m[1] || "da", m[2] || "overview", m[3] || "")],
     [/^\/result\/([^/]+)$/, "Kết quả đánh giá", "check", m => renderResult(m[1])],
-    [/^\/resources$/, "Học liệu đã duyệt", "book", () => renderResources()],
+    [/^\/resources$/, "Học liệu đã duyệt", "learn", () => renderResources()],
     [/^\/mini\/([^/]+)$/, "Kiểm tra học phần", "quiz", m => renderMiniTest(m[1])],
-    [/^\/tests$/, "Kiểm tra kiến thức", "quiz", () => renderTests()],
-    [/^\/tests\/run\/([^/]+)$/, "Làm bài kiểm tra", "quiz", m => renderTestRunner(m[1])],
+    [/^\/tests$/, "Kiểm tra kiến thức", "test", () => renderTests()],
+    [/^\/tests\/run\/([^/]+)$/, "Làm bài kiểm tra", "test", m => renderTestRunner(m[1])],
     [/^\/tests\/report\/([^/]+)$/, "Báo cáo bài kiểm tra", "file", m => renderTestReport(m[1])],
     [/^\/report$/, "Báo cáo năng lực", "file", () => renderReport()],
     [/^\/final-exam$/, "Bài đánh giá tổng hợp", "quiz", () => renderFinalExam()],
-    [/^\/profile$/, "Hồ sơ", "user", () => renderProfile()],
-    [/^\/admin(?:\/([a-z]+))?$/, "Quản trị nội dung", "shield", m => renderAdmin(m[1] || "")],
-    [/^\/contribute(?:\/(.+))?$/, "Đóng góp câu hỏi", "pen", m => renderContribute(m[1] || "")],
+    [/^\/profile$/, "Hồ sơ", "account", () => renderProfile()],
+    [/^\/admin(?:\/([a-z]+))?$/, "Quản trị nội dung", "admin", m => renderAdmin(m[1] || "")],
+    [/^\/contribute(?:\/(.+))?$/, "Đóng góp câu hỏi", "write", m => renderContribute(m[1] || "")],
 ];
 
 // Old links land on the place that replaced them.
@@ -51,8 +52,8 @@ const MOVED = { "/target": "/process", "/assess": "/process", "/gap": "/plan/da/
 
 function renderNav() {
     // Experts granted the right (and administrators) also see the page for writing questions.
-    const resources = app.user.contributor ? NAV.map(([title, links]) => (title === "Tài nguyên" ? [title, [...links, ["#/contribute", "Đóng góp câu hỏi", "pen"]]] : [title, links])) : NAV;
-    const groups = app.user.role === "admin" ? [...resources, ["Quản trị", [["#/admin", "Quản trị nội dung", "shield"]]]] : resources;
+    const resources = app.user.contributor ? NAV.map(([title, links]) => (title === "Tài nguyên" ? [title, [...links, ["#/contribute", "Đóng góp câu hỏi", "write"]]] : [title, links])) : NAV;
+    const groups = app.user.role === "admin" ? [...resources, ["Quản trị", [["#/admin", "Quản trị nội dung", "admin"]]]] : resources;
     document.getElementById("nav").innerHTML = groups.map(([title, links]) => `<div class="nav-group"><div class="nav-title">${title}</div>${links.map(([href, label, name]) =>
         `<a class="nav-link" href="${href}" data-nav="${href}">${icon(name)}<span>${label}</span></a>`).join("")}</div>`).join("");
 }
@@ -168,6 +169,8 @@ async function route(event) {
         setView(errorView(error.message));
     }
     enterView();
+    // 5.62: the AI robot may come to the part of this page where it can help (companion.js).
+    companionRoute(path);
     refreshBell();
 }
 

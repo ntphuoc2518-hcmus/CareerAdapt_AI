@@ -2,6 +2,7 @@
  *  side menu. Every form, field and request is the same as before; only the layout changed. */
 import { api, avatarMarkup, confirmDialog, esc, fmtDate, fmtDateTime, formData, getLang, refreshAvatar, register, setView, toast, withBusy } from "../core.js";
 import { icon, tile } from "../icons.js";
+import { aiMomentsEnabled, setAiMoments } from "../companion.js";
 
 const KIND_LABELS = { MINI_TEST: "Mini-test đến hạn", ACTIVITY_DUE: "Hoạt động sắp đến hạn hoặc quá hạn", SCHEDULE: "Lịch không còn phù hợp" };
 const TABS = [["account", "Thông tin", "user"], ["goals", "Mục tiêu", "target"], ["preferences", "Nhắc nhở", "bell"], ["password", "Bảo mật", "lock"], ["data", "Dữ liệu", "shield"]];
@@ -50,7 +51,9 @@ function preferencesPanel(preferences) {
         <div class="form-grid"><label class="field"><span>Chu kỳ mặc định</span><select class="select" name="default_cycle_days">${cycles.map(days => `<option value="${days}" ${days === preferences.default_cycle_days ? "selected" : ""}>${days} ngày</option>`).join("")}</select></label>
             <label class="field"><span>Múi giờ</span><select class="select" name="timezone">${zones.map(zone => `<option ${zone === preferences.timezone ? "selected" : ""}>${esc(zone)}</option>`).join("")}</select></label></div>
         <div class="pf-toggles">${preferences.kinds.map(kind => `<label class="pf-toggle"><input type="checkbox" name="kind_${kind}" ${preferences.enabled_kinds[kind] ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>${esc(KIND_LABELS[kind] || kind)}</span></label>`).join("")}</div>
-        ${saveButton()}</form>`;
+        ${saveButton()}</form>
+        <div class="pf-form pf-ai-moments">${heading("sparkles", "Gợi ý của Trợ lý AI", "Robot AI ghé vào đúng phần trang có thể giúp, rồi tự lui đi. Lưu trên trình duyệt này.")}
+            <div class="pf-toggles"><label class="pf-toggle"><input type="checkbox" id="pf-ai-moments" ${aiMomentsEnabled() ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>Hiện gợi ý của Trợ lý AI trên các trang</span></label></div></div>`;
 }
 
 function passwordPanel(user) {
@@ -100,6 +103,11 @@ export async function renderProfile() {
         const next = tabs[(index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
         openTab(next.dataset.tab);
         next.focus();
+    });
+    // 5.62: a choice kept in this browser, so it has its own listener (not data-act).
+    document.getElementById("pf-ai-moments")?.addEventListener("change", event => {
+        setAiMoments(event.target.checked);
+        toast(event.target.checked ? "Đã bật gợi ý của Trợ lý AI." : "Đã tắt gợi ý của Trợ lý AI.", "good");
     });
     document.getElementById("avatar-file").addEventListener("change", async event => {
         const file = event.target.files?.[0];

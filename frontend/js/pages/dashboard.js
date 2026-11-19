@@ -230,8 +230,8 @@ export async function renderDashboard() {
     setView(`<div class="stack">${hero(state, gap, journey)}
         <div class="grid grid-3">
             ${shortcut(done ? "#/plan/da/overview" : "#/plan", "plan", "brand", "Kế hoạch Career Adapt", "Kết quả, khoảng cách kỹ năng, lộ trình và nhắc nhở.")}
-            ${shortcut("#/resources", "book", "s4", "Kho tài liệu", "Học liệu đã duyệt theo từng kỹ năng.")}
-            ${shortcut("#/tests", "quiz", "s3", "Luyện tập kiểm tra kiến thức", "Làm bài trắc nghiệm để ôn tập, không ảnh hưởng kết quả quy trình.")}
+            ${shortcut("#/resources", "learn", "s4", "Kho tài liệu", "Học liệu đã duyệt theo từng kỹ năng.")}
+            ${shortcut("#/tests", "test", "s3", "Luyện tập kiểm tra kiến thức", "Làm bài trắc nghiệm để ôn tập, không ảnh hưởng kết quả quy trình.")}
         </div>
         <div class="grid grid-main">${progressCard(state, gap, roadmap, attempts, journey)}${activityCard(history)}</div>
         <div class="grid grid-main">${resourcesCard(roadmap, catalogue)}${roadmapCard(state, roadmap)}</div></div>`);

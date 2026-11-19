@@ -21,7 +21,7 @@ function card(item) {
    the result line under the toolbar, which is announced to screen readers. */
 function resourcesHero(overview) {
     return pageHero({
-        tone: "green", icon: "book", kicker: "Học liệu", title: "Học liệu đã duyệt cho lộ trình của bạn",
+        tone: "green", icon: "learn", kicker: "Học liệu", title: "Học liệu đã duyệt cho lộ trình của bạn",
         text: "Chỉ hiển thị học liệu đã duyệt, đã kiểm tra link và không bị tạm ẩn. Hệ thống không tự sinh liên kết.",
         stats: [["book", "Học liệu", overview.total, "good"], ["chart", "Kỹ năng có học liệu", overview.skills, "teal"], ["user", "Nguồn cung cấp", overview.providers, "violet"]],
     });

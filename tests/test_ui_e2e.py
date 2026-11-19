@@ -417,6 +417,114 @@ def test_the_fold_buttons_are_hidden_on_a_phone(server, browser, signed_in_state
     context.close()
 
 
+# --- AI moments (5.62): the robot comes to the part of a page where it can help ---
+
+def test_an_ai_moment_comes_beside_its_part_and_hands_the_question_to_the_assistant(app):
+    page = app.open("/app#/resources")
+    wait_ready(page)
+    page.locator("#view .grid-2 > .card").first.scroll_into_view_if_needed()
+    moment = page.locator(".ai-moment")
+    expect(moment).to_have_count(1, timeout=8000)
+    expect(moment.locator(".ai-moment-text")).to_contain_text("học liệu")
+    # 5.63: it comes out at the corner above the Assistant button, never over the middle of the page, and the part
+    # it talks about is outlined instead.
+    box, viewport = moment.bounding_box(), page.viewport_size
+    assert viewport["width"] - (box["x"] + box["width"]) < 40 and viewport["height"] - (box["y"] + box["height"]) < 120
+    expect(page.locator("#view .grid-2 > .card.ai-spotlight")).to_have_count(1)
+    moment.locator(".ai-moment-ask").first.click()
+    expect(page.locator(".ai-spotlight")).to_have_count(0)
+    expect(page.locator("#assistant-panel")).to_be_visible()
+    expect(moment).to_have_count(0)
+    # Once per session: coming back to the page does not bring it again.
+    page.keyboard.press("Escape")
+    page.click("#nav a[href='#/tests']")
+    wait_ready(page)
+    page.click("#nav a[href='#/resources']")
+    wait_ready(page)
+    page.wait_for_timeout(2500)
+    expect(page.locator(".ai-moment")).to_have_count(0)
+    assert app.errors == []
+
+
+def test_ai_moments_can_be_turned_off_and_on_again(app):
+    page = app.open("/app#/tests")
+    wait_ready(page)
+    page.locator("#view .test-card").first.scroll_into_view_if_needed()
+    moment = page.locator(".ai-moment")
+    expect(moment).to_have_count(1, timeout=8000)
+    moment.locator(".ai-moment-off").click()
+    expect(moment).to_have_count(0)
+    page.click("#nav a[href='#/profile']")
+    wait_ready(page)
+    page.click("#pf-tab-preferences")
+    switch = page.locator("#pf-ai-moments")
+    expect(switch).not_to_be_checked()
+    page.locator("label.pf-toggle", has=switch).click()
+    expect(switch).to_be_checked()
+    assert page.evaluate("localStorage.getItem('careeradapt_ai_moments')") == "on"
+    assert app.errors == []
+
+
+def test_the_assistant_button_shows_only_the_face_until_pointed_at(app):
+    """5.64: a round button with the AI face; the label slides out on hover or keyboard focus and folds back."""
+    page = app.open("/app#/profile")
+    wait_ready(page)
+    fab, label = page.locator("#assistant-fab"), page.locator("#assistant-fab .assistant-fab-label")
+    page.mouse.move(400, 300)
+    expect(label).to_have_css("opacity", "0")
+    page.wait_for_timeout(700)  # the button pops in when it appears
+    box = fab.bounding_box()
+    assert abs(box["width"] - box["height"]) <= 1 and box["height"] >= 48  # a circle, as large as a touch target
+    expect(fab).to_have_attribute("aria-label", "Mở Trợ lý CareerAdapt AI")  # still named for screen readers
+    face_centre = lambda: (lambda f: f["x"] + f["width"] / 2)(page.locator("#assistant-fab .ai-avatar-fab").bounding_box())  # noqa: E731
+    at_rest = face_centre()
+    fab.hover()
+    expect(label).to_have_css("opacity", "1")
+    page.wait_for_timeout(600)
+    assert fab.bounding_box()["width"] > box["width"] + 30
+    assert abs(face_centre() - at_rest) <= 1  # the face stays put; the label opens to its left
+    page.mouse.move(400, 300)
+    expect(label).to_have_css("opacity", "0")
+    page.keyboard.press("Tab")
+    fab.focus()
+    expect(label).to_have_css("opacity", "1")
+    assert app.errors == []
+
+
+def test_the_robot_comes_out_of_the_assistant_button_and_leaves_it_clickable(app):
+    """5.64: the robot flies out of the face in the Assistant button and back into it; the light burst around the
+    robot once covered the button and swallowed clicks for as long as the robot stayed."""
+    page = app.open("/app#/resources")
+    wait_ready(page)
+    page.locator("#view .grid-2 > .card").first.scroll_into_view_if_needed()
+    moment = page.locator(".ai-moment")
+    expect(moment).to_have_count(1, timeout=8000)
+    expect(page.locator("#assistant-fab")).to_have_class(re.compile(r"\bis-away\b"))
+    page.wait_for_timeout(1500)
+    start = page.evaluate("""() => { const m = document.querySelector('.ai-moment'), s = getComputedStyle(m), b = m.querySelector('.ai-moment-bot').getBoundingClientRect(),
+        f = document.querySelector('#assistant-fab .ai-avatar-fab').getBoundingClientRect();
+        return [b.left + b.width / 2 + parseFloat(s.getPropertyValue('--from-x')) - (f.left + f.width / 2), b.top + b.height / 2 + parseFloat(s.getPropertyValue('--from-y')) - (f.top + f.height / 2)]; }""")
+    assert abs(start[0]) <= 3 and abs(start[1]) <= 3  # the flight starts and ends at the face in the button
+    page.click("#assistant-fab", timeout=3000)
+    expect(page.locator("#assistant-panel")).to_be_visible()
+    expect(moment).to_have_count(0)
+    page.keyboard.press("Escape")
+    expect(page.locator("#assistant-fab")).to_be_visible()
+    expect(page.locator("#assistant-fab")).not_to_have_class(re.compile(r"\bis-away\b"))
+    assert app.errors == []
+
+
+def test_no_ai_moment_comes_while_a_test_is_on_screen(app):
+    page = app.open("/app#/tests")
+    wait_ready(page)
+    page.click("#view .test-card [data-act='start']")
+    expect(page.locator("#question-area")).to_be_visible()
+    page.wait_for_timeout(3000)
+    expect(page.locator(".ai-moment")).to_have_count(0)
+    expect(page.locator("#assistant-fab")).to_be_hidden()
+    assert app.errors == []
+
+
 def test_starting_the_process_opens_its_first_step(app):
     """Runs last: it starts a Career Adapt process for the test account (in the temporary database)."""
     page = app.open("/app#/process")

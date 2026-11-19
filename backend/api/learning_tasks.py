@@ -23,7 +23,7 @@ from backend.catalog import get_resource, is_usable
 from backend.clock import utcnow
 from backend.database import dumps
 from backend.lesson_checks import GRADED, check_summary, issue_lesson_check, latest_graded, learning_tasks, lesson_checks, level_confirmed, skill_mastery, task_state
-from backend.store import store
+from backend.store import LOCK_LEASE_SECONDS, store
 from backend.targeting import evaluate_learner
 
 router = APIRouter(tags=["Learning tasks & knowledge checks"])
@@ -174,9 +174,12 @@ def ai_feedback(micro_id: str, current_user: AuthenticatedUser = Depends(get_cur
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=problem)
     facts = _feedback_facts(payload)
     instructions = f"{FEEDBACK_INSTRUCTIONS}\nWrite every field in English." if i18n.is_english() else FEEDBACK_INSTRUCTIONS
+    # 5.59.3: this route holds the learner's lock (lease LOCK_LEASE_SECONDS), so the AI wait stays inside the lease
+    # even when AI_REQUEST_DEADLINE_SECONDS is raised for the lock-free assistant.
+    feedback_seconds = min(config.AI_REQUEST_DEADLINE_SECONDS, LOCK_LEASE_SECONDS - 15)
     try:
         answer = gateway.structured(instructions, {"facts": facts}, FEEDBACK_SCHEMA, task="lesson_feedback", user_id=user_id,
-                                    deadline=time.monotonic() + config.AI_REQUEST_DEADLINE_SECONDS, max_output_tokens=900, temperature=0.2)
+                                    deadline=time.monotonic() + feedback_seconds, max_output_tokens=900, temperature=0.2)
     except GatewayError:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="AI chưa phản hồi. Hãy thử lại sau ít phút; kết quả bài làm không bị ảnh hưởng.")
     text = " ".join([answer["summary"], *answer["strengths"], *answer["to_review"], *answer["next_steps"]])

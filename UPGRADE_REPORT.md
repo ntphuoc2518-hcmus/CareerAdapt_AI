@@ -1905,3 +1905,315 @@ Các màn khác đang dùng `chart` và `target` cho dữ liệu (biểu đồ, 
 - Đo trên Edge: chiều cao nội dung của tiêu đề bằng chiều cao khung (29/29px ở khổ 1280, 26/26px ở khổ 390), nghĩa là không còn phần nào bị cắt. Tiêu đề và ô biểu tượng vẫn cùng tâm dọc 35px.
 - Đã kiểm ở giao diện sáng, tối và tiếng Anh.
 - Toàn bộ bộ test: **1314 passed, 11 skipped**.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.59.3: Tăng hạn chờ AI khi Gemini chậm
+
+**Bối cảnh:**
+- Gọi thẳng Gemini (`gemini-3.5-flash-lite`) cho thấy mỗi câu hỏi ngắn mất 10–30 giây. Có lần dịch vụ trả HTTP 503 "This model is currently experiencing high demand".
+- Một câu hỏi gửi Trợ lý cần 2–3 lượt gọi. Vì vậy với hạn chờ cũ, nhiều câu hỏi bị quá giờ và Trợ lý phải trả lời theo quy tắc thay vì do AI viết.
+
+**Thay đổi trong `.env`** (được làm theo yêu cầu của người dùng; tệp này không đưa lên GitHub):
+
+| Biến | Cũ | Mới |
+| --- | --- | --- |
+| `LLM_TIMEOUT_SECONDS` | 60 | 120 |
+| `AI_REQUEST_DEADLINE_SECONDS` | 150 | 240 |
+| `LLM_MAX_RETRIES` | 2 | 3 |
+
+Thêm một lần thử lại giúp vượt qua các lỗi 503 tạm thời. Các dòng khác của `.env` giữ nguyên, và khóa API không bị đọc ra hay in ra.
+
+**Thay đổi trong code** (`backend/api/learning_tasks.py`):
+- Trợ lý chat và các tác vụ AI chạy không giữ khóa của học viên.
+- Riêng "Nhận xét AI" cho bài kiểm tra học phần (`POST /micro-tests/{id}/ai-feedback`) chạy trong lúc giữ khóa, mà khóa chỉ giữ tối đa 120 giây (`CAREERADAPT_USER_LOCK_LEASE`).
+- Vì vậy thời gian chờ AI ở route này được giới hạn ở `min(AI_REQUEST_DEADLINE_SECONDS, thời hạn khóa − 15)`, tức 105 giây. Khóa không bao giờ hết hạn khi yêu cầu chưa xong, dù hạn chờ chung đã tăng lên 240 giây.
+
+**Lưu ý khi kiểm thử:** dưới pytest, `backend/config.py` cố ý không đọc `.env`. Test Gemini thật vì thế dùng giá trị mặc định 20/45 giây và thử lại 2 lần, trừ khi đặt biến môi trường. Muốn mô phỏng đúng ứng dụng, chạy:
+`CAREERADAPT_LIVE_AI=1 LLM_TIMEOUT_SECONDS=120 AI_REQUEST_DEADLINE_SECONDS=240 LLM_MAX_RETRIES=3 python -m pytest tests/test_ai_live.py`
+
+**Kiểm chứng:**
+- Ứng dụng đọc đúng giá trị mới (`config.LLM_TIMEOUT_SECONDS = 120`, `config.AI_REQUEST_DEADLINE_SECONDS = 240`).
+- 10 test Gemini thật với đúng cấu hình đó: **10/10 đạt**. Các luồng Trợ lý mất 22–51 giây.
+- Docker Desktop đã được bật và image `careeradapt-sandbox:1` (518 MB) đã được build, nên test sandbox Docker thật chạy được và đạt.
+- Toàn bộ bộ test: **1315 passed, 10 skipped**. 10 test bỏ qua là test Gemini thật, chỉ chạy khi đặt `CAREERADAPT_LIVE_AI=1`.
+
+**Cần làm:** khởi động lại `run.py` để máy chủ đang chạy nạp `.env` và code mới.
+
+## Bổ sung 20/11/2026 · Phiên bản 5.60.0: Trang phục tốt nghiệp cho robot AI và ba biểu tượng cùng cỡ
+
+### 1. Thân robot AI
+
+Robot xuất hiện ở ba nơi: thanh chào mừng của Bảng điều khiển, khung Trợ lý và màn hoàn tất Quy trình. Cả ba dùng chung hình vẽ thân trong `frontend/js/bot.js`. Phần đầu là ảnh vẽ tay của nhóm và giữ nguyên; chỉ phần thân được vẽ lại.
+
+**Trang phục mới, áo tốt nghiệp công nghệ hợp với mũ cử nhân trên đầu:**
+- Vạt áo màu xanh hoàng gia mở hai bên thân trắng. Mặt trước vẫn để lộ màn hình "AI".
+- Dải khăn tốt nghiệp (stole) màu vàng, cùng tông với tua mũ. Khăn có đường chỉ sáng ở giữa và một viên đá xanh ở mỗi đầu.
+- Áo choàng phía sau có viền sáng ở hai mép và đường viền vàng ở gấu.
+- Vai có vòng đèn xanh; cổ áo có đường may phát sáng.
+- Cổ tay áo màu xanh có vạch đèn.
+- Màn hình "AI" có khung viền chuyển màu và vầng sáng bao quanh, thêm hai đường quét mờ bên trong.
+- Năm thanh sóng âm thay cho ba đèn tròn cũ.
+- Viền sáng bên phải thân, đón ánh sáng của cảnh nền.
+- Ba tia lửa nhỏ dưới ống phản lực.
+
+**Hiệu ứng mới**, chỉ chạy khi người dùng không bật giảm chuyển động:
+- thanh sóng âm nhấp nhô lệch nhịp như đang nói;
+- khung màn hình "thở" sáng lên rồi mờ đi;
+- vòng đèn vai, đường may cổ, cổ tay áo và viền sáng nhấp nháy nhẹ;
+- hai viên đá ở đầu khăn lần lượt lóe sáng;
+- tia lửa rơi từ ống phản lực.
+
+Khi rê chuột vào cảnh, thanh sóng âm và khung màn hình chạy nhanh gấp đôi.
+
+Khi bật giảm chuyển động, robot đứng yên và chỉ còn mắt chớp như quy ước cũ. Thanh sóng âm khi đó đứng ở độ cao so le để vẫn có nhịp điệu.
+
+**Dọn CSS:**
+- Trước đây robot ở Bảng điều khiển và robot trong Trợ lý có hai bộ quy tắc trùng nhau. Nay dùng chung một bộ `:is(.hero-bot-body, .as-bot-body)`; chỉ riêng nhịp vẫy tay là khác nhau.
+- Bỏ quy tắc và `@keyframes` của ba đèn LED cũ.
+- Hiệu ứng sáng của chữ "AI" chỉ đổi độ trong suốt. Trước đây nó dùng CSS `filter`, làm tạm mất bộ lọc phát sáng gốc của chữ.
+- Giữ nguyên các id và class mà test đang kiểm (`#hb-shell`, `#as-shell`, `svg.as-bot-body`).
+
+### 2. Ba biểu tượng Bảng điều khiển, Quy trình, Kế hoạch cùng cỡ
+
+**Trước đây:** biểu tượng Bảng điều khiển trông to và đậm nhất, Quy trình (vài nét mảnh) trông nhỏ và nhạt nhất.
+
+**Sửa** (`frontend/js/icons.js`, nhóm `DUO`):
+- Cả ba được vẽ vừa đúng một ô 16×16 trên lưới 24px. Đo trên Edge bằng `getBBox`, cả ba đều 16,0 × 16,0 tại điểm (4, 4).
+- Biểu tượng Quy trình được vẽ lại thành ba hàng, mỗi hàng gồm một chấm và một thanh bo tròn; hai hàng đầu được tô. Nhờ vậy độ đậm tương đương hai biểu tượng còn lại.
+- Phương án trước đó (ba nút tròn lớn) bị bỏ vì các nút dính vào nhau.
+- Biểu tượng Kế hoạch được nới thêm 0,2 đơn vị mỗi bên cho đúng ô.
+
+### Kiểm chứng
+- Chụp trên Edge ở độ phân giải gấp 3, cả giao diện sáng và tối, ở Bảng điều khiển và trong Trợ lý.
+- Chụp khi đang chuyển động: tay vẫy, thanh sóng âm và tia lửa hiện đúng.
+- Kiểm tra `animationName` của từng phần: 14 phần đều có chuyển động.
+- Không có lỗi console.
+- Toàn bộ bộ test: **1315 passed, 10 skipped**. 10 test bỏ qua là test Gemini thật.
+
+### Tệp
+- `frontend/js/bot.js`
+- `frontend/js/icons.js`
+- `frontend/css/app.css`
+- Phiên bản 5.60.0 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+## Bổ sung 20/11/2026 · Phiên bản 5.61.0: Mọi biểu tượng trên thanh bên cùng cỡ
+
+**Yêu cầu:** cân lại kích thước các biểu tượng trên thanh bên cho đều nhau.
+
+**Nguyên nhân:**
+- Sau bản 5.59–5.60, Bảng điều khiển, Quy trình và Kế hoạch dùng biểu tượng hai tông mới, cao 16 đơn vị trên lưới 24.
+- Học liệu, Kiểm tra kiến thức, Đóng góp câu hỏi, Hồ sơ và Quản trị vẫn dùng biểu tượng chung cũ. Các biểu tượng này cao 17–18 đơn vị và chỉ có nét viền, nên trông to nhỏ, đậm nhạt khác nhau.
+
+**Sửa** (`frontend/js/icons.js`, nhóm `DUO`): thêm năm biểu tượng hai tông cùng kiểu.
+
+| Mục | Biểu tượng | Mảng tô |
+| --- | --- | --- |
+| Học liệu (`learn`) | Cuốn sách có gáy trang | Bìa sách |
+| Kiểm tra kiến thức (`test`) | Bảng kẹp có dấu tích | Kẹp giấy |
+| Đóng góp câu hỏi (`write`) | Bút viết trên một dòng | Đầu bút |
+| Hồ sơ (`account`) | Người | Đầu |
+| Quản trị (`admin`) | Khiên có dấu tích | Nửa trái khiên |
+
+- Mọi biểu tượng đều cao 16 đơn vị. Hình vuông rộng 16; hình dáng đứng (sách, bảng kẹp, bút, người, khiên) rộng 15 để nhìn cân về thị giác.
+- Tất cả cùng nét 1,8 và có mảng tô nhạt cùng màu, đậm hơn khi rê chuột hay khi đang ở trang đó.
+- Áp dụng ở thanh bên (mở và thu gọn), ô biểu tượng ở tiêu đề trang, hero của trang Học liệu, Kiểm tra kiến thức, Đóng góp câu hỏi, Quản trị, và hai thẻ dẫn trang trên Bảng điều khiển.
+- Các chỗ khác đang dùng `book`, `quiz`, `pen`, `user`, `shield` (thẻ học liệu, bài kiểm tra học phần, bài tổng hợp…) giữ nguyên.
+
+**Kiểm chứng:**
+- Đo bằng `getBBox` trên Edge, với tài khoản học viên và tài khoản quản trị (đủ 8 mục):
+  - Bảng điều khiển, Quy trình, Kế hoạch: 16,0 × 16,0;
+  - Học liệu, Kiểm tra kiến thức, Hồ sơ, Quản trị: 15,0 × 16,0;
+  - Đóng góp câu hỏi: 15,1 × 16,0.
+- Đã chụp thanh bên thu gọn ở giao diện sáng và tối, cùng ô biểu tượng ở tiêu đề trang. Không có lỗi console.
+- Toàn bộ bộ test: **1315 passed, 10 skipped**.
+
+**Tệp:**
+- `frontend/js/icons.js`
+- `frontend/js/main.js`
+- `frontend/js/pages/dashboard.js`
+- `frontend/js/pages/resources.js`
+- `frontend/js/pages/tests.js`
+- `frontend/js/pages/contribute.js`
+- `frontend/js/pages/admin.js`
+- Phiên bản 5.61.0 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+## Bổ sung 20/11/2026 · Phiên bản 5.62.0: Cảnh chào mới của Trợ lý và AI xuất hiện theo ngữ cảnh
+
+### 1. Cảnh chào trong khung chat AI
+
+Cảnh này hiện ở đầu khung Trợ lý khi cuộc trò chuyện còn trống. Mã nằm ở `frontend/js/assistant.js` (`stage()`) và CSS khối 5.62. Cảnh được dựng lại thành ba lớp:
+- **Lớp sau:** hai vầng cực quang (xanh ngọc, tím) trôi chậm, lưới chấm mờ dần ra mép, hai vòng sáng xoay như cũ, và một quỹ đạo elip có ba vệ tinh phát sáng chạy quanh robot (`offset-path`).
+- **Lớp giữa:** sóng âm hai bên, nay có quầng sáng, và các tia lấp lánh.
+- **Lớp trước:** bong bóng kiểu kính mờ (`backdrop-filter`):
+  - một bong bóng đang gõ "…";
+  - một bong bóng lần lượt hiện bốn biểu tượng kỹ năng mà Trợ lý đọc (dữ liệu, code, biểu đồ, viết);
+  - một huy hiệu tích xanh nhấp nhịp.
+
+Các hiệu ứng khác:
+- **Chiều sâu:** ba lớp dịch theo con trỏ chuột với mức khác nhau (−5 / 4 / 9px), nên cảnh có chiều sâu.
+- **Rê chuột:** vòng sáng quay nhanh hơn và robot vẫy tay như trước.
+- **Giảm chuyển động:** mọi lớp đứng yên, kể cả hiệu ứng chiều sâu; robot chỉ còn chớp mắt.
+- Tất cả chỉ để trang trí (`aria-hidden`), không thêm số liệu nào.
+
+### 2. AI xuất hiện theo ngữ cảnh
+
+Module mới `frontend/js/companion.js`. Robot AI không còn chỉ đứng cố định ở nút "Trợ lý". Khi người dùng cuộn tới phần trang mà AI có thể giúp, robot hiện lên từ góc phải trên của phần đó: đầu robot (khuôn mặt có biểu cảm) nhô qua mép thẻ, kèm bong bóng kính mờ. Robot "gõ" một nhịp, nói một câu ngắn, và đưa ra một hoặc hai câu hỏi gửi thẳng cho Trợ lý thật (`askAssistant`, gồm cả các tác vụ AI của máy chủ). Xong việc, robot tự lui đi.
+
+| Trang | Robot xuất hiện ở | Câu hỏi đưa cho Trợ lý |
+| --- | --- | --- |
+| Bảng điều khiển (đã có tiến độ) | thẻ Tổng quan tiến độ | Tổng hợp hành trình · Tôi nên học gì tiếp theo |
+| Bảng điều khiển (mới bắt đầu) | thẻ dẫn tới Kế hoạch | Giải thích 6 bước của Quy trình |
+| Học liệu | thẻ học liệu đầu tiên | Tôi nên học gì tiếp theo · Gợi ý học liệu cho kỹ năng còn thiếu |
+| Kiểm tra kiến thức | thẻ bài đầu tiên | Nên luyện bài nào trước · Phân tích kỹ năng |
+| Báo cáo năng lực | bảng kỹ năng | Tổng hợp hành trình · Viết phần kỹ năng trong CV đúng với kết quả đã xác thực |
+| Trang bài học có lỗi đã mắc | thẻ "Lỗi bạn đã mắc" | Giải thích đúng tiêu chí đã sai (tên tiêu chí lấy từ thẻ) |
+| Trang bài học chưa có lỗi | bài thực hành | Gợi ý hướng làm theo bước, không đưa đáp án hoàn chỉnh |
+| Hồ sơ, tab Mục tiêu | bảng mục tiêu | Gợi ý số giờ học mỗi tuần để kịp lộ trình |
+
+**Quy tắc để robot hữu ích mà không làm phiền:**
+- **Thời điểm:** robot chỉ đến khi phần trang ở trong màn hình ít nhất 0,9 giây. Mỗi lần mở trang chỉ một robot, và mỗi gợi ý chỉ một lần trong phiên.
+- **Lúc rời đi:** robot tự rời sau 16 giây nếu không được dùng (dừng đếm khi rê chuột hay focus vào bong bóng). Robot cũng rời khi phần trang bị cuộn khuất, khi đổi trang, khi mở khung Trợ lý hay một hộp thoại, hoặc khi nhấn Esc.
+- **Không bao giờ xuất hiện khi đang làm bài:** robot không đến các trang làm bài (`/flow`, `/tests/run`, `/mini`, `/final-exam`), khi Trợ lý bị khóa vì có bài đang mở, hay khi tab trình duyệt bị ẩn.
+- **Bật/tắt:** nút "Tắt gợi ý trên các trang" ngay trong bong bóng, và công tắc "Hiện gợi ý của Trợ lý AI trên các trang" trong Hồ sơ > Nhắc nhở. Lựa chọn lưu trên trình duyệt.
+- **Trên điện thoại** (dưới 720px), bong bóng thành một dải phía trên nút Trợ lý.
+- **Trợ năng:** câu nói được đọc qua vùng `aria-live`; nút đóng có nhãn; có vùng chạm 44px trên màn hình cảm ứng; không giành focus của người dùng.
+
+**Ranh giới:**
+- Robot chỉ đọc chữ đang hiển thị trên trang và chuyển câu hỏi đi. Câu trả lời đến từ Trợ lý, dựa trên dữ liệu của chính học viên và kho kiến thức đã duyệt.
+- Robot không chấm điểm, không quyết định và không viết câu hỏi.
+- Có chủ đích không đặt robot ở:
+  - Đóng góp câu hỏi, vì dự án không dùng câu hỏi do AI viết;
+  - báo cáo bài kiểm tra kiến thức, vì Trợ lý không có công cụ đọc dữ liệu này;
+  - các mục Kế hoạch và các bước Quy trình, vì ở đó đã có thẻ cố vấn AI và robot hướng dẫn;
+  - trang Quản trị.
+
+### Kiểm chứng
+
+Trên Edge, với server chạy trên dữ liệu tạm:
+- Bảng điều khiển: robot đến bên thẻ tiến độ. Bấm "Tổng hợp hành trình của tôi" thì Trợ lý mở và chạy tác vụ, robot rời đi. Quay lại trang thì robot không đến nữa.
+- Học liệu: robot đến khi cuộn tới thẻ đầu tiên, và rời khi bấm đóng.
+- Trang bài học: robot nói "Lần trước bạn chưa đạt “Code đúng cú pháp Python”…" và gửi đúng câu hỏi có tên tiêu chí đó.
+- Tắt từ bong bóng thì giá trị `off` được lưu, và công tắc trong Hồ sơ hiện tắt. Bật lại thì lưu `on`.
+- Khổ 390, giao diện tối, tiếng Anh: dải dưới đáy hiển thị đúng tiếng Anh, không tràn ngang.
+- Cảnh chào: đã chụp giao diện sáng, tối và chế độ giảm chuyển động. Hiệu ứng chiều sâu chạy (lớp trước dịch 7,2 / −5,4px); khi giảm chuyển động thì không có chuyển động nào.
+- Không có lỗi console.
+
+Test:
+- 3 test Playwright mới: robot đến đúng chỗ và chuyển câu hỏi cho Trợ lý, chỉ một lần mỗi phiên; tắt rồi bật lại được; không xuất hiện khi đang làm bài.
+- Toàn bộ test giao diện: 44 passed.
+- Toàn bộ bộ test: **1318 passed, 10 skipped**.
+
+### Tệp
+- `frontend/js/companion.js` (mới)
+- `frontend/js/assistant.js`
+- `frontend/js/main.js`
+- `frontend/js/pages/profile.js`
+- `frontend/css/app.css`
+- `frontend/js/lang/en.json` (31 mục mới)
+- `tests/test_ui_e2e.py`
+- Phiên bản 5.62.0 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+### Chưa kiểm chứng
+- Chưa thử trình đọc màn hình thật đọc bong bóng.
+- Chưa thử trên thiết bị cảm ứng thật.
+- Câu trả lời thật từ Gemini cho các câu hỏi mới chưa được chạy trực tiếp; trong test, Trợ lý chạy bằng câu trả lời theo quy tắc.
+
+## Bổ sung 20/11/2026 · Phiên bản 5.63.0: AI xuất hiện ở góc màn hình, không che giữa trang
+
+Ở bản 5.62, robot hiện ngay mép phần trang mà nó nói tới, nên có lúc che giữa trang. Bản này đưa robot về một chỗ cố định và làm lại cách nó xuất hiện. Mã ở `frontend/js/companion.js` và khối CSS 5.63 trong `frontend/css/app.css`.
+
+### 1. Chỗ hiển thị
+
+- **Góc phải dưới, ngay trên nút "Trợ lý":** robot và bong bóng luôn nằm ở góc này, không bao giờ đè lên nội dung giữa trang.
+- **Viền sáng cho phần đang nói tới:** thay vì đứng cạnh, robot làm phần trang đó hiện một viền sáng mềm (`.ai-spotlight`). Viền tắt khi robot rời đi.
+- **Chip "Về: …":** bong bóng ghi tên phần đang nói tới (ví dụ "Về: Tổng quan tiến độ", "Về: Python"). Bấm vào chip thì trang cuộn tới phần đó và viền sáng lóe lại.
+- **Nút lên đầu trang** tạm ẩn khi robot đang hiện, để hai thứ không chồng nhau.
+- **Điện thoại** (dưới 720px): bong bóng là một dải ngang phía trên nút Trợ lý, không tràn ngang.
+- Bỏ "đuôi" hình thoi trắng của bong bóng, vì không hợp với nền kính mờ.
+
+### 2. Hiệu ứng xuất hiện theo nhịp
+
+1. Robot bật lên kiểu lò xo, kèm một vòng sáng lan ra và năm đốm lấp lánh.
+2. Bong bóng kính mờ mở ra từ phía robot (mờ dần thành rõ, phóng từ nhỏ đến lớn).
+3. Ba chấm "đang gõ", rồi câu nói hiện ra như đang được gõ.
+4. Các nút câu hỏi trượt vào lần lượt.
+
+Khi rời đi, bong bóng thu về phía robot rồi robot chìm xuống. Ở chế độ giảm chuyển động, mọi thứ hiện và tắt ngay, không có chuyển động.
+
+### 3. Thêm ba chỗ trong Kế hoạch
+
+| Trang | Robot nói về | Câu hỏi đưa cho Trợ lý |
+| --- | --- | --- |
+| Kết quả bài kiểm tra đầu vào | kỹ năng đầu tiên có nhãn còn thiếu | Cách bù kỹ năng này |
+| Phân tích khoảng cách | kỹ năng đầu tiên chưa đạt mức JD | Cách bù kỹ năng này · Tư vấn mức sẵn sàng |
+| Lộ trình học | bài học tiếp theo | Bài này học gì? |
+
+Tên kỹ năng hay tên bài học được đọc từ chữ đang hiển thị trên trang. Nếu trang không có phần đó (ví dụ mọi kỹ năng đã đạt), robot không đến. Robot vẫn không chấm điểm, không quyết định mức đạt; câu trả lời đến từ Trợ lý.
+
+### Kiểm chứng
+
+- Trên Edge (dữ liệu tạm):
+  - robot nằm cách mép phải và mép dưới đúng như thiết kế;
+  - thẻ tiến độ có viền sáng, và viền tắt khi đóng;
+  - chip "Về:" cuộn đúng tới thẻ;
+  - ba chỗ mới trong Kế hoạch đọc đúng tên kỹ năng và tên bài học;
+  - khổ 390, giao diện tối, tiếng Anh hiển thị đúng, không tràn ngang;
+  - không có lỗi console.
+- Kiểm thử giao diện: thêm kiểm tra vị trí góc, viền sáng và việc viền tắt sau khi gửi câu hỏi.
+- Toàn bộ bộ test: **1318 passed, 10 skipped** (10 test gọi Gemini thật, bỏ qua theo mặc định).
+
+## Bổ sung 20/11/2026 · Phiên bản 5.64.0: Nút Trợ lý chỉ còn logo AI, robot bay ra từ nút
+
+### 1. Nút "Trợ lý"
+
+- **Lúc bình thường:** nút tròn 56px, bên trong chỉ có khuôn mặt AI (46px, viền trắng). Không còn chữ.
+- **Rê chuột hoặc dùng phím Tab tới nút:** chữ "Trợ lý" (tiếng Anh: "Assistant") trượt ra bên trái khuôn mặt.
+  - Nút giãn thành viên thuốc rộng 117px (141px với "Assistant"), theo đúng độ rộng chữ (kỹ thuật `grid-template-columns: 0fr → 1fr`, không đặt độ rộng cứng).
+  - Chữ mờ dần thành rõ, trễ 70ms so với lúc nút giãn để không bị chen chúc.
+  - Khuôn mặt đứng yên tại chỗ (bố cục `row-reverse`), chỉ nghiêng nhẹ và to lên 4%.
+  - Nút nhấc lên 2px với bóng sâu hơn; khi bấm thì lún nhẹ.
+- **Màn hình cảm ứng:** nút giữ dạng tròn (chữ chỉ hiện khi có chuột thật, `@media (hover: hover)`).
+- **Khi nút hiện ra** (lúc tải trang, hoặc khi đóng khung Trợ lý): nút bật vào nhẹ.
+- **Trợ năng:** nút vẫn có tên "Mở Trợ lý CareerAdapt AI" cho trình đọc màn hình; focus bằng bàn phím cũng mở chữ.
+- **Giảm chuyển động:** không còn hiệu ứng.
+
+### 2. AI xuất hiện "biến ra" từ nút
+
+Mỗi khi AI xuất hiện theo ngữ cảnh (các chỗ ở bản 5.62 và 5.63), robot giờ bay ra từ chính khuôn mặt trong nút:
+
+1. **Phóng ra:** khuôn mặt trong nút nhún xuống rồi bật lên, một vòng sáng xanh ngọc lan ra từ nút.
+2. **Bay lên:** robot xuất phát nhỏ đúng tại khuôn mặt trong nút, bay lên và lớn dần tới chỗ đứng ngay trên nút, nảy nhẹ khi đáp. Các đốm lấp lánh bung ra lúc đáp.
+3. **Trong lúc robot ở ngoài:** khuôn mặt trong nút mờ đi và nhỏ lại, như thể robot đã rời khỏi nút. Rê chuột vào nút thì khuôn mặt sáng lại.
+4. **Thu về:** bong bóng thu lại, robot nhún lên rồi lao xuống, thu nhỏ vào nút. Một vòng sáng co lại quanh nút và khuôn mặt bật sáng trở lại.
+
+Chi tiết kỹ thuật:
+- Quãng đường bay được đo lúc robot xuất hiện (`--from-x`, `--from-y`), nên luôn đúng ở mọi khổ màn hình, kể cả điện thoại.
+- Đổi trang, gửi câu hỏi hoặc tắt gợi ý thì robot biến mất ngay và nút trở lại bình thường.
+- Bấm nút Trợ lý trong lúc robot đang hiện thì robot rời đi và khung Trợ lý mở ra.
+- Ở chế độ giảm chuyển động, không có đường bay; chỉ có khuôn mặt trong nút mờ đi rồi sáng lại.
+
+### 3. Lỗi tìm ra và đã sửa
+
+Vòng sáng quanh robot sau khi lan ra (phóng to 2,3 lần) vẫn nằm đó dù đã trong suốt. Vòng này phủ lên nút Trợ lý, nên **trong suốt 16 giây robot hiện, bấm vào giữa nút không có tác dụng**. Lỗi có từ bản 5.63, khi robot được dời xuống ngay trên nút.
+
+Đã sửa bằng cách cho cả phần robot không nhận sự kiện chuột (`pointer-events: none`). Robot chỉ để trang trí; bong bóng và các nút vẫn bấm được bình thường.
+
+### 4. Các vị trí được dời theo nút mới
+
+Nút cao 56px (trước là 42px), nên mọi thứ nằm phía trên nút được dời lên cho khỏi chồng nhau:
+- bong bóng thông báo: từ 76px lên 88px tính từ đáy;
+- nút lên đầu trang: từ 84px lên 88px, căn giữa thẳng với nút;
+- robot: từ 74px lên 88px, đứng ngay trên mép nút.
+
+### Kiểm chứng
+
+- **Trên Edge (dữ liệu tạm):**
+  - **Nút:** nút tròn 56×56 ở cả giao diện sáng và tối; rê chuột thì rộng 117px với "Trợ lý" và 141px với "Assistant", rời chuột thì về 56px; focus bằng bàn phím cũng mở chữ.
+  - **Hiệu ứng:** đã chụp từng khung hình của đường bay ra và bay về bằng cách dừng và tua animation. Robot xuất phát và kết thúc đúng tâm khuôn mặt trong nút (lệch 3px ngang, 62px dọc so với chỗ đứng).
+  - **Khổ 390:** nút tròn, robot bay ra đúng, không tràn ngang.
+  - **Giảm chuyển động:** không có animation nào của nút; đóng robot thì nút về ngay.
+  - **Bấm nút khi robot đang hiện:** nhận ngay (82ms). Trước khi sửa, Playwright phải chờ 15 giây.
+  - **Console:** không có lỗi.
+- **Hai kiểm thử giao diện mới:**
+  - `test_the_assistant_button_shows_only_the_face_until_pointed_at`;
+  - `test_the_robot_comes_out_of_the_assistant_button_and_leaves_it_clickable`. Kiểm thử này đã được chứng minh là bắt được lỗi cũ: khi trả lại CSS cũ, nó thất bại vì hết 3 giây chờ bấm.
+- **Toàn bộ bộ test:** **1320 passed, 10 skipped (10 test gọi Gemini thật, bỏ qua theo mặc định)**.

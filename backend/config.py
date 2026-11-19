@@ -15,7 +15,7 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 
 # Application Settings
 APP_NAME = "CareerAdapt AI"
-APP_VERSION = "5.59.2"
+APP_VERSION = "5.64.0"
 DEBUG = os.getenv("CAREERADAPT_DEBUG", "False").lower() == "true"
 PORT = int(os.getenv("PORT", "8000"))
 HOST = os.getenv("HOST", "127.0.0.1")

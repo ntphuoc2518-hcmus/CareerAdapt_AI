@@ -42,21 +42,43 @@ const PATHS = {
     inbox: "M3 13h5l1.5 3h5l1.5-3h5M5.5 5h13L21 13v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z",
 };
 
-/* 5.59: the three main pages get their own two-tone marks (an outline plus a soft filled part) on the same 24px grid
-   and stroke as the set: Bảng điều khiển = a dashboard of panels, Quy trình = a step timeline, the first two steps done,
-   Kế hoạch = a plan board with a rising line. Other screens keep using chart and target for data. */
+/* 5.59: the main pages get their own two-tone marks (an outline plus a soft filled part) on the same 24px grid
+   and stroke as the set, each filling the same 16-unit square (5.60): Bảng điều khiển = a dashboard of panels, Quy trình = three steps (a dot and a bar each), the first two done,
+   Kế hoạch = a plan board with a rising line.
+   5.61: the rest of the navigation joins the set (learn, test, write, account, admin). Square marks fill the 16-unit
+   square, upright ones (book, clipboard, person, shield) are 15 wide and 16 tall, so every item reads the same size. Other screens keep using chart and target for data. */
 const DUO = {
     dashboard: {
         fill: "M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5Z",
         d: "M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5ZM13 5.5A1.5 1.5 0 0 1 14.5 4h4A1.5 1.5 0 0 1 20 5.5v3A1.5 1.5 0 0 1 18.5 10h-4A1.5 1.5 0 0 1 13 8.5ZM13 14.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5Z",
     },
     journey: {
-        fill: "M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
-        d: "M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM6 7v3M6 14v3M11 5h9M11 12h9M11 19h6",
+        fill: "M7.6 5.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM7.6 12a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM12.2 4h6a1.8 1.8 0 0 1 0 3.6h-6a1.8 1.8 0 0 1 0-3.6ZM12.2 10.2h6a1.8 1.8 0 0 1 0 3.6h-6a1.8 1.8 0 0 1 0-3.6Z",
+        d: "M7.6 5.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM7.6 12a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM7.6 18.2a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM12.2 4h6a1.8 1.8 0 0 1 0 3.6h-6a1.8 1.8 0 0 1 0-3.6ZM12.2 10.2h6a1.8 1.8 0 0 1 0 3.6h-6a1.8 1.8 0 0 1 0-3.6ZM12.2 16.4h3a1.8 1.8 0 0 1 0 3.6h-3a1.8 1.8 0 0 1 0-3.6Z",
     },
     plan: {
-        fill: "M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5V8.5H5Z",
-        d: "M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 17.5ZM5 8.5h14M8.5 16.5l2.5-2.5 2 1.5 3-3.5M14.5 12h1.5v1.5",
+        fill: "M4 6.6A2.6 2.6 0 0 1 6.6 4h10.8A2.6 2.6 0 0 1 20 6.6V9H4Z",
+        d: "M4 6.6A2.6 2.6 0 0 1 6.6 4h10.8A2.6 2.6 0 0 1 20 6.6v10.8a2.6 2.6 0 0 1-2.6 2.6H6.6A2.6 2.6 0 0 1 4 17.4ZM4 9h16M7.5 16.5l3-3 2.5 2 3.5-4M14.5 11.5h2v2",
+    },
+    learn: {
+        fill: "M4.5 6.5A2.5 2.5 0 0 1 7 4h12.5v12H7a2.5 2.5 0 0 0-2.5 2.5Z",
+        d: "M4.5 6.5A2.5 2.5 0 0 1 7 4h12.5v12H7a2.5 2.5 0 0 0-2.5 2.5ZM4.5 18.5A1.5 1.5 0 0 0 6 20h13.5v-4M8.5 8h7",
+    },
+    test: {
+        fill: "M9.5 4h5a1 1 0 0 1 1 1v1.4a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z",
+        d: "M8.5 5.6h-2a2 2 0 0 0-2 2V18a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7.6a2 2 0 0 0-2-2h-2M9.5 4h5a1 1 0 0 1 1 1v1.4a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1ZM8.8 13.6l2.2 2.2 4.4-4.6",
+    },
+    write: {
+        fill: "M14.8 4.6a2 2 0 0 1 2.8 0l1.4 1.4a2 2 0 0 1 0 2.8l-1.7 1.7-4.2-4.2Z",
+        d: "M14.8 4.6a2 2 0 0 1 2.8 0l1.4 1.4a2 2 0 0 1 0 2.8L8.8 19H4.5v-4.3ZM13.1 6.3l4.2 4.2M12.5 20h7",
+    },
+    account: {
+        fill: "M15.6 7.6a3.6 3.6 0 1 1-7.2 0 3.6 3.6 0 0 1 7.2 0Z",
+        d: "M15.6 7.6a3.6 3.6 0 1 1-7.2 0 3.6 3.6 0 0 1 7.2 0ZM4.5 20v-.5A6.5 6.5 0 0 1 11 13h2a6.5 6.5 0 0 1 6.5 6.5v.5Z",
+    },
+    admin: {
+        fill: "M12 4v16c-4.4-.9-7.5-3.6-7.5-8V7Z",
+        d: "M12 4l7.5 3v5c0 4.4-3.1 7.1-7.5 8-4.4-.9-7.5-3.6-7.5-8V7ZM9 12l2.2 2.2 4-4.2",
     },
 };
 

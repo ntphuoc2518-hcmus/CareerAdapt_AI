@@ -260,7 +260,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* Toasts (5.57): an icon per tone and a close button; errors keep their own red in both themes so white text
    stays readable (the dark palette's --bad is a light red meant for text). */
-.toasts { position: fixed; right: 16px; bottom: 76px; z-index: var(--z-toast); display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-2); width: min(400px, calc(100vw - 32px)); pointer-events: none; }
+.toasts { position: fixed; right: 16px; bottom: 88px; z-index: var(--z-toast); display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-2); width: min(400px, calc(100vw - 32px)); pointer-events: none; }
 .toast { --toast-bg: var(--brand-deep); display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px 8px 10px 12px; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius-md); background: var(--toast-bg); color: #fff; box-shadow: var(--shadow-lg); font-size: var(--fs-base); line-height: 1.45; pointer-events: auto; }
 .toast-bad { --toast-bg: #B3362F; }
 .toast-good { --toast-bg: #17724F; }
@@ -1012,9 +1012,16 @@ button.rd-flag:hover { text-decoration: underline; }
     .icon-btn { width: 36px; height: 36px; }
     #logout { display: none; }
 }
-.assistant-fab { position: fixed; right: 20px; bottom: 20px; z-index: var(--z-fab); display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 16px; border: 0; border-radius: var(--radius-xl); background: var(--brand); color: var(--on-brand); font: inherit; font-weight: var(--fw-semibold); box-shadow: var(--btn-shadow), 0 8px 24px rgba(10,10,10,.16); cursor: pointer; }
+/* 5.64: only the AI face shows; the label slides out to its left on hover or keyboard focus, so the face never moves. */
+.assistant-fab { position: fixed; right: 20px; bottom: 20px; z-index: var(--z-fab); display: inline-flex; flex-direction: row-reverse; align-items: center; min-height: 56px; padding: 5px; border: 0; border-radius: var(--radius-pill); background: var(--brand); color: var(--on-brand); font: inherit; font-weight: var(--fw-semibold); box-shadow: var(--btn-shadow), 0 8px 24px rgba(10,10,10,.16); cursor: pointer; transition: background-color var(--dur-3), box-shadow var(--dur-4) var(--ease-out), transform var(--dur-4) var(--ease-spring); }
 .assistant-fab[hidden] { display: none; }
-.assistant-fab:hover { background: var(--brand-strong); }
+.assistant-fab:hover { background: var(--brand-strong); box-shadow: var(--btn-shadow), 0 14px 30px rgba(10,10,10,.22); transform: translateY(-2px); }
+.assistant-fab:active { transform: scale(.96); }
+.assistant-fab::after { content: ""; position: absolute; top: 50%; right: 5px; width: 46px; height: 46px; margin-top: -23px; border: 2px solid #5EEAD4; border-radius: 50%; box-shadow: 0 0 14px rgba(94, 234, 212, .7); opacity: 0; pointer-events: none; }
+.assistant-fab-label { display: grid; grid-template-columns: 0fr; padding: 0; opacity: 0; white-space: nowrap; transform: translateX(10px); transition: grid-template-columns var(--dur-5) var(--ease-spring), padding var(--dur-5) var(--ease-spring), opacity var(--dur-3) var(--ease-out), transform var(--dur-5) var(--ease-spring); }
+.assistant-fab-label > span { min-width: 0; overflow: hidden; }
+.assistant-fab:focus-visible .assistant-fab-label { grid-template-columns: 1fr; padding: 0 10px 0 14px; opacity: 1; transform: none; transition-delay: 0s, 0s, 70ms, 0s; }
+@media (hover: hover) { .assistant-fab:hover .assistant-fab-label { grid-template-columns: 1fr; padding: 0 10px 0 14px; opacity: 1; transform: none; transition-delay: 0s, 0s, 70ms, 0s; } }
 .assistant-fab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .assistant-panel { position: fixed; top: 0; right: 0; bottom: 0; z-index: var(--z-panel); display: flex; flex-direction: column; }
 .assistant-panel[hidden] { display: none; }
@@ -1474,8 +1481,7 @@ button.rd-flag:hover { text-decoration: underline; }
 .ai-avatar-xs { width: 20px; height: 20px; box-shadow: none; }
 .ai-avatar-sm { width: 30px; height: 30px; }
 .ai-avatar-md { width: 34px; height: 34px; }
-.ai-avatar-fab { width: 32px; height: 32px; box-shadow: 0 0 0 2px rgba(255, 255, 255, .85); }
-.assistant-fab { padding-left: 6px; }
+.ai-avatar-fab { width: 46px; height: 46px; box-shadow: 0 0 0 2px rgba(255, 255, 255, .9); transition: transform var(--dur-4) var(--ease-spring), opacity var(--dur-3) var(--ease-out); }
 .assistant-title { display: inline-flex; align-items: center; gap: 9px; }
 .chat-ai { align-items: flex-start; gap: 8px; }
 .chat-ai > .ai-avatar { margin-top: 2px; }
@@ -1492,7 +1498,7 @@ button.rd-flag:hover { text-decoration: underline; }
 @media (max-height: 760px) { .ai-card-stage { height: 136px; } .ai-card-mascot { height: 128px; } }
 .ai-note > .ai-avatar { margin-top: 1px; }
 .btn > .ai-avatar-xs { margin-left: -2px; }
-@media (prefers-reduced-motion: no-preference) { .assistant-fab:hover .ai-avatar-fab { transform: rotate(-6deg); transition: transform var(--dur-3); } }
+@media (prefers-reduced-motion: no-preference) { .assistant-fab:hover .ai-avatar-fab { transform: rotate(-8deg) scale(1.04); } }
 
 /* Dashboard robot (v5.22): two frames of the same head; only the eyes differ, so swapping them reads as a blink.
    Open eyes most of the time, a quick blink, a double blink, and a short happy smile, on a 7 s loop. */
@@ -2165,10 +2171,19 @@ button.rd-flag:hover { text-decoration: underline; }
 .hero-bot-shadow { position: absolute; z-index: 0; left: 40px; top: 166px; width: 60px; height: 8px; border-radius: 50%; background: radial-gradient(ellipse, rgba(2, 8, 25, .55), transparent 70%); }
 .hero-orbit { position: absolute; left: 66px; top: 22px; width: 170px; height: 120px; border: 1px dashed rgba(125, 211, 252, .35); border-radius: 50%; transform: rotate(-12deg); }
 .hero-orbit i { position: absolute; top: -4px; left: calc(50% - 4px); width: 8px; height: 8px; border-radius: 50%; background: #A5F3FC; box-shadow: 0 0 8px 2px rgba(56, 189, 248, .8); }
-.hero-bot-body .hb-arm-l { transform: rotate(26deg); transform-origin: 40px 27px; }
-.hero-bot-body .hb-arm-r { transform: rotate(-28deg); transform-origin: 100px 27px; }
-.hero-bot-body .hb-cape { transform-origin: 70px 15px; }
-.hero-bot-body .hb-scan { transform: translateX(0) skewX(-18deg); }
+/* 5.60: the graduate outfit (js/bot.js). One set of rules for the dashboard robot and the assistant's robot. */
+:is(.hero-bot-body, .as-bot-body) .hb-arm-l { transform: rotate(26deg); transform-origin: 40px 27px; }
+:is(.hero-bot-body, .as-bot-body) .hb-arm-r { transform: rotate(-28deg); transform-origin: 100px 27px; }
+:is(.hero-bot-body, .as-bot-body) .hb-cape { transform-origin: 70px 15px; }
+:is(.hero-bot-body, .as-bot-body) .hb-scan { transform: translateX(0) skewX(-18deg); }
+:is(.hero-bot-body, .as-bot-body) .hb-eq { transform-box: fill-box; transform-origin: 50% 100%; }
+:is(.hero-bot-body, .as-bot-body) .hb-eq:nth-child(2n) { transform: scaleY(.6); }
+:is(.hero-bot-body, .as-bot-body) .hb-gem { transform-box: fill-box; transform-origin: 50% 50%; }
+:is(.hero-bot-body, .as-bot-body) .hb-core { opacity: .35; }
+:is(.hero-bot-body, .as-bot-body) .hb-ring { opacity: .8; }
+:is(.hero-bot-body, .as-bot-body) .hb-rim { opacity: .55; }
+:is(.hero-bot-body, .as-bot-body) .hb-seam { opacity: .85; }
+:is(.hero-bot-body, .as-bot-body) .hb-spark { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
     .hero-bot { animation: hero-float 4s ease-in-out infinite; }
     .hero-bot-shadow { animation: hero-bot-shadow 4s ease-in-out infinite; }
@@ -2177,15 +2192,36 @@ button.rd-flag:hover { text-decoration: underline; }
     .hero-orbit { animation: hero-orbit 14s linear infinite; }
     .hero-bot-body .hb-arm-r { animation: hero-arm-wave 5.2s ease-in-out infinite 1.2s; }
     .hero-art:hover .hero-bot-body .hb-arm-r { animation: hero-arm-wave-now 1.1s ease-in-out 2; }
-    .hero-bot-body .hb-arm-l { animation: hero-arm-rest 4s ease-in-out infinite; }
-    .hero-bot-body .hb-cape { animation: hero-cape 3.2s ease-in-out infinite; }
-    .hero-bot-body .hb-scan { animation: hero-scan 3.6s ease-in-out infinite 0.6s; }
-    .hero-bot-body .hb-led { animation: hero-led 1.8s ease-in-out infinite; }
-    .hero-bot-body .hb-led:nth-of-type(2) { animation-delay: .3s; }
-    .hero-bot-body .hb-led:nth-of-type(3) { animation-delay: .6s; }
-    .hero-bot-body .hb-ai { animation: hero-ai-glow 2.4s ease-in-out infinite; }
-    .hero-bot-body .hb-jet { transform-origin: 70px 79px; animation: hero-jet 1.6s ease-in-out infinite; }
 }
+/* 5.60 motion of the outfit, shared by both robots: the equaliser speaks, the chest frame breathes, the shoulder
+   rings and the rim light pulse, the stole gems glint, sparks drop from the jet. Hovering the scene livens it up. */
+@media (prefers-reduced-motion: no-preference) {
+    :is(.hero-bot-body, .as-bot-body) .hb-arm-l { animation: hero-arm-rest 4s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-cape { animation: hero-cape 3.2s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-scan { animation: hero-scan 3.6s ease-in-out .6s infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-ai { animation: hero-ai-glow 2.4s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-jet { transform-origin: 70px 79px; animation: hero-jet 1.6s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-eq { animation: bot-eq .9s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-eq:nth-child(2) { animation-delay: -.18s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-eq:nth-child(3) { animation-delay: -.36s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-eq:nth-child(4) { animation-delay: -.54s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-eq:nth-child(5) { animation-delay: -.72s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-core { animation: bot-core 2.4s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-ring { animation: bot-glow 2.4s ease-in-out -1.2s infinite; }
+    :is(.hero-bot-body, .as-bot-body) :is(.hb-rim, .hb-seam, .hb-cuff) { animation: bot-glow 3.6s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-gem { animation: bot-gem 3.2s ease-in-out infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-gem + .hb-gem { animation-delay: -1.6s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-spark { animation: bot-spark 1.6s ease-in infinite; }
+    :is(.hero-bot-body, .as-bot-body) .hb-spark + .hb-spark { animation-delay: -.55s; }
+    :is(.hero-bot-body, .as-bot-body) .hb-spark + .hb-spark + .hb-spark { animation-delay: -1.1s; }
+    :is(.hero-art, .chat-stage):hover .hb-eq { animation-duration: .45s; }
+    :is(.hero-art, .chat-stage):hover .hb-core { animation-duration: 1.2s; }
+}
+@keyframes bot-eq { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+@keyframes bot-core { 0%, 100% { opacity: .18; } 50% { opacity: .7; } }
+@keyframes bot-glow { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+@keyframes bot-gem { 0%, 68%, 100% { opacity: .6; transform: scale(.85); } 80% { opacity: 1; transform: scale(1.3); } }
+@keyframes bot-spark { 0% { opacity: 0; transform: translateY(-2px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(7px); } }
 @keyframes hero-bot-shadow { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(.78); opacity: .6; } }
 @keyframes hero-head-tilt { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg) translateY(-1px); } }
 @keyframes hero-halo { 0%, 100% { opacity: .75; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
@@ -2195,8 +2231,7 @@ button.rd-flag:hover { text-decoration: underline; }
 @keyframes hero-arm-rest { 0%, 100% { transform: rotate(26deg); } 50% { transform: rotate(21deg); } }
 @keyframes hero-cape { 0%, 100% { transform: rotate(-1.6deg) scaleY(1); } 50% { transform: rotate(1.6deg) scaleY(1.03); } }
 @keyframes hero-scan { 0%, 15% { transform: translateX(0) skewX(-18deg); opacity: 0; } 20% { opacity: .9; } 55% { transform: translateX(62px) skewX(-18deg); opacity: .9; } 60%, 100% { transform: translateX(62px) skewX(-18deg); opacity: 0; } }
-@keyframes hero-led { 0%, 100% { opacity: .35; } 40% { opacity: 1; } }
-@keyframes hero-ai-glow { 0%, 100% { opacity: .9; } 50% { opacity: 1; filter: brightness(1.25); } }
+@keyframes hero-ai-glow { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
 @keyframes hero-jet { 0%, 100% { transform: scale(1, 1); opacity: .85; } 50% { transform: scale(.82, .7); opacity: .55; } }
 
 /* ==========================================================================
@@ -2353,7 +2388,7 @@ button.rd-flag:hover { text-decoration: underline; }
 .chat-stage-ring.is-inner { width: 156px; height: 156px; margin: -78px 0 0 -78px; opacity: .45;
     -webkit-mask: radial-gradient(circle, transparent 0 63px, #000 64px 67px, transparent 69px); mask: radial-gradient(circle, transparent 0 63px, #000 64px 67px, transparent 69px); }
 
-.chat-float { position: absolute; z-index: 3; display: flex; align-items: center; gap: 3px; padding: 7px 9px; border: 1px solid var(--float-line); border-radius: 12px 12px 12px 4px; background: var(--float-bg); box-shadow: 0 6px 14px rgba(29, 91, 216, .16); }
+.chat-float { position: absolute; z-index: 3; display: flex; align-items: center; gap: 3px; padding: 7px 9px; border: 1px solid var(--float-line); border-radius: 12px 12px 12px 4px; background: var(--float-bg); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 6px 14px rgba(29, 91, 216, .16); }
 .chat-float i { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--float-dot); opacity: .45; }
 .chat-float.is-a { left: 12%; top: 24px; }
 .chat-float.is-b { right: 11%; top: 86px; border-radius: 12px 12px 4px 12px; }
@@ -2363,7 +2398,7 @@ button.rd-flag:hover { text-decoration: underline; }
 .chat-wave { position: absolute; top: 50%; z-index: 1; display: flex; align-items: center; gap: 3px; height: 30px; margin-top: -10px; }
 .chat-wave.is-left { left: 7%; }
 .chat-wave.is-right { right: 7%; }
-.chat-wave i { display: block; width: 3px; height: 100%; border-radius: 2px; background: linear-gradient(180deg, #5EEAD4, #60A5FA); opacity: .8; transform: scaleY(.35); }
+.chat-wave i { display: block; width: 3px; height: 100%; border-radius: 2px; background: linear-gradient(180deg, #5EEAD4, #60A5FA); box-shadow: 0 0 6px rgba(94, 234, 212, .55); opacity: .85; transform: scaleY(.35); }
 .chat-wave i:nth-child(2), .chat-wave i:nth-child(4) { transform: scaleY(.6); }
 .chat-wave i:nth-child(3) { transform: scaleY(.85); }
 
@@ -2379,10 +2414,6 @@ button.rd-flag:hover { text-decoration: underline; }
 .as-bot-head img { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 6px 10px rgba(15, 30, 61, .25)); }
 .as-bot-blink { opacity: 0; animation: ai-blink-slow 2s infinite; }
 .as-bot-body { position: absolute; z-index: 1; left: 0; top: 81px; width: 132px; height: 81px; overflow: visible; filter: drop-shadow(0 8px 12px rgba(15, 30, 61, .22)); }
-.as-bot-body .hb-arm-l { transform: rotate(26deg); transform-origin: 40px 27px; }
-.as-bot-body .hb-arm-r { transform: rotate(-28deg); transform-origin: 100px 27px; }
-.as-bot-body .hb-cape { transform-origin: 70px 15px; }
-.as-bot-body .hb-scan { transform: translateX(0) skewX(-18deg); }
 .as-bot-shadow { position: absolute; left: 38px; top: 170px; width: 56px; height: 8px; border-radius: 50%; background: radial-gradient(ellipse, rgba(15, 30, 61, .3), transparent 70%); }
 :root[data-theme="dark"] .as-bot-shadow { background: radial-gradient(ellipse, rgba(0, 0, 0, .6), transparent 70%); }
 
@@ -2413,14 +2444,6 @@ button.rd-flag:hover { text-decoration: underline; }
     /* First wave about half a second after the panel opens, then every 5 s; hovering the scene waves at once. */
     .as-bot-body .hb-arm-r { animation: hero-arm-wave 5.2s ease-in-out -2.6s infinite; }
     .chat-stage:hover .as-bot-body .hb-arm-r { animation: hero-arm-wave-now 1.1s ease-in-out 2; }
-    .as-bot-body .hb-arm-l { animation: hero-arm-rest 4s ease-in-out infinite; }
-    .as-bot-body .hb-cape { animation: hero-cape 3.2s ease-in-out infinite; }
-    .as-bot-body .hb-scan { animation: hero-scan 3.6s ease-in-out .6s infinite; }
-    .as-bot-body .hb-led { animation: hero-led 1.8s ease-in-out infinite; }
-    .as-bot-body .hb-led:nth-of-type(2) { animation-delay: .3s; }
-    .as-bot-body .hb-led:nth-of-type(3) { animation-delay: .6s; }
-    .as-bot-body .hb-ai { animation: hero-ai-glow 2.4s ease-in-out infinite; }
-    .as-bot-body .hb-jet { transform-origin: 70px 79px; animation: hero-jet 1.6s ease-in-out infinite; }
     .chat-welcome .chat-chip { animation: chat-chip-in var(--dur-5) ease-out both; animation-delay: calc(.3s + var(--i, 0) * 45ms); }
     .chat-thinking::before { animation: chat-ring 1.1s linear infinite; }
 }
@@ -3297,3 +3320,137 @@ button.rd-flag:hover { text-decoration: underline; }
     .rail-btn + .page-title { min-height: 40px; margin-left: 2px; padding-left: 16px; border-left: 1px solid var(--border); }
 }
 @media (max-width: 820px) { #page-icon { display: none; } }
+
+/* --- 5.62: the assistant's welcome scene in depth. Three layers (back: aurora, dot grid, rings and an elliptical
+   orbit with satellites; middle: waves and sparks; front: glass bubbles) shift with the pointer by different
+   amounts; one bubble cycles through the skills the assistant reads about. All still with reduced motion. --- */
+.chat-layer { position: absolute; inset: 0; pointer-events: none; translate: calc(var(--px, 0) * var(--depth, 0) * 1px) calc(var(--py, 0) * var(--depth, 0) * 1px); transition: translate .6s var(--ease-out); }
+.chat-layer.is-back { --depth: -5; z-index: 0; }
+.chat-layer.is-mid { --depth: 4; z-index: 1; }
+.chat-layer.is-front { --depth: 9; z-index: 3; }
+.chat-aurora { position: absolute; width: 220px; height: 220px; border-radius: 50%; filter: blur(30px); opacity: .5; }
+.chat-aurora.is-a { top: -100px; left: -60px; background: radial-gradient(circle, #5EEAD4, transparent 65%); }
+.chat-aurora.is-b { right: -70px; bottom: -120px; background: radial-gradient(circle, #A78BFA, transparent 65%); }
+:root[data-theme="dark"] .chat-aurora { opacity: .38; }
+.chat-grid { position: absolute; inset: 0; background: radial-gradient(circle, rgba(59, 130, 246, .2) 1px, transparent 1.5px) 0 0 / 16px 16px; opacity: .7; -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 25%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 50%, #000 25%, transparent 72%); }
+:root[data-theme="dark"] .chat-grid { background-image: radial-gradient(circle, rgba(147, 197, 253, .18) 1px, transparent 1.5px); }
+.chat-orbit { position: absolute; top: 50%; left: 50%; width: 300px; height: 120px; margin: -60px 0 0 -150px; border: 1px dashed rgba(96, 165, 250, .35); border-radius: 50%; transform: rotate(-9deg); }
+.chat-orbit i { position: absolute; top: 0; left: 0; width: 7px; height: 7px; border-radius: 50%; background: #5EEAD4; box-shadow: 0 0 8px 2px rgba(94, 234, 212, .7); offset-path: path("M0 60a150 60 0 1 0 300 0a150 60 0 1 0-300 0"); offset-rotate: 0deg; offset-distance: 12%; }
+.chat-orbit i:nth-child(2) { width: 5px; height: 5px; background: #A78BFA; box-shadow: 0 0 8px 2px rgba(167, 139, 250, .7); offset-distance: 45%; }
+.chat-orbit i:nth-child(3) { width: 6px; height: 6px; background: #60A5FA; box-shadow: 0 0 8px 2px rgba(96, 165, 250, .7); offset-distance: 78%; }
+.chat-float.chat-float-skills { width: 34px; height: 30px; padding: 0; }
+.chat-float-skills b { position: absolute; inset: 0; display: grid; place-items: center; color: var(--float-dot); opacity: 0; }
+.chat-float-skills b:first-child { opacity: 1; }
+.chat-float-skills .ic { width: 16px; height: 16px; }
+.chat-float.chat-float-ok { padding: 5px; border-color: transparent; border-radius: 50%; background: linear-gradient(135deg, #34D399, #0EA5E9); color: #FFFFFF; box-shadow: 0 6px 14px rgba(14, 165, 233, .35); }
+.chat-float-ok .ic { width: 14px; height: 14px; stroke-width: 2.6; }
+@media (prefers-reduced-motion: no-preference) {
+    .chat-aurora.is-a { animation: chat-aurora 14s ease-in-out infinite alternate; }
+    .chat-aurora.is-b { animation: chat-aurora 17s ease-in-out -6s infinite alternate-reverse; }
+    .chat-orbit i { animation: chat-orbit 9s linear infinite; }
+    .chat-orbit i:nth-child(2) { animation-delay: -3s; }
+    .chat-orbit i:nth-child(3) { animation-delay: -6s; }
+    .chat-float-skills b { animation: chat-skill 8s ease-in-out infinite; }
+    .chat-float-skills b:nth-child(2) { animation-delay: -6s; }
+    .chat-float-skills b:nth-child(3) { animation-delay: -4s; }
+    .chat-float-skills b:nth-child(4) { animation-delay: -2s; }
+    .chat-float.chat-float-ok { animation: chat-float 5s ease-in-out -3.4s infinite, chat-ok 3.2s ease-in-out infinite; }
+    .chat-stage:hover .chat-stage-ring { animation-duration: 4.5s; }
+}
+@media (prefers-reduced-motion: reduce) { .chat-layer { transition: none; translate: none; } }
+@keyframes chat-aurora { from { translate: 0 0; scale: 1; } to { translate: 40px 24px; scale: 1.15; } }
+@keyframes chat-orbit { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes chat-skill { 0%, 22% { opacity: 1; scale: 1; } 27%, 100% { opacity: 0; scale: .7; } }
+@keyframes chat-ok { 0%, 100% { scale: 1; } 50% { scale: 1.12; } }
+
+/* --- 5.63: AI moments (js/companion.js). The robot comes out at its home corner, just above the Assistant button,
+   never over the middle of the page; the part it talks about gets a soft glowing outline. Arrival in steps: the robot
+   springs up from the edge with a light burst and sparks, the bubble unfolds out of it, the words sweep in as if
+   typed and the questions slide in one by one. Leaving folds the bubble back and the robot sinks. On a phone the same
+   corner becomes a strip. With reduced motion it simply appears and goes. --- */
+.ai-moment { position: fixed; right: 18px; bottom: 88px; z-index: var(--z-float); display: flex; align-items: flex-end; width: min(372px, calc(100vw - 24px)); pointer-events: none; }
+.ai-moment > * { pointer-events: auto; }
+.ai-moment-bubble { position: relative; flex: 1; min-width: 0; padding: 12px 14px 10px; border: 1px solid color-mix(in srgb, var(--brand) 26%, var(--border)); border-radius: 18px 18px 6px 18px; background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--text); box-shadow: var(--shadow-lg), 0 0 0 4px color-mix(in srgb, var(--brand) 6%, transparent); opacity: 0; transform: translate(18px, 14px) scale(.55); transform-origin: 100% 100%; filter: blur(6px); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-5) var(--ease-spring), filter var(--dur-4) var(--ease-out); }
+.ai-moment-bubble::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, color-mix(in srgb, #5EEAD4 22%, transparent), transparent 40%, color-mix(in srgb, #A78BFA 18%, transparent)); }
+.ai-moment.is-open .ai-moment-bubble { opacity: 1; transform: none; filter: none; }
+.ai-moment-bot { position: relative; order: 2; flex: none; width: 74px; height: 64px; margin: 0 -4px -10px 4px; opacity: 0; pointer-events: none; }
+.ai-moment-halo { position: absolute; inset: -8px -6px -2px; border-radius: 50%; background: radial-gradient(circle at 50% 55%, rgba(96, 165, 250, .5), transparent 66%); }
+.ai-moment-burst { position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; margin: -35px 0 0 -35px; border: 2px solid #5EEAD4; border-radius: 50%; box-shadow: 0 0 14px rgba(94, 234, 212, .7); opacity: 0; }
+.ai-moment-head { position: absolute; bottom: 0; left: 0; width: 74px; height: 59px; transform-origin: 50% 90%; }
+.ai-moment-head img { filter: drop-shadow(0 6px 10px rgba(15, 30, 61, .3)); }
+.ai-moment-sparks i { position: absolute; top: 46%; left: 50%; width: 6px; height: 6px; border-radius: 50%; background: #FDE68A; box-shadow: 0 0 8px 2px rgba(253, 230, 138, .8); opacity: 0; }
+.ai-moment-sparks i:nth-child(2) { background: #A5F3FC; box-shadow: 0 0 8px 2px rgba(165, 243, 252, .8); }
+.ai-moment-sparks i:nth-child(3) { background: #C4B5FD; box-shadow: 0 0 8px 2px rgba(196, 181, 253, .8); }
+.ai-moment-sparks i:nth-child(4) { width: 4px; height: 4px; }
+.ai-moment-sparks i:nth-child(5) { width: 5px; height: 5px; background: #A5F3FC; }
+.ai-moment.is-in .ai-moment-bot { opacity: 1; }
+.ai-moment-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--brand); font-size: var(--fs-xs); }
+.ai-moment-meta .ic { width: 14px; height: 14px; }
+.ai-moment-meta strong { flex: 1; color: var(--text); font-weight: var(--fw-bold); }
+:root[data-theme="dark"] .ai-moment-meta { color: var(--navy-600); }
+.ai-moment-close { display: grid; flex: none; width: 26px; height: 26px; margin: -4px -6px -4px 0; place-items: center; border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--muted); cursor: pointer; transition: background-color var(--dur-2), color var(--dur-2); }
+.ai-moment-close:hover { background: var(--chip); color: var(--text); }
+.ai-moment-close .ic { width: 15px; height: 15px; }
+.ai-moment-about { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; margin-bottom: 6px; padding: 3px 9px 3px 7px; border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border)); border-radius: var(--radius-pill); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); color: var(--text-2); cursor: pointer; font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-semibold); transition: background-color var(--dur-2), border-color var(--dur-2); }
+.ai-moment-about:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
+.ai-moment-about .ic { width: 13px; height: 13px; color: var(--brand); }
+.ai-moment-about-name { overflow: hidden; color: var(--text); text-overflow: ellipsis; white-space: nowrap; }
+.ai-moment-text { min-height: 22px; color: var(--text); font-size: var(--fs-base); line-height: 1.45; }
+.ai-moment-typing { display: inline-flex; gap: 4px; padding: 7px 0; }
+.ai-moment-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); opacity: .35; }
+.ai-moment-asks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+.ai-moment-ask { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 5px 11px; border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border)); border-radius: var(--radius-pill); background: var(--surface); color: var(--text); cursor: pointer; font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold); text-align: left; opacity: 0; transition: background-color var(--dur-2), border-color var(--dur-2), transform var(--dur-2); }
+.ai-moment.is-said .ai-moment-ask { opacity: 1; }
+.ai-moment-ask .ic { width: 15px; height: 15px; color: var(--brand); }
+.ai-moment-ask:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); transform: translateY(-1px); }
+.ai-moment-off { display: block; margin-top: 8px; padding: 2px 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: inherit; font-size: var(--fs-xs); text-decoration: underline; text-underline-offset: 2px; }
+.ai-moment-off:hover { color: var(--text); }
+.ai-moment.is-out .ai-moment-bubble { opacity: 0; transform: translate(18px, 14px) scale(.55); filter: blur(6px); transition-duration: var(--dur-3); }
+.ai-spotlight { outline: 2px solid color-mix(in srgb, var(--brand) 45%, transparent); outline-offset: 4px; transition: outline-color var(--dur-4), outline-offset var(--dur-4); }
+.has-ai-moment .fx-top { opacity: 0; pointer-events: none; }
+/* 5.64: the robot leaves the Assistant button and comes back into it. While it is out, the face in the button dims. */
+.assistant-fab.is-away { box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 22%, transparent), var(--shadow-lg); }
+.assistant-fab.is-away .ai-avatar-fab { opacity: .5; transform: scale(.76); }
+.assistant-fab.is-away:is(:hover, :focus-visible) .ai-avatar-fab { opacity: 1; transform: none; }
+@media (max-width: 719px) { .ai-moment { right: 12px; left: 12px; width: auto; } }
+@media (pointer: coarse) { .ai-moment-ask { min-height: var(--touch); } .ai-moment-close { width: 40px; height: 40px; } }
+@media (prefers-reduced-motion: no-preference) {
+    .assistant-fab:not([hidden]) { animation: fab-in .5s var(--ease-spring) backwards; }
+    .assistant-fab.is-launching .ai-avatar-fab { animation: fab-launch .55s var(--ease-out) both; }
+    .assistant-fab.is-launching::after { animation: fab-ring-out .7s ease-out both; }
+    .assistant-fab.is-absorbing .ai-avatar-fab { animation: fab-absorb .6s var(--ease-spring) both; }
+    .assistant-fab.is-absorbing::after { animation: fab-ring-in .55s ease-out both; }
+    .ai-moment.is-in .ai-moment-bot { animation: ai-bot-in .78s var(--ease-spring) .1s both; }
+    .ai-moment.is-in .ai-moment-burst { animation: ai-burst .8s ease-out .5s both; }
+    .ai-moment.is-in .ai-moment-sparks i { animation: ai-spark .9s var(--ease-out) .54s both; }
+    .ai-moment.is-in .ai-moment-sparks i:nth-child(1) { --sx: -34px; --sy: -30px; }
+    .ai-moment.is-in .ai-moment-sparks i:nth-child(2) { --sx: 30px; --sy: -36px; animation-delay: .6s; }
+    .ai-moment.is-in .ai-moment-sparks i:nth-child(3) { --sx: -42px; --sy: 6px; animation-delay: .64s; }
+    .ai-moment.is-in .ai-moment-sparks i:nth-child(4) { --sx: 38px; --sy: 2px; animation-delay: .56s; }
+    .ai-moment.is-in .ai-moment-sparks i:nth-child(5) { --sx: 4px; --sy: -46px; animation-delay: .68s; }
+    .ai-moment-halo { animation: hero-halo 3s ease-in-out infinite; }
+    .ai-moment.is-said .ai-moment-head { animation: ai-moment-bob 3.2s ease-in-out .3s infinite; }
+    .ai-moment.is-said .ai-moment-text { animation: ai-type .7s steps(14, end) both; }
+    .ai-moment.is-said .ai-moment-ask { animation: ai-chip-in .45s var(--ease-spring) both; animation-delay: calc(.35s + var(--i, 0) * .1s); }
+    .ai-moment-typing i { animation: chat-dot 1s ease-in-out infinite; }
+    .ai-moment-typing i:nth-child(2) { animation-delay: .15s; }
+    .ai-moment-typing i:nth-child(3) { animation-delay: .3s; }
+    .ai-moment.is-out .ai-moment-bot { animation: ai-bot-out .5s var(--ease-in) .14s both; }
+    .ai-spotlight { animation: ai-spot 1.4s ease-out 2; }
+}
+@media (prefers-reduced-motion: reduce) { .ai-moment-bubble, .ai-moment-ask { transition: none; } }
+@media print { .ai-moment { display: none !important; } .ai-spotlight { outline: 0; } }
+@keyframes ai-bot-in { 0% { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 46px)) scale(.6); } 16% { opacity: 1; } 60% { transform: translateY(-10px) scale(1.07) rotate(4deg); } 82% { transform: translateY(2px) scale(.98) rotate(-2deg); } 100% { opacity: 1; transform: none; } }
+@keyframes ai-bot-out { 0% { opacity: 1; transform: none; } 30% { transform: translateY(-8px) scale(1.04) rotate(-3deg); } 86% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 46px)) scale(.55); } }
+@keyframes fab-in { from { opacity: 0; transform: translateY(14px) scale(.6); } }
+@keyframes fab-launch { 0% { opacity: 1; transform: none; } 28% { transform: scale(1.12, .84); } 55% { opacity: 1; transform: translateY(-4px) scale(.92, 1.1); } 100% { opacity: .5; transform: scale(.76); } }
+@keyframes fab-absorb { 0% { opacity: .5; transform: scale(.76); } 45% { opacity: 1; transform: scale(1.16); } 72% { transform: scale(.96); } 100% { opacity: 1; transform: none; } }
+@keyframes fab-ring-out { 0% { opacity: .95; transform: scale(.9); } 100% { opacity: 0; transform: scale(2.2); } }
+@keyframes fab-ring-in { 0% { opacity: 0; transform: scale(2); } 60% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+@keyframes ai-burst { 0% { opacity: .9; transform: scale(.35); } 100% { opacity: 0; transform: scale(2.3); } }
+@keyframes ai-spark { 0% { opacity: 0; transform: translate(0, 0) scale(.4); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--sx, 0), var(--sy, -30px)) scale(1); } }
+@keyframes ai-type { from { -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%); mask-image: linear-gradient(90deg, #000 45%, transparent 55%); -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%); mask-image: linear-gradient(90deg, #000 45%, transparent 55%); -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-position: 0 0; mask-position: 0 0; } }
+@keyframes ai-chip-in { from { opacity: 0; transform: translateY(8px) scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes ai-moment-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-3px) rotate(3deg); } }
+@keyframes ai-spot { 0% { outline-color: color-mix(in srgb, var(--brand) 0%, transparent); outline-offset: 10px; } 40% { outline-color: color-mix(in srgb, var(--brand) 70%, transparent); outline-offset: 4px; } 100% { outline-color: color-mix(in srgb, var(--brand) 45%, transparent); outline-offset: 4px; } }
+.pf-ai-moments { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--border); }

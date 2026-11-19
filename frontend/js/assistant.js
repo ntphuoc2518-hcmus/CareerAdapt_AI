@@ -1,5 +1,5 @@
 /** CareerAdapt AI Assistant: a panel that stays across pages, so it has its own listeners. */
-import { aiAvatar } from "./icons.js";
+import { aiAvatar, icon } from "./icons.js";
 import { botBody, botHead } from "./bot.js";
 import { api, confirmDialog, emptyView, esc, fmtDateTime, getLang, safeUrl, toast } from "./core.js";
 
@@ -112,18 +112,31 @@ const SPARK = '<svg viewBox="0 0 24 24"><path d="M12 1.5 13.9 9.6 22 12l-8.1 2.4
 // The face that blinks (1 s open, 1 s closed, like the "Trợ lý" button); used for the header and while answering.
 const blinkingFace = size => `<span class="ai-avatar ai-avatar-${size} fab-blink" aria-hidden="true"><img src="/img/ai-avatar-open.webp" alt="" width="32" height="32"><img class="fab-blink-closed" src="/img/ai-avatar-closed.webp" alt="" width="32" height="32"></span>`;
 
-/** Welcome scene (5.41): the CareerAdapt robot floats and waves inside a turning ring of light, with speech
- *  bubbles, sound waves and sparkles around it. Decorative only; with reduced motion only the blink remains. */
+/** Welcome scene (5.41, rebuilt in 5.62): the CareerAdapt robot floats and waves inside turning rings of light, over a
+ *  drifting aurora and a dot grid, with satellites on an elliptical orbit, glass speech bubbles (one cycles through
+ *  the skills the assistant reads about), sound waves and sparkles. The layers shift a little with the pointer, so
+ *  the scene has depth. Decorative only; with reduced motion everything stands still except the blink. */
 function stage() {
     const dots = "<i></i><i></i><i></i>";
     const bars = Array.from({ length: 5 }, (unused, index) => `<i style="--d:${index}"></i>`).join("");
+    const skills = ["database", "code", "chart", "pen"].map(name => `<b>${icon(name)}</b>`).join("");
     return `<div class="chat-stage" aria-hidden="true">
-        <span class="chat-stage-ring"></span><span class="chat-stage-ring is-inner"></span>
-        <span class="chat-float is-a">${dots}</span><span class="chat-float is-b">${dots}</span><span class="chat-float is-c">${dots}</span>
-        <span class="chat-wave is-left">${bars}</span><span class="chat-wave is-right">${bars}</span>
-        <span class="chat-spark is-a">${SPARK}</span><span class="chat-spark is-b">${SPARK}</span><span class="chat-spark is-c">${SPARK}</span>
+        <span class="chat-layer is-back"><span class="chat-aurora is-a"></span><span class="chat-aurora is-b"></span><span class="chat-grid"></span>
+            <span class="chat-stage-ring"></span><span class="chat-stage-ring is-inner"></span><span class="chat-orbit"><i></i><i></i><i></i></span></span>
+        <span class="chat-layer is-mid"><span class="chat-wave is-left">${bars}</span><span class="chat-wave is-right">${bars}</span>
+            <span class="chat-spark is-a">${SPARK}</span><span class="chat-spark is-b">${SPARK}</span><span class="chat-spark is-c">${SPARK}</span></span>
+        <span class="chat-layer is-front"><span class="chat-float is-a">${dots}</span><span class="chat-float is-b chat-float-skills">${skills}</span><span class="chat-float is-c chat-float-ok">${icon("check")}</span></span>
         <span class="as-bot"><span class="as-bot-halo"></span>${botBody("as", "as-bot-body")}${botHead("as-bot-head", "as-bot-blink")}<span class="as-bot-shadow"></span></span>
     </div>`;
+}
+
+/* The scene's layers follow the pointer a little (5.62). Off with reduced motion. */
+function stageParallax(event) {
+    const scene = event.target.closest?.(".chat-stage");
+    if (!scene || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = scene.getBoundingClientRect();
+    scene.style.setProperty("--px", (((event.clientX - box.left) / box.width) * 2 - 1).toFixed(3));
+    scene.style.setProperty("--py", (((event.clientY - box.top) / box.height) * 2 - 1).toFixed(3));
 }
 
 function welcome() {
@@ -369,6 +382,12 @@ export async function askAssistant(question, task = null, label = "") {
     else if (question) await send(question);
 }
 
+/** True when the Assistant can take a question here: not on a test step, not locked by an open test, not already open.
+ *  The contextual AI moments (companion.js, 5.62) only appear when this holds. */
+export function assistantReady() {
+    return !state.hidden && !fab().hidden && !state.open;
+}
+
 /** Hidden while a test is on screen. The server refuses as well, so this only keeps the screen clean. */
 export async function assistantRoute(path) {
     state.page = pageKey(path);
@@ -395,6 +414,8 @@ export function initAssistant() {
     alignWithTopbar();
     fab().addEventListener("click", () => setOpen(!state.open));
     document.getElementById("ai-card-open").addEventListener("click", () => setOpen(true));
+    panel().addEventListener("pointermove", stageParallax, { passive: true });
+    panel().addEventListener("pointerleave", () => { const scene = panel().querySelector(".chat-stage"); scene?.style.setProperty("--px", "0"); scene?.style.setProperty("--py", "0"); }, { passive: true });
     panel().addEventListener("click", event => {
         const element = event.target.closest("[data-assistant]");
         if (!element) return;

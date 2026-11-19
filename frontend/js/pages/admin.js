@@ -55,7 +55,7 @@ async function loadSummary() {
 function heroView() {
     const value = key => (summary?.[key] ?? "—");
     return pageHero({
-        tone: "brand", icon: "shield", kicker: "Quản trị", title: "Quản trị nội dung",
+        tone: "brand", icon: "admin", kicker: "Quản trị", title: "Quản trị nội dung",
         text: "Duyệt bài, quản lý nội dung học và theo dõi chất lượng chấm điểm. Mọi thay đổi ở đây có hiệu lực với tất cả học viên.",
         stats: [["check", "Bài cần duyệt", value("reviews"), "amber"], ["pen", "Câu hỏi chờ duyệt", value("contributions"), "violet"], ["file", "JD cần rà soát", value("jds"), "teal"], ["book", "Học liệu cần xử lý", value("resources"), "rose"]],
     });

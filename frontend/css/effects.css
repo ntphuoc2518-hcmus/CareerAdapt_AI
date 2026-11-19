@@ -37,7 +37,7 @@
 
 /* Scroll aids: a progress line under the header and a back-to-top button above the assistant button. */
 .fx-scroll-line { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, var(--brand), #36CFFF); transform: scaleX(0); transform-origin: left center; pointer-events: none; }
-.fx-top { position: fixed; right: 22px; bottom: 84px; z-index: var(--z-float); display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--brand); box-shadow: var(--shadow-md); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity var(--dur-3), transform var(--dur-3); }
+.fx-top { position: fixed; right: 27px; bottom: 88px; z-index: var(--z-float); display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--brand); box-shadow: var(--shadow-md); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity var(--dur-3), transform var(--dur-3); }
 .fx-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
 .fx-top:hover { background: var(--brand); color: #fff; }
 .fx-top svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

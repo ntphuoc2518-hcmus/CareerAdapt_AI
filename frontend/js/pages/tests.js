@@ -13,7 +13,7 @@ function testsHero(catalog, history) {
     const open = history.attempts.length - submitted.length;
     const latest = submitted.slice().sort((a, b) => String(b.submitted_at || "").localeCompare(String(a.submitted_at || "")))[0];
     return pageHero({
-        tone: "teal", icon: "quiz", kicker: "Kiểm tra kiến thức", title: "Luyện tập kiến thức theo từng kỹ năng",
+        tone: "teal", icon: "test", kicker: "Kiểm tra kiến thức", title: "Luyện tập kiến thức theo từng kỹ năng",
         text: "Đây là phần luyện tập kiến thức, tách biệt với bài kiểm tra trong Quy trình Career Adapt và không làm thay đổi kết quả của quy trình.",
         stats: [["quiz", "Bài có sẵn", catalog.blueprints.length], ["check", "Lượt đã nộp", submitted.length, "teal"], ["clock", "Đang làm", open, open ? "amber" : "muted"], ["trophy", "Điểm gần nhất", latest?.composite_score ?? "—", "violet"]],
     });

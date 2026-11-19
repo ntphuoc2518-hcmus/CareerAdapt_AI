@@ -54,7 +54,7 @@ async function listPage() {
     const count = status => mine.filter(item => item.status === status).length;
     const lowCells = Object.values(data.coverage.exam).reduce((total, levels) => total + Object.values(levels).filter(value => value <= 1).length, 0);
     setView(`<div class="stack">
-        ${pageHero({ tone: "violet", icon: "pen", kicker: "Đóng góp câu hỏi", title: lowCells ? `Đề thi còn ${lowCells} ô kỹ năng × độ khó chỉ có một câu.` : "Mọi ô của đề thi đã có từ hai câu trở lên.",
+        ${pageHero({ tone: "violet", icon: "write", kicker: "Đóng góp câu hỏi", title: lowCells ? `Đề thi còn ${lowCells} ô kỹ năng × độ khó chỉ có một câu.` : "Mọi ô của đề thi đã có từ hai câu trở lên.",
             text: "Câu hỏi do chuyên gia viết. Hệ thống tự kiểm tra đáp án mẫu trên bốn bộ dữ liệu, rồi một quản trị viên khác duyệt trước khi dùng.",
             stats: [["file", "Bản nháp", count("DRAFT") + count("CHANGES_REQUESTED"), "muted"], ["clock", "Chờ duyệt", count("SUBMITTED"), "warn"], ["check", "Đã xuất bản", count("APPROVED"), "good"], ["target", "Ô còn 1 câu", lowCells, lowCells ? "bad" : "good"]] })}
         <div class="ct-layout">
