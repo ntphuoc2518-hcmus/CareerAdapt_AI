@@ -53,11 +53,15 @@ function roadmapSection(plan, tasks) {
 }
 
 export async function renderReport() {
-    const [gap, mastery, review, plan, tasks] = await Promise.all([api("/me/gap"), optional(api("/me/skill-mastery")), optional(api("/career-process/exam/review")), optional(api("/me/roadmap")), optional(api("/me/learning-tasks"))]);
+    const gap = await api("/me/gap");
     if (!gap.skill_evaluations.length) {
         setView(`<div class="card">${emptyView("Chưa có dữ liệu để lập báo cáo", "Hãy hoàn thành Quy trình Career Adapt trước.", '<a class="btn btn-primary" href="#/process">Đi đến quy trình</a>')}</div>`);
         return;
     }
+    // 5.57.2: the graded exam is asked for only once some skill has evidence; before that the server answers 409
+    // and the browser logged it as an error, although the page showed its empty state correctly.
+    const measured = gap.skill_evaluations.some(item => item.evidence);
+    const [mastery, review, plan, tasks] = await Promise.all([optional(api("/me/skill-mastery")), measured ? optional(api("/career-process/exam/review")) : null, optional(api("/me/roadmap")), optional(api("/me/learning-tasks"))]);
     const target = gap.target;
     setView(`<div class="stack report">
         <div class="report-actions"><a class="btn btn-secondary" href="#/plan/da/gap">${icon("arrow")}<span>Về Khoảng cách kỹ năng</span></a><button class="btn btn-primary" type="button" data-act="print">${icon("file")}<span>In hoặc lưu PDF</span></button></div>

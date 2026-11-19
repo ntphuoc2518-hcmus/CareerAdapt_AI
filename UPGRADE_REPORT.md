@@ -1729,3 +1729,27 @@ Phát hiện khi viết test bàn phím, ở trang Quản trị:
 - `frontend/js/pages/admin.js`
 - `tests/test_lesson_mistakes_english.py` (mới)
 - Phiên bản 5.57.1 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+## Bổ sung 19/11/2026 · Phiên bản 5.57.2: Báo cáo năng lực không còn gọi API khi chưa có bài
+
+**Lỗi:** khi thử bản clone mới từ GitHub, mở Báo cáo năng lực bằng tài khoản chưa làm bài kiểm tra thì console có lỗi "Failed to load resource … 409".
+- Trang vẫn gọi `/career-process/exam/review`, và máy chủ trả 409 vì chưa có bài đã chấm.
+- Giao diện đã xử lý đúng: trang hiện "Chưa có dữ liệu để lập báo cáo" hoặc "Chưa có bài kiểm tra đã chấm".
+- Tuy vậy, trình duyệt vẫn ghi request bị từ chối thành lỗi. Hành vi này có từ bản 5.48.
+
+**Sửa** (`frontend/js/pages/report.js`):
+- Đọc `/me/gap` trước.
+- Chỉ gọi API kết quả bài làm khi đã có ít nhất một kỹ năng có bằng chứng.
+- Các API còn lại vẫn được gọi song song như cũ.
+
+**Test:** thêm `#/report` vào danh sách trang của `tests/test_ui_e2e.py`. Danh sách này kiểm tra không lỗi console và không tràn ngang, trên máy tính và điện thoại. Hai test này thất bại với mã cũ và đạt với mã mới.
+
+**Kiểm chứng:**
+- Toàn bộ bộ test: **1312 passed, 11 skipped**.
+- Trên Edge, học viên đã làm bài vẫn thấy đủ phần điểm (85/100, Đạt). Học viên đang làm dở quy trình thấy "Chưa có bài kiểm tra đã chấm". Cả hai trường hợp đều không có lỗi console.
+
+**Kiểm thử bản clone (bản 5.57.1, trước bản sửa này):**
+- Clone commit c87e596 từ GitHub vào thư mục tạm, tạo venv Python 3.13 mới và cài `requirements.txt` và `requirements-dev.txt`: không lỗi.
+- `run.py` chạy ở cổng 8790 và báo phiên bản 5.57.1.
+- Trên Edge, ở khổ 1440 sáng tiếng Việt và khổ 390 tối tiếng Anh: đăng ký, đăng nhập, mở 7 trang chính và Trợ lý AI đều không tràn ngang. Lỗi console duy nhất là dòng 409 đã sửa ở trên.
+- Bộ test trên bản clone: 1310 passed, 11 skipped.

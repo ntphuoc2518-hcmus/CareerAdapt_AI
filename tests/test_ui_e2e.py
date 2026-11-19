@@ -23,7 +23,7 @@ playwright_api = pytest.importorskip("playwright.sync_api", reason="Playwright i
 expect = playwright_api.expect
 ROOT = Path(__file__).resolve().parents[1]
 NAME, EMAIL, PASSWORD = "Học Viên Kiểm Thử", "ui.test@example.com", "Kiem-Thu#2026"
-PAGES = ["/", "/process", "/plan", "/resources", "/tests", "/profile", "/plan/da/progress"]
+PAGES = ["/", "/process", "/plan", "/resources", "/tests", "/profile", "/plan/da/progress", "/report"]
 ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD = "Quản Trị Kiểm Thử", "admin.ui.test@example.com", "Quan-Tri#2026"
 SERVER_DIRS: dict[str, Path] = {}
 
