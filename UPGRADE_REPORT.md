@@ -1753,3 +1753,155 @@ Phát hiện khi viết test bàn phím, ở trang Quản trị:
 - `run.py` chạy ở cổng 8790 và báo phiên bản 5.57.1.
 - Trên Edge, ở khổ 1440 sáng tiếng Việt và khổ 390 tối tiếng Anh: đăng ký, đăng nhập, mở 7 trang chính và Trợ lý AI đều không tràn ngang. Lỗi console duy nhất là dòng 409 đã sửa ở trên.
 - Bộ test trên bản clone: 1310 passed, 11 skipped.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.58.0: Thu gọn thanh bên và menu Kế hoạch để có thêm chỗ làm việc
+
+**Yêu cầu:** có cách ẩn thanh điều hướng navy bên trái và menu dọc của Kế hoạch Career Adapt, để vùng nội dung rộng hơn.
+
+**Cách làm:** hai thanh không ẩn hẳn mà thu thành một cột chỉ còn biểu tượng. Như vậy vẫn chuyển trang được bằng một cú bấm, trong khi phần lớn bề ngang được trả lại cho nội dung.
+
+**Thanh bên chính:**
+- Nút mới nằm ở đầu thanh trên cùng, cạnh tên trang (`#rail-btn`, `aria-controls="sidebar"`, có `aria-expanded`).
+- Khi thu gọn, thanh còn 76px:
+  - logo chỉ còn hình;
+  - tiêu đề nhóm thành vạch ngăn;
+  - mục menu chỉ còn biểu tượng; rê chuột thì hiện tên, và trình đọc màn hình vẫn đọc được tên;
+  - thẻ Trợ lý AI và dòng ghi chú cuối thanh được ẩn. Nút "Trợ lý" nổi ở góc vẫn mở trợ lý như cũ.
+- Chỉ có tác dụng từ 821px trở lên. Hẹp hơn thì thanh bên vẫn là ngăn kéo mở bằng nút ☰.
+
+**Menu Kế hoạch:**
+- Nút "Thu gọn menu" nằm ở đầu menu dọc.
+- Khi thu gọn, menu còn 68px; mỗi mục chỉ còn biểu tượng, có tên khi rê chuột.
+- Chỉ có tác dụng từ 1200px trở lên. Hẹp hơn thì menu vẫn là hàng ngang như trước.
+
+**Chung cho cả hai:**
+- Lựa chọn được nhớ trong trình duyệt (`localStorage`). `boot.js` áp lựa chọn đó trước khi trang hiện, nên trang không bị giật khi mở.
+- Khi thanh bên thu gọn, vùng nội dung được rộng tối đa 1440px thay vì 1320px.
+- Hiệu ứng co giãn tắt khi bật giảm chuyển động.
+- Không có dữ liệu hay chức năng nào thay đổi.
+
+**Kết quả đo trên Edge (trang Khoảng cách kỹ năng, bề rộng vùng nội dung):**
+
+| Khổ màn hình | Trước | Sau khi thu gọn |
+| --- | --- | --- |
+| 1440, thu cả hai thanh | 866px | 1218px |
+| 1024, thu thanh bên | 764px | 948px |
+
+- Ở 1280px với tiếng Anh, nhãn nút đổi đúng ("Expand sidebar", "Expand menu").
+- Ở 390px, hai nút ẩn và nút ☰ vẫn hoạt động.
+- Tải lại trang vẫn giữ trạng thái thu gọn. Bấm Enter trên nút mở lại được.
+- Không có lỗi console, không tràn ngang.
+
+**Tệp:**
+- `frontend/js/layout.js` (mới)
+- `frontend/js/boot.js`
+- `frontend/js/main.js`
+- `frontend/js/pages/plan.js`
+- `frontend/index.html`
+- `frontend/css/app.css`
+- `frontend/js/lang/en.json`: 4 nhãn mới
+- `tests/test_ui_e2e.py`: 2 test mới
+- Phiên bản 5.58.0 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+**Kiểm chứng:**
+- Toàn bộ bộ test: **1314 passed, 11 skipped**.
+- Test mới, thu gọn cả hai thanh: kiểm `aria-expanded`, tên hiện khi rê chuột, độ rộng thanh bên ≤ 80px, nội dung rộng thêm hơn 300px, trạng thái còn giữ sau khi tải lại, và mở lại bằng bàn phím.
+- Test mới trên điện thoại: nút thu gọn ẩn, nút ☰ còn hiện.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.58.1: Tooltip riêng cho mục đã thu gọn
+
+**Yêu cầu:** dòng chữ hiện ra khi rê chuột vào một mục đã thu gọn trông chưa đẹp. Đó là tooltip mặc định của trình duyệt (thuộc tính `title`), một hộp xám nhỏ không chỉnh kiểu được.
+
+**Thay đổi:**
+- Bỏ thuộc tính `title` ở các mục đã thu gọn và ở hai nút thu gọn.
+- Thay bằng tooltip riêng của ứng dụng (`.nav-tip`, trong `frontend/js/layout.js`):
+  - Kiểu dáng: nền navy chữ trắng ở giao diện sáng, nền sáng chữ navy ở giao diện tối. Chữ 13px, đậm vừa, bo góc 10px, có bóng đổ.
+  - Vị trí: có mũi nhọn chỉ đúng vào biểu tượng. Tooltip nằm bên phải mục, hoặc bên dưới với nút thu gọn thanh bên. Nếu sát mép màn hình, tooltip được đẩy vào trong nhưng mũi nhọn vẫn chỉ đúng mục.
+  - Hiển thị: hiện mờ dần và trượt nhẹ trong 150 ms (tắt khi bật giảm chuyển động). Có khi rê chuột, và có cả khi dùng phím Tab, điều tooltip mặc định không làm được.
+  - Tooltip ẩn khi bấm chuột, cuộn trang, đổi trang hoặc nhấn Esc. Tooltip không chặn chuột.
+- Tên mục vẫn nằm trong liên kết cho trình đọc màn hình. Bản thân tooltip được ẩn khỏi trình đọc màn hình (`aria-hidden`) để tên không bị đọc hai lần.
+- Nút "Thu gọn menu" khi menu đang mở đã có chữ trên nút, nên không hiện tooltip.
+
+**Kiểm chứng:**
+- Toàn bộ bộ test: **1314 passed, 11 skipped**.
+- Test giao diện kiểm: liên kết không còn `title`; tooltip hiện đúng tên khi rê chuột và tắt khi rời chuột; tooltip hiện khi focus bằng bàn phím; tên truy cập của liên kết vẫn đúng.
+- Đã chụp ảnh trên Edge (khổ 1280, sáng và tối) cho menu Kế hoạch, thanh bên và nút thu gọn. Không có lỗi console.
+
+**Tệp:**
+- `frontend/js/layout.js`
+- `frontend/css/app.css`
+- `tests/test_ui_e2e.py`
+- Phiên bản 5.58.1 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+## Bổ sung 19/11/2026 · Phiên bản 5.59.0: Biểu tượng mới cho Bảng điều khiển, Quy trình và Kế hoạch
+
+**Yêu cầu:** thiết kế lại biểu tượng của Bảng điều khiển (trang chủ), Quy trình Career Adapt và Kế hoạch Career Adapt cho đẹp, đồng bộ và hiện đại hơn.
+
+**Trước đây:**
+- Ba trang dùng các biểu tượng chung của bộ icon: ngôi nhà, bia bắn và biểu đồ cột.
+- Biểu tượng của Bảng điều khiển còn không thống nhất: menu bên dùng ngôi nhà, còn tiêu đề trang dùng lưới ô vuông.
+
+**Thiết kế mới** (`frontend/js/icons.js`, nhóm `DUO`):
+- Kiểu hai tông: nét viền như cả bộ icon, cộng một mảng tô nhạt cùng màu.
+- Cùng lưới 24px, cùng độ dày nét 1,8 và cùng kiểu đầu nét tròn như các biểu tượng khác.
+
+| Trang | Biểu tượng mới | Mảng tô |
+| --- | --- | --- |
+| Bảng điều khiển (`dashboard`) | Bố cục bảng điều khiển: một ô dọc lớn và hai ô nhỏ | Ô lớn |
+| Quy trình Career Adapt (`journey`) | Dòng thời gian các bước: ba bước tròn nối dọc, mỗi bước có một dòng | Hai bước đầu, gợi ý "đang tiến triển" |
+| Kế hoạch Career Adapt (`plan`) | Bảng kế hoạch có đường đi lên | Thanh tiêu đề của bảng |
+
+- Mảng tô nhạt hơn khi bình thường và đậm hơn khi rê chuột hay khi đang ở trang đó.
+- Khi chọn mẫu đã thử thêm hai phương án và bỏ đi:
+  - "đường uốn tới lá cờ": quá giống biểu tượng Lộ trình học tập;
+  - "ba nút nối zic-zắc": dễ bị đọc nhầm thành biểu tượng Chia sẻ.
+
+**Áp dụng ở:**
+- menu bên, cả khi mở và khi thu gọn;
+- tiêu đề trang trên thanh trên cùng;
+- hero của trang Quy trình;
+- thẻ dẫn tới Kế hoạch trên Bảng điều khiển.
+
+Các màn khác đang dùng `chart` và `target` cho dữ liệu (biểu đồ, mục tiêu) giữ nguyên.
+
+**Kiểm chứng:**
+- Toàn bộ bộ test: **1314 passed, 11 skipped**.
+- Chụp trên Edge (khổ 1280, độ phân giải gấp đôi), ở giao diện sáng và tối, gồm menu mở, menu thu gọn, tiêu đề, hero và thẻ dẫn trang. Không có lỗi console.
+
+**Tệp:**
+- `frontend/js/icons.js`
+- `frontend/js/main.js`
+- `frontend/js/pages/dashboard.js`
+- `frontend/js/pages/process.js`
+- `frontend/css/app.css`
+- Phiên bản 5.59.0 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`
+
+## Bổ sung 19/11/2026 · Phiên bản 5.59.1: Đầu trang cân đối hơn
+
+**Yêu cầu:** phía trái thanh trên cùng gồm nút thu gọn, biểu tượng trang và tiêu đề trông chưa cân đối.
+
+**Nguyên nhân:**
+- Biểu tượng trang (`#page-icon`) là một thẻ `span` thường nằm theo dòng chữ, nên nó lệch lên so với tiêu đề.
+- Biểu tượng chỉ cao 24px, đứng trơ trọi cạnh nút tròn 40px có viền.
+
+**Sửa** (`frontend/css/app.css`):
+- Biểu tượng trang nằm trong một ô vuông bo góc 40px, cùng cao với nút thu gọn và các nút khác trên thanh. Ô có nền màu thương hiệu nhạt, nền đậm hơn ở giao diện tối, và được căn giữa theo tiêu đề.
+- Một vạch ngăn mảnh tách nút thu gọn khỏi cụm "biểu tượng + tiêu đề".
+- Khoảng cách giữa ô và tiêu đề tăng từ 12 lên 14px; dòng tiêu đề có `line-height` 1,2 để căn giữa chính xác.
+- Ở khổ 820px trở xuống, ô biểu tượng ẩn đi như biểu tượng cũ.
+
+**Kiểm chứng:**
+- Đo trên Edge ở khổ 1280 (sáng, tối, thanh bên thu gọn): nút, ô biểu tượng và tiêu đề có cùng tâm dọc (35px); nút và ô cùng cao 40px.
+- Ở khổ 390 bố cục giữ như trước. Không có lỗi console.
+- Toàn bộ bộ test: **1314 passed, 11 skipped**.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.59.2: Tiêu đề trang không còn bị cắt chân chữ
+
+**Lỗi:** bản 5.59.1 đặt chiều cao dòng của tiêu đề trang bằng 1,2 lần cỡ chữ. Tiêu đề có `overflow: hidden` để hiện dấu "…" khi quá dài, nên phần chân của chữ "g", "y" trong các tiêu đề như "Đóng góp câu hỏi" bị cắt.
+
+**Sửa** (`frontend/css/app.css`, `.topbar h1`): chiều cao dòng tăng lên 1,4 và chừa thêm 1px ở dưới. Tiêu đề vẫn căn giữa với ô biểu tượng.
+
+**Kiểm chứng:**
+- Đo trên Edge: chiều cao nội dung của tiêu đề bằng chiều cao khung (29/29px ở khổ 1280, 26/26px ở khổ 390), nghĩa là không còn phần nào bị cắt. Tiêu đề và ô biểu tượng vẫn cùng tâm dọc 35px.
+- Đã kiểm ở giao diện sáng, tối và tiếng Anh.
+- Toàn bộ bộ test: **1314 passed, 11 skipped**.

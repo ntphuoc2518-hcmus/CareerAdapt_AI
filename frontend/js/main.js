@@ -18,20 +18,21 @@ import { renderReport } from "./pages/report.js";
 import { renderFinalExam } from "./pages/roadmap.js";
 import { renderContribute } from "./pages/contribute.js";
 import { initEffects } from "./effects.js";
+import { initLayout } from "./layout.js";
 
 const NAV = [
-    ["Tổng quan", [["#/", "Bảng điều khiển", "home"]]],
-    ["Career Adapt", [["#/process", "Quy trình Career Adapt", "target"], ["#/plan", "Kế hoạch Career Adapt", "chart"]]],
+    ["Tổng quan", [["#/", "Bảng điều khiển", "dashboard"]]],
+    ["Career Adapt", [["#/process", "Quy trình Career Adapt", "journey"], ["#/plan", "Kế hoạch Career Adapt", "plan"]]],
     ["Tài nguyên", [["#/resources", "Học liệu", "book"], ["#/tests", "Kiểm tra kiến thức", "quiz"]]],
     ["Tài khoản", [["#/profile", "Hồ sơ", "user"]]],
 ];
 
 // [pattern, title, header icon, render]
 const ROUTES = [
-    [/^\/$/, "Bảng điều khiển", "grid", () => renderDashboard()],
-    [/^\/process$/, "Quy trình Career Adapt", "target", () => renderProcess()],
-    [/^\/flow(?:\/(.*))?$/, "Quy trình Career Adapt", "target", m => renderFlow(m[1] || "")],
-    [/^\/plan(?:\/(da|backend|qa))?(?:\/(overview|exam|review|gap|rank|roadmap|progress))?(?:\/(.+))?$/, "Kế hoạch Career Adapt", "chart", m => renderPlan(m[1] || "da", m[2] || "overview", m[3] || "")],
+    [/^\/$/, "Bảng điều khiển", "dashboard", () => renderDashboard()],
+    [/^\/process$/, "Quy trình Career Adapt", "journey", () => renderProcess()],
+    [/^\/flow(?:\/(.*))?$/, "Quy trình Career Adapt", "journey", m => renderFlow(m[1] || "")],
+    [/^\/plan(?:\/(da|backend|qa))?(?:\/(overview|exam|review|gap|rank|roadmap|progress))?(?:\/(.+))?$/, "Kế hoạch Career Adapt", "plan", m => renderPlan(m[1] || "da", m[2] || "overview", m[3] || "")],
     [/^\/result\/([^/]+)$/, "Kết quả đánh giá", "check", m => renderResult(m[1])],
     [/^\/resources$/, "Học liệu đã duyệt", "book", () => renderResources()],
     [/^\/mini\/([^/]+)$/, "Kiểm tra học phần", "quiz", m => renderMiniTest(m[1])],
@@ -257,6 +258,7 @@ async function start() {
     document.getElementById("app-version").textContent = `v${document.documentElement.dataset.build} · CareerAdapt AI`;
     if (app.user.role === "admin") api("/i18n/private-catalog").then(addPrivateCatalog).catch(() => {});
     renderNav();
+    initLayout();
     initAssistant();
     initBell();
     initEffects();

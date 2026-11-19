@@ -42,7 +42,29 @@ const PATHS = {
     inbox: "M3 13h5l1.5 3h5l1.5-3h5M5.5 5h13L21 13v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z",
 };
 
-export const icon = (name, className = "") => `<svg class="ic ${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${PATHS[name] || PATHS.info}"/></svg>`;
+/* 5.59: the three main pages get their own two-tone marks (an outline plus a soft filled part) on the same 24px grid
+   and stroke as the set: Bảng điều khiển = a dashboard of panels, Quy trình = a step timeline, the first two steps done,
+   Kế hoạch = a plan board with a rising line. Other screens keep using chart and target for data. */
+const DUO = {
+    dashboard: {
+        fill: "M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5Z",
+        d: "M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5ZM13 5.5A1.5 1.5 0 0 1 14.5 4h4A1.5 1.5 0 0 1 20 5.5v3A1.5 1.5 0 0 1 18.5 10h-4A1.5 1.5 0 0 1 13 8.5ZM13 14.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5Z",
+    },
+    journey: {
+        fill: "M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
+        d: "M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM8 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM6 7v3M6 14v3M11 5h9M11 12h9M11 19h6",
+    },
+    plan: {
+        fill: "M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5V8.5H5Z",
+        d: "M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 17.5ZM5 8.5h14M8.5 16.5l2.5-2.5 2 1.5 3-3.5M14.5 12h1.5v1.5",
+    },
+};
+
+export const icon = (name, className = "") => {
+    const duo = DUO[name];
+    const body = duo ? `<path class="ic-fill" d="${duo.fill}"/><path d="${duo.d}"/>` : `<path d="${PATHS[name] || PATHS.info}"/>`;
+    return `<svg class="ic ${duo ? "ic-duo" : ""} ${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${body}</svg>`;
+};
 
 export const SKILL_ICONS = { SQL: "database", DATA_QUALITY: "filter", PYTHON: "code", DATA_VIZ: "chart", WRITTEN_COMM: "pen", STATISTICS: "sigma" };
 const SKILL_TONES = { SQL: "s1", DATA_QUALITY: "s2", PYTHON: "s3", DATA_VIZ: "s4", WRITTEN_COMM: "s5", STATISTICS: "s6" };

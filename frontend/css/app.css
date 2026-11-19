@@ -94,9 +94,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .scrim { position: fixed; inset: 0; z-index: var(--z-scrim); background: rgba(8,23,48,.5); }
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .topbar { position: sticky; top: 0; z-index: var(--z-header); display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 12px 28px; border-bottom: 1px solid var(--border); background: var(--bar); backdrop-filter: blur(10px); }
-.page-title { display: flex; flex: 1; align-items: center; gap: 12px; min-width: 0; color: var(--navy-800); }
+.page-title { display: flex; flex: 1; align-items: center; gap: 14px; min-width: 0; color: var(--navy-800); }
 .page-title .ic { width: 24px; height: 24px; }
-.topbar h1 { min-width: 0; overflow: hidden; color: var(--text); font-size: var(--fs-2xl); font-weight: var(--fw-bold); letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap; }
+.topbar h1 { min-width: 0; overflow: hidden; color: var(--text); font-size: var(--fs-2xl); font-weight: var(--fw-bold); letter-spacing: -.02em; line-height: 1.4; padding-bottom: 1px; text-overflow: ellipsis; white-space: nowrap; }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 .icon-btn { position: relative; display: inline-grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--navy-800); cursor: pointer; }
 .icon-btn:hover { border-color: var(--border-strong); background: var(--navy-50); }
@@ -3225,3 +3225,75 @@ button.rd-flag:hover { text-decoration: underline; }
 @media (max-width: 640px) { .res-filter-grid { grid-template-columns: minmax(0, 1fr); } .res-filter-actions > .btn { flex: 1; } }
 /* JD summary on Khai báo và JD: the folded summary fades out instead of cutting a line in half. */
 .ov-summary:not(.is-open) { -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent); mask-image: linear-gradient(to bottom, #000 50%, transparent); }
+
+/* --- 5.58: room to work. The navy rail folds into a 76px column of icons and the Kế hoạch menu into a 68px one.
+   Each choice is kept in the browser (js/layout.js) and applied by boot.js before the first paint. Folded names
+   stay readable by screen readers and show as a tooltip. The rail folds only where it is not a drawer (>= 821px),
+   the plan menu only where it is a column (>= 1200px). --- */
+.rail-btn, .pn-fold { display: none; }
+@media (min-width: 821px) {
+    .rail-btn { display: inline-grid; }
+    .rail-btn .rail-arrow { transform-origin: 14.25px 12px; transition: transform var(--dur-3) var(--ease-out); }
+    .side-collapsed .rail-btn .rail-arrow { transform: scaleX(-1); }
+    .sidebar { transition: flex-basis var(--dur-4) var(--ease-out), padding var(--dur-4) var(--ease-out); }
+    .side-collapsed .sidebar { flex-basis: 76px; padding-right: 12px; padding-left: 12px; overflow-x: hidden; }
+    .side-collapsed .brand { justify-content: center; padding-right: 0; padding-left: 0; }
+    .side-collapsed .brand > span:not(.brand-mark) { display: none; }
+    .side-collapsed .brand-mark { flex-basis: 40px; }
+    .side-collapsed .brand-mark img { width: 40px; }
+    .side-collapsed .nav-group { margin-top: 10px; }
+    .side-collapsed .nav-title { height: 1px; margin: 0 10px 10px; padding: 0; overflow: hidden; background: rgba(255,255,255,.14); color: transparent; }
+    .side-collapsed .nav-link { justify-content: center; gap: 0; padding-right: 0; padding-left: 0; }
+    .side-collapsed .nav-link .ic { width: 21px; height: 21px; }
+    .side-collapsed .nav-link > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .side-collapsed .nav-link:hover .ic { transform: none; }
+    .side-collapsed .sidebar-foot { display: none; }
+    .side-collapsed #view { max-width: 1440px; }
+    .side-collapsed .subnav { max-width: 1384px; }
+}
+@media (min-width: 1200px) {
+    .side-collapsed .view-shell.has-side { max-width: 1440px; }
+    .view-shell.has-side { transition: grid-template-columns var(--dur-4) var(--ease-out); }
+    .view-shell.has-side .pn-fold { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; margin: 0 0 6px; padding: 6px 12px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--muted); font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold); text-align: left; cursor: pointer; transition: background-color var(--dur-2), color var(--dur-2); }
+    .view-shell.has-side .pn-fold:hover { background: var(--chip); color: var(--text); }
+    .pn-fold svg { flex: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--dur-3) var(--ease-out); }
+    .plan-menu-collapsed .view-shell.has-side { grid-template-columns: 68px minmax(0, 1fr); }
+    .plan-menu-collapsed .view-shell.has-side > .subnav { padding: 10px 8px; overflow-x: hidden; }
+    .plan-menu-collapsed .view-shell.has-side .pn-fold { justify-content: center; padding-right: 0; padding-left: 0; }
+    .plan-menu-collapsed .view-shell.has-side .pn-fold svg { transform: rotate(180deg); }
+    .plan-menu-collapsed .view-shell.has-side .pn-item { justify-content: center; gap: 0; padding-right: 0; padding-left: 0; }
+    .plan-menu-collapsed .view-shell.has-side .pn-group + .pn-group { padding-top: 8px; }
+    .plan-menu-collapsed .view-shell.has-side .pn-fold > span, .plan-menu-collapsed .view-shell.has-side .pn-item > span,
+    .plan-menu-collapsed .view-shell.has-side .pn-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media print { .rail-btn, .pn-fold { display: none !important; } }
+
+/* --- 5.58.1: the name of a folded item shows in the app's own tooltip: navy (light in the dark theme), rounded,
+   with a pointer at the icon, a short fade and slide. It never takes the pointer. --- */
+.nav-tip { position: fixed; z-index: var(--z-tooltip); top: 0; left: 0; max-width: 260px; padding: 7px 12px; border-radius: var(--radius-sm); background: #0F1E3D; color: #FFFFFF; font-size: var(--fs-sm); font-weight: var(--fw-semibold); line-height: 1.3; letter-spacing: .005em; white-space: nowrap; box-shadow: 0 10px 24px rgba(8, 23, 48, .28); pointer-events: none; opacity: 0; visibility: hidden; transform: translateX(-4px); transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-2); }
+.nav-tip[data-side="bottom"] { transform: translateY(-4px); }
+.nav-tip.is-shown { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.nav-tip.is-measuring { opacity: 0; visibility: hidden; transition: none; }
+.nav-tip::before { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 2px; background: inherit; transform: rotate(45deg); }
+.nav-tip[data-side="right"]::before { top: calc(var(--tip-arrow, 50%) - 4.5px); left: -4px; }
+.nav-tip[data-side="bottom"]::before { top: -4px; left: calc(var(--tip-arrow, 50%) - 4.5px); }
+:root[data-theme="dark"] .nav-tip { background: #E6EDF7; color: #0F1E3D; box-shadow: 0 10px 24px rgba(0, 0, 0, .45); }
+@media print { .nav-tip { display: none !important; } }
+
+/* --- 5.59: two-tone marks for Bảng điều khiển, Quy trình and Kế hoạch (icons.js DUO): the soft part takes the
+   icon's own colour at low strength, a little stronger on hover and on the open page. --- */
+.ic .ic-fill { fill: currentColor; stroke: none; opacity: .2; transition: opacity var(--dur-2); }
+.nav-link:hover .ic-duo .ic-fill, .link-card:hover .ic-duo .ic-fill { opacity: .32; }
+.nav-link.is-active .ic-duo .ic-fill { opacity: .38; }
+.page-title .ic-duo .ic-fill, .tile .ic-duo .ic-fill { opacity: .24; }
+
+/* --- 5.59.1: the header's left side in balance. The page icon sits in a 40px tile (the height of the fold button
+   and of every header button), centred on the title, and a thin rule separates the fold button from the title. --- */
+#page-icon { display: inline-grid; flex: none; width: 40px; height: 40px; place-items: center; border-radius: var(--radius-md); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); color: var(--brand); }
+#page-icon:empty { display: none; }
+#page-icon .ic { width: 22px; height: 22px; }
+:root[data-theme="dark"] #page-icon { background: color-mix(in srgb, var(--brand) 22%, var(--surface)); color: var(--navy-600); }
+@media (min-width: 821px) {
+    .rail-btn + .page-title { min-height: 40px; margin-left: 2px; padding-left: 16px; border-left: 1px solid var(--border); }
+}
+@media (max-width: 820px) { #page-icon { display: none; } }

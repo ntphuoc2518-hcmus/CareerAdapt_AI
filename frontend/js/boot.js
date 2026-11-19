@@ -66,5 +66,8 @@
     try {
         const lang = localStorage.getItem("careeradapt_lang");
         if (lang === "en" || lang === "vi") document.documentElement.lang = lang;
+        // 5.58: folded navigation (js/layout.js) is applied before the first paint so the page does not jump.
+        document.documentElement.classList.toggle("side-collapsed", localStorage.getItem("careeradapt_side_collapsed") === "1");
+        document.documentElement.classList.toggle("plan-menu-collapsed", localStorage.getItem("careeradapt_plan_menu_collapsed") === "1");
     } catch (e) { /* The page stays in its default language. */ }
 })();

@@ -1,6 +1,6 @@
 # CareerAdapt AI
 
-Phiên bản 5.57.2 (19/11/2026). Lịch sử thay đổi và kết quả kiểm định: `CAREERADAPT_AI_FINAL_AUDIT_REPORT.md` (mới nhất), `FINAL_IMPLEMENTATION_AND_UPGRADE_REPORT.md`, `UPGRADE_REPORT.md`, `CAREERADAPT_AI_FULL_SYSTEM_AUDIT_REPORT.md`, `AUDIT_REPORT.md`.
+Phiên bản 5.59.2 (19/11/2026). Lịch sử thay đổi và kết quả kiểm định: `CAREERADAPT_AI_FINAL_AUDIT_REPORT.md` (mới nhất), `FINAL_IMPLEMENTATION_AND_UPGRADE_REPORT.md`, `UPGRADE_REPORT.md`, `CAREERADAPT_AI_FULL_SYSTEM_AUDIT_REPORT.md`, `AUDIT_REPORT.md`.
 
 Hệ thống phát triển năng lực Data Analyst bằng đánh giá có bằng chứng, mục tiêu theo JD và lộ trình học cá nhân hóa.
 Đồ án môn Tư duy Tính toán, HCMUS. Đặc tả: `CareerAdapt_AI_v1_upgrade.pdf`.

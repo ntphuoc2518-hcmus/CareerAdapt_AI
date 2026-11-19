@@ -9,6 +9,7 @@ import { basisCard, levelOf, openLevelGuide, renderRank, standing } from "./rank
 import { openResetDialog } from "./process.js";
 import { renderRoadmap } from "./roadmap.js";
 import { pageHero } from "../hero.js";
+import { syncPlanMenu } from "../layout.js";
 import { disclose } from "../disclose.js";
 import { mountPlanAdvisor } from "../plan-advisor.js";
 import { expressionForScore, expressiveHead } from "../faces.js";
@@ -24,7 +25,10 @@ function subnav(career, section) {
     const careers = CAREER_TABS.map(([id, label, name]) => item(`#/plan/${id}${id === "da" ? "/overview" : ""}`, name, label, id === career, id === "da" ? "" : '<span class="pn-soon">Sắp có</span>')).join("");
     const sections = career === "da" && section
         ? `<div class="pn-group pn-sections"><span class="pn-label">Data Analyst</span>${SECTIONS.map(([id, label, name]) => item(`#/plan/da/${id}`, name, label, id === section)).join("")}</div>` : "";
-    setSubnav(`<div class="pn"><div class="pn-group pn-careers"><span class="pn-label">Nghề</span>${careers}</div>${sections}</div>`, { side: true });
+    // 5.58: the button folds the menu into a column of icons (wide screens only; see layout.js).
+    const fold = `<button type="button" class="pn-fold" data-plan-menu-toggle aria-controls="subnav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span data-toggle-text>Thu gọn menu</span></button>`;
+    setSubnav(`<div class="pn">${fold}<div class="pn-group pn-careers"><span class="pn-label">Nghề</span>${careers}</div>${sections}</div>`, { side: true });
+    syncPlanMenu();
     // As a row (narrow screens) the open item may sit past the edge; bring it into view. As a column this does nothing.
     document.querySelectorAll("#subnav .pn-group").forEach(group => {
         const active = group.querySelector(".pn-item.is-active");

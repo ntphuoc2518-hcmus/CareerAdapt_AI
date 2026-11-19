@@ -368,6 +368,55 @@ def test_a_toast_has_a_close_button(app):
     assert app.errors == []
 
 
+def test_the_rail_and_the_plan_menu_fold_into_icons_and_stay_folded(app):
+    # 5.58: two buttons give the page more room; the choice survives a reload.
+    page = app.open("/app#/plan")
+    wait_ready(page)
+    rail, fold = page.locator("#rail-btn"), page.locator("[data-plan-menu-toggle]")
+    expect(rail).to_have_attribute("aria-expanded", "true")
+    expect(fold).to_have_attribute("aria-expanded", "true")
+    wide = page.locator("#view").bounding_box()["width"]
+    rail.click()
+    fold.click()
+    expect(rail).to_have_attribute("aria-expanded", "false")
+    expect(fold).to_have_attribute("aria-expanded", "false")
+    # 5.58.1: a folded link shows its name in the app's tooltip on hover and on keyboard focus, not the browser's
+    # plain title box; the name stays in the link for screen readers.
+    first = page.locator("#nav .nav-link").first
+    expect(first).not_to_have_attribute("title", re.compile(".*"))
+    tip = page.locator(".nav-tip")
+    first.hover()
+    expect(tip).to_have_class(re.compile(r"\bis-shown\b"))
+    expect(tip).to_have_text("Bảng điều khiển")
+    page.mouse.move(900, 500)
+    expect(tip).not_to_have_class(re.compile(r"\bis-shown\b"))
+    page.focus("#nav .nav-link[href='#/tests']")
+    page.keyboard.press("Shift+Tab")
+    page.keyboard.press("Tab")
+    expect(tip).to_have_text("Kiểm tra kiến thức")
+    expect(page.locator("#nav .nav-link[href='#/tests']")).to_have_accessible_name("Kiểm tra kiến thức")
+    page.wait_for_timeout(500)  # the width eases into place
+    assert page.locator("#sidebar").bounding_box()["width"] <= 80
+    assert page.locator("#view").bounding_box()["width"] > wide + 300
+    page.reload()
+    wait_ready(page)
+    expect(page.locator("#rail-btn")).to_have_attribute("aria-expanded", "false")
+    expect(page.locator("[data-plan-menu-toggle]")).to_have_attribute("aria-expanded", "false")
+    page.focus("#rail-btn")  # the folded rail still answers the keyboard
+    page.keyboard.press("Enter")
+    expect(page.locator("#rail-btn")).to_have_attribute("aria-expanded", "true")
+    assert app.errors == []
+
+
+def test_the_fold_buttons_are_hidden_on_a_phone(server, browser, signed_in_state):
+    context = browser.new_context(storage_state=signed_in_state, viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    page = Watched(context.new_page(), server).open("/app#/plan")
+    wait_ready(page)
+    expect(page.locator("#rail-btn")).to_be_hidden()
+    expect(page.locator("#menu-btn")).to_be_visible()
+    context.close()
+
+
 def test_starting_the_process_opens_its_first_step(app):
     """Runs last: it starts a Career Adapt process for the test account (in the temporary database)."""
     page = app.open("/app#/process")

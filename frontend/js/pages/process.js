@@ -99,7 +99,7 @@ export async function renderProcess() {
     let selected = state.run?.career_code || null;
     const open = state.careers.filter(item => item.status !== "SIMULATED").length;
     const status = state.run ? STATUS_TEXT[state.run.status] || state.run.status : "Chưa bắt đầu";
-    setView(`<div class="stack process">${pageHero({ tone: "teal", icon: "target", kicker: "Career Adapt", title: "Quy trình Career Adapt",
+    setView(`<div class="stack process">${pageHero({ tone: "teal", icon: "journey", kicker: "Career Adapt", title: "Quy trình Career Adapt",
             text: "Đo năng lực bằng bài làm thật, so với JD bạn nhắm tới và lập lộ trình học theo tuần.",
             stats: [["route", "Bước", state.steps.length, "brand"], ["target", "Nghề đã mở", open, "good"], ["check", "Trạng thái", status, state.run?.status === "COMPLETED" ? "good" : "warn"]] })}
         ${processGuide(state)}
