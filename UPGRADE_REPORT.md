@@ -1324,3 +1324,408 @@ Báo cáo đầy đủ: `CAREERADAPT_AI_FINAL_AUDIT_REPORT.md`. Sao lưu: `Caree
 - 7 test mới (`tests/test_audit_2026_11_18.py`, 2 test trong `tests/test_ui_e2e.py`). Toàn bộ: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
 - Không đổi cấu trúc cơ sở dữ liệu.
 
+## Bổ sung 19/11/2026 · Phiên bản 5.49.0: Khai báo và JD gọn hơn
+
+**Yêu cầu:** giao diện mục "Khai báo và JD" của Kế hoạch Career Adapt đẹp hơn, gọn, ít chữ, vẫn đủ chức năng. Bản cũ nằm trong lịch sử Git (commit a33e9fa).
+
+**Bố cục mới** (`frontend/js/pages/plan.js`, cuối `frontend/css/app.css`):
+
+- Dải tiêu đề chỉ còn tên JD và ba số: kỹ năng tự khai, kỹ năng JD yêu cầu, ngày hoàn tất. Bỏ câu giải thích.
+- Một bảng **Kỹ năng** thay cho hai lưới thẻ: mỗi dòng là một kỹ năng, hai thanh mức đặt cạnh nhau "Bạn khai" (tím) và "JD cần" (xanh), nhãn "Cốt lõi" cho kỹ năng cốt lõi. Ghi chú một dòng: "Mức tự khai chưa được xác thực" kèm cách khai. Ghi chú bằng chứng tự khai (nếu có) vẫn hiện dưới tên kỹ năng.
+- Thẻ **JD** đặt cạnh bảng (máy tính) hoặc bên dưới (điện thoại): nguồn JD, tóm tắt thu gọn 3 dòng với nút "Xem thêm"/"Thu gọn", nhãn AI tóm tắt hoặc tóm tắt theo quy tắc, nút "Phân tích JD của tôi" (tác vụ JD của Trợ lý như trước).
+- "Làm lại từ đầu" thành nút nhỏ ở cuối trang, cạnh dòng "Quy trình đã khóa từ …"; bấm vẫn mở hộp xác nhận Reset có xem trước dữ liệu bị xóa.
+- Mục này không còn hàng nút "Xem thêm chi tiết" vì cả trang vừa một màn hình. Thẻ Trợ lý AI giữ nguyên, bỏ nút "Phân tích JD của tôi" trùng với nút trong thẻ JD.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 390px, giao diện tối, tiếng Anh): 5 dòng kỹ năng với nhãn đọc màn hình "Bạn khai: mức 1/3", "JD cần: mức 3/3"; "Xem thêm" mở rộng và thu gọn tóm tắt; "Phân tích JD của tôi" mở Trợ lý và nhận câu trả lời; "Làm lại từ đầu" mở hộp Reset, Hủy không đổi gì; không tràn ngang; không lỗi console. 6 chuỗi mới có bản tiếng Anh.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.50.0: Kết quả bài làm gọn hơn
+
+**Yêu cầu:** mục "Kết quả bài làm" của Kế hoạch Career Adapt đẹp, đơn giản, ít chữ, dễ dùng, vẫn đủ chức năng.
+
+**Bố cục mới** (`frontend/js/pages/plan.js`, cuối `frontend/css/app.css`):
+
+- Dải tiêu đề: "Đạt/Chưa đạt · điểm" và ba số (ngưỡng đạt, kỹ năng đạt JD, số bài đã chấm). Bỏ câu giải thích; điểm không còn lặp ở ba chỗ.
+- **Thẻ điểm** duy nhất: vòng điểm có vạch ngưỡng, nhãn Đạt/Chưa đạt, robot đổi nét mặt theo điểm (cùng quy tắc `expressionForScore` của 5.43), "Còn thiếu / Cao hơn ngưỡng … điểm", một dòng ngưỡng · số bài · giờ nộp, các nhãn nhỏ khi bài tự nộp, rời màn hình, dán nhiều chữ (rê chuột để đọc ghi chú "không ảnh hưởng điểm"), khung đỏ khi có lỗi trọng yếu, nút "Xem lại bài làm".
+- **Thẻ Tiếp theo**: trình độ đã xác thực, mức cạnh tranh, kỹ năng nên học trước (cùng quy tắc chọn như trước) và nút "Mở lộ trình".
+- **Bảng Kỹ năng** hiện ngay (trước đây nằm sau nút "Nhận xét trình độ"): mỗi kỹ năng một dòng với thanh mức "Đã xác thực" và "JD cần", nhãn "Đạt" hoặc "Thiếu n", nút "Vì sao" mở chủ đề, độ khó và lý do chấm; nút ⓘ mở hộp "Cách phân bậc"; "Nhận xét của AI" thu gọn trong một dòng; ghi chú phạm vi một dòng.
+- "Kết quả này dựa trên gì" giữ dạng thẻ đóng mở ở cuối trang. Mục này không còn hàng nút "Xem thêm chi tiết".
+- Sửa kèm: biểu tượng của thẻ "Kết quả này dựa trên gì" bị kéo giãn (quy tắc CSS cho phần chữ áp lên cả biểu tượng); lỗi này cũng có ở trang Xếp hạng.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 390px, giao diện tối, tiếng Anh): robot hiện nét mặt "crying" với bài 0 điểm; "Xem lại bài làm" mở trang xem lại và quay lại được; "Vì sao", "Nhận xét của AI", "Kết quả này dựa trên gì" mở được; nút ⓘ mở hộp Cách phân bậc; "Mở lộ trình" trỏ tới Lộ trình; nhãn đọc màn hình "Đã xác thực: mức 0/3", "JD cần: mức 3/3"; không tràn ngang; không lỗi console. 14 chuỗi mới có bản tiếng Anh.
+- Chưa thử với bài có cờ tự nộp, rời màn hình hay lỗi trọng yếu vì tài khoản thử không có các cờ này; phần hiển thị dùng đúng các trường cũ.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.51.0: Xếp hạng và lương gọn hơn
+
+**Yêu cầu:** chỉnh lại giao diện mục "Xếp hạng và lương" của Kế hoạch Career Adapt (cùng hướng 5.49–5.50: gọn, ít chữ, đủ chức năng).
+
+**Bố cục mới** (`frontend/js/pages/rank.js`, cuối `frontend/css/app.css`; chữ trên trang giảm từ khoảng 330 xuống 228 từ):
+
+- **Dải vị trí**: phạm vi xếp hạng (cách xếp · kỹ năng), "Hạng/Top" cỡ lớn, nhãn thay đổi hạng rút gọn ("Giữ hạng", "Tăng 2 hạng"; rê chuột để đọc "so với bài kiểm tra đầu vào"), nhãn "4/5 người để tính Top" khi chưa đủ người. Ba ô: trình độ, tổng mức (có thanh), điểm đầu vào. Hàng thao tác: "Chia sẻ", "Hiện tên tôi" (rê chuột để đọc giải thích), "Cách phân bậc" (thay thẻ riêng ở cuối trang trước đây).
+- **Bảng xếp hạng**: bộ chọn "Năng lực hiện tại / Bài kiểm tra đầu vào" và ô chọn kỹ năng chuyển vào đầu bảng (bỏ thẻ bộ lọc riêng); câu quy tắc xếp hạng thu vào "Cách xếp hạng".
+- **So với nhóm** và **Phân bố trình độ**: bỏ dòng mô tả; khi chưa đủ người, một dòng giải thích ngắn.
+- **Lương tham khảo** hiện ngay (trước đây nằm sau nút): biểu đồ cột, mức tăng theo kinh nghiệm, liên kết nguồn; ghi chú phạm vi, vị trí, thời gian khảo sát, số người trả lời và ngày kiểm tra thu vào "Về số liệu".
+- Mục này không còn hàng nút "Xem thêm chi tiết".
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 390px, giao diện tối, tiếng Anh): đổi cách xếp hạng và lọc kỹ năng vẽ lại trang, giữ thẻ Trợ lý AI và không hiện lại hàng nút; "Chia sẻ" sao chép đúng nội dung; "Hiện tên tôi" bật rồi tắt lại được (chỉ trên bản sao); hộp Cách phân bậc mở được; "Cách xếp hạng" và "Về số liệu" mở được; liên kết nguồn lương đúng; không tràn ngang; không lỗi console. 16 chuỗi mới có bản tiếng Anh.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.52.0: Hồ sơ và thanh chào mừng
+
+**Yêu cầu:** nâng cấp giao diện trang Hồ sơ cho đẹp và hiện đại; nâng cấp thanh chào mừng ở Bảng điều khiển.
+
+**Hồ sơ** (`frontend/js/pages/profile.js` viết lại phần bố cục, cuối `frontend/css/app.css`):
+
+- Đầu trang màu xanh đậm: ảnh đại diện lớn với nút tải ảnh tròn ở góc, vai trò (Học viên/Quản trị viên, nhãn Đóng góp câu hỏi nếu có), họ tên, email, ba nhãn ngành học, giờ học mỗi tuần · thời hạn, ngày tham gia; nút "Xóa ảnh" khi có ảnh, nút "Trang quản trị" với quản trị viên (thay hộp thông báo cũ).
+- Menu bên trái (trên điện thoại là hàng tab cuộn ngang): Thông tin, Mục tiêu, Nhắc nhở, Bảo mật, Dữ liệu. Mỗi lần hiện một phần, có thể chuyển bằng phím mũi tên, trang nhớ phần đang mở trong phiên.
+- Nhắc nhở dùng công tắc gạt thay ô đánh dấu. Bảo mật hiện thêm ngày đổi mật khẩu gần nhất và lần đăng nhập gần nhất (đã có sẵn trong `/auth/me`). Dữ liệu gồm hai hàng: Tải về và vùng Xóa màu đỏ.
+- Mọi biểu mẫu, tên trường, yêu cầu gửi máy chủ và hộp xác nhận giữ nguyên.
+
+**Thanh chào mừng** (`frontend/js/pages/dashboard.js`):
+
+- Lời chào theo giờ trên máy người dùng (Chào buổi sáng/trưa/chiều/tối), tay vẫy chuyển động nhẹ (tắt khi người dùng chọn giảm chuyển động).
+- Nhãn "Chậm lịch n ngày" khi lộ trình chậm; dòng "Tiếp theo: bài học · Tuần n" thay câu khẩu hiệu.
+- Nút **Học tiếp** mở thẳng bài học tiếp theo; hai nút cũ giữ nguyên.
+- Dải số liệu: tiến độ lộ trình (có thanh), số bài đã học, mức đáp ứng JD (có thanh), ngày dự kiến xong. Chỉ hiện số máy chủ trả về; ô "0% đáp ứng JD" nổi trên hình robot được bỏ vì đã có trong dải.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 390px, giao diện tối, tiếng Anh): nút Học tiếp mở đúng bài ACT_SQL_01; lưu Thông tin, Mục tiêu, Nhắc nhở đều báo đúng thông báo; công tắc nhắc nhở bật tắt được; phím mũi tên chuyển tab; danh sách điều kiện mật khẩu hiện đủ 6 mục; "Tải về" tải tệp `careeradapt-du-lieu-ca-nhan.json`; nút Xóa mở hộp xác nhận (đã hủy, không xóa); tải ảnh đại diện lên rồi xóa ảnh (chỉ trên tài khoản bản sao); tải lại trang vẫn mở đúng tab; không tràn ngang; không lỗi console. 39 chuỗi mới có bản tiếng Anh.
+- Chưa thử nút Đổi mật khẩu thật để không đổi mật khẩu tài khoản thử; phần này dùng nguyên mã cũ.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.53.0: Menu dọc cho Kế hoạch Career Adapt
+
+**Yêu cầu:** nâng cấp giao diện Kế hoạch Career Adapt giống trang Hồ sơ: các nút chức năng đặt thẳng đứng, nội dung hiện bên cạnh khi bấm từng mục.
+
+**Thay đổi:**
+
+- `frontend/index.html`: thanh mục và vùng nội dung nằm chung một khung `#view-shell`.
+- `frontend/js/core.js`: `setSubnav(html, { side: true })` bật bố cục menu bên cạnh; mọi trang khác vẫn gọi `setSubnav()` như cũ nên không đổi.
+- `frontend/js/pages/plan.js`: menu mới gồm nhóm **Nghề** (Data Analyst; Backend Developer và QA Tester có nhãn "Sắp có") và nhóm **Data Analyst** với 6 mục (Khai báo và JD, Kết quả bài làm, Khoảng cách kỹ năng, Lộ trình học tập, Xếp hạng và lương, Nhắc nhở). Mỗi mục vẫn là một liên kết nên nút Quay lại của trình duyệt, liên kết trực tiếp và các trang con (tuần học, bài học, xem lại bài làm) hoạt động như trước; mục đang mở được tô sáng.
+- `frontend/css/app.css`: từ 1200px trở lên, menu là cột 236px bên trái, dính khi cuộn trang, nội dung ở bên phải; dưới 1200px (máy tính bảng, điện thoại) menu trở lại dạng hai hàng tab cuộn ngang và tự cuộn tới mục đang mở.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu ở 1440px, 1280px, 1024px và 390px, cả 6 mục và trang Backend Developer: menu dọc ở 1440/1280, hàng tab ở 1024/390; mục đang mở đúng ở mọi trang; menu vẫn ở trên màn hình khi cuộn xuống; bấm "Xếp hạng và lương" chuyển đúng trang; trang tuần học, bài học và xem lại bài làm giữ menu và tô đúng mục cha; rời sang trang Hồ sơ thì bố cục menu bên cạnh tắt; không tràn ngang; không lỗi console; giao diện tối hiển thị đúng.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.54.0: Kết quả bài làm bớt khoảng trống
+
+**Yêu cầu:** trang "Kết quả bài làm" đang quá nhiều khoảng trống, quá đơn giản.
+
+**Thay đổi** (`frontend/js/pages/plan.js`, `frontend/js/pages/exam.js`, cuối `frontend/css/app.css`), chỉ thêm dữ liệu thật đã có trong `/career-process/exam/review`:
+
+- **Thẻ điểm** thêm cột **Điểm từng bài**: Bài 1–5 với kỹ năng, độ khó, thanh điểm (xanh đạt, cam một phần, đỏ sai, xám bỏ trống), nhãn "Trống" và số điểm. Bấm một bài mở trang Xem lại bài làm đúng bài đó (`#/plan/da/review?q=N`; `renderReview` nhận thêm `start`, các nơi khác gọi như cũ).
+- **Dải Tiếp theo** thay thẻ dọc: Trình độ, Cạnh tranh, Ưu tiên học và nút "Mở lộ trình" trên một hàng.
+- **Bảng Kỹ năng** dày hơn: mỗi dòng có chủ đề và độ khó dưới tên, cột **Điểm bài** (thanh và số), mức đã xác thực, mức JD cần, nhãn Đạt/Thiếu và mũi tên; bấm cả dòng (hoặc Enter) để mở "Vì sao" ngay dưới, không còn dòng "Vì sao" riêng.
+- **Nhận xét của AI** thành thẻ riêng (nhãn "Không đổi điểm", "Xem thêm" khi dài), đặt cạnh "Kết quả này dựa trên gì".
+- Sửa kèm: quy tắc CSS cho menu dọc ở 1200–1365px bị áp lên cả điện thoại; nay chỉ áp trong khoảng đó.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 1280px, 390px, giao diện tối, tiếng Anh): khoảng trống cuối thẻ điểm giảm từ 66px còn 28px; bấm dòng kỹ năng mở và đóng phần lý do, phím Enter cũng mở được; bấm "Bài 3" mở trang xem lại ở Bài 3, menu vẫn tô "Kết quả bài làm"; `#/plan/da/review` vẫn mở Bài 1, `?q=99` mở bài cuối; hộp Cách phân bậc, "Kết quả này dựa trên gì" và liên kết lộ trình chạy; không tràn ngang; không lỗi console. 6 chuỗi mới có bản tiếng Anh.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.55.0: Cảnh động phía sau robot ở thanh chào mừng
+
+**Yêu cầu:** nâng cấp hiệu ứng, thêm hình ảnh, điều chỉnh hình nền động phía sau robot ở thanh chào mừng.
+
+**Thay đổi** (`heroArt()` trong `frontend/js/pages/dashboard.js`, cuối `frontend/css/app.css`):
+
+- Bỏ khung kính chữ nhật và vệt sáng chéo cứng. Thay bằng ánh sáng mềm quét chậm qua thanh, dải màu cực quang trôi nhẹ, sao lấp lánh và mặt sàn lưới phối cảnh chuyển động dưới chân robot.
+- Robot đứng trước một **cổng ánh sáng**: ba vòng sáng đồng tâm xoay ngược chiều nhau và lõi sáng nhịp thở.
+- **Hình ảnh mới**: biểu tượng 5 kỹ năng của nghề (SQL, Python, Trực quan hóa, Chất lượng dữ liệu, Giao tiếp viết), mỗi kỹ năng một màu, bay vòng quanh robot và luôn đứng thẳng; thẻ biểu đồ có cột nhấp nhô và đường xu hướng tự vẽ; bong bóng trò chuyện có ba chấm "đang gõ"; khiên xác thực có vòng sóng lan.
+- Toàn bộ cảnh chỉ để trang trí: không có con số nào (số thật nằm ở dải số liệu của thanh), đánh dấu `aria-hidden`, và đứng yên khi hệ điều hành bật giảm chuyển động. Trên điện thoại cảnh vẫn được ẩn như trước.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu ở 1440px, 1280px, 1100px: 57 chuyển động chạy trong thanh, 5 biểu tượng kỹ năng trên quỹ đạo, chụp ba khung hình cách nhau 1,3 giây cho thấy quỹ đạo và các thẻ thay đổi; khi bật giảm chuyển động không còn chuyển động nào trong cảnh; ở 390px cảnh ẩn; không tràn ngang; không lỗi console.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.55.1: Bong bóng chat cân đối
+
+Ba chấm "đang gõ" trong bong bóng chat của thanh chào mừng bị dồn sang trái vì khung không căn giữa nội dung. Nay ba chấm nằm giữa (cách hai bên 12px, trên dưới 14px, đo trên Edge), bong bóng có thêm đuôi nhỏ ở góc dưới trái.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.56.0: Xếp hạng và lương cân đối hơn
+
+**Vấn đề:** bảng xếp hạng chỉ rộng 509px nên tên bị cắt, cạnh đó thẻ "So với nhóm" chỉ cao khoảng 120px để lại khoảng trống lớn; ô chọn kỹ năng rơi xuống dòng riêng; thẻ Lương có ô +79% lơ lửng giữa vùng trống.
+
+**Thay đổi** (`frontend/js/pages/rank.js`, cuối `frontend/css/app.css`):
+
+- Bảng xếp hạng trải hết chiều ngang: tên hiện đầy đủ, cột tổng mức rộng hơn, bộ chọn cách xếp và ô chọn kỹ năng trên cùng một hàng.
+- Khi chưa đủ người để so sánh nhóm, ghi chú một dòng nằm ở chân bảng (cạnh "Cách xếp hạng") thay vì một thẻ gần như trống. Khi có dữ liệu, "So với nhóm" và "Phân bố trình độ" đặt cạnh nhau dưới bảng.
+- Thẻ Lương: biểu đồ cột bên trái (chú thích đường "Mọi mức kinh nghiệm" chuyển xuống dưới biểu đồ), bên phải là ba ô số liệu cao đều nhau: mức tăng theo kinh nghiệm, lương trung vị mọi mức kinh nghiệm, số người trả lời khảo sát (đều lấy từ nguồn lương đã có). Liên kết nguồn và "Về số liệu" ở chân thẻ.
+
+**Kiểm chứng:**
+
+- Toàn bộ bộ test: 1296 passed, 11 skipped (10 cần Gemini thật, 1 cần Docker).
+- Edge thật trên bản sao dữ liệu (1440px, 1280px, 390px, giao diện tối, tiếng Anh): đổi cách xếp và lọc kỹ năng vẽ lại trang đúng, giữ thẻ Trợ lý; Chia sẻ sao chép đúng; "Hiện tên tôi" bật rồi tắt lại (chỉ trên bản sao); hộp Cách phân bậc, "Cách xếp hạng", "Về số liệu" mở được; liên kết nguồn lương đúng; nhãn nhóm kinh nghiệm trong ô +79% dịch đúng sang tiếng Anh; không tràn ngang; không lỗi console.
+- Chưa xem được cách hiển thị "So với nhóm" và "Phân bố trình độ" cạnh nhau, vì bản sao dữ liệu chỉ có 4 học viên (dưới ngưỡng 5 người).
+
+## Bổ sung 19/11/2026 · Phiên bản 5.56.1: Chữ "Đang tải dữ liệu..." ở giao diện tiếng Anh
+
+**Lỗi:** ở chế độ tiếng Anh, màn hình chờ khi một trang đang tải vẫn hiện "Đang tải dữ liệu...".
+
+**Nguyên nhân:** câu này là giá trị mặc định của tham số `loadingView(text = "...")` trong `frontend/js/core.js`. Công cụ quét chữ giao diện (`scripts/i18n_extract.py`, dùng trong `tests/test_i18n.py`) không đọc giá trị mặc định của tham số nên câu này chưa từng có bản dịch, và test không phát hiện được.
+
+**Sửa:**
+
+- Thêm "Loading data..." vào `frontend/js/lang/en.json`.
+- Test mới `tests/test_i18n_literals.py`: đọc mọi chuỗi tiếng Việt nằm trong dấu nháy ở các tệp JavaScript của ứng dụng và yêu cầu có bản tiếng Anh. Lượt quét toàn bộ chỉ tìm thêm 4 chuỗi, đều không hiển thị nguyên dạng (bảng nhãn song ngữ riêng của nút giao diện, một đoạn nằm trong nhãn dài đã dịch, hai ví dụ trong chú thích); 4 chuỗi này được ghi rõ trong danh sách bỏ qua của test.
+
+**Kiểm chứng:** toàn bộ bộ test 1298 passed, 11 skipped (thêm 2 test mới). Edge thật ở tiếng Anh, máy chủ được làm chậm 2,5 giây: màn hình chờ hiện "Loading data..." khi mở Bảng điều khiển, Học liệu và khi mở thẳng ứng dụng.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.57.0: Chuẩn hóa UI/UX toàn bộ giao diện
+
+Đợt này thực hiện "MASTER PROMPT — COMPREHENSIVE UI/UX TRANSFORMATION & INTERACTION ENHANCEMENT". Chức năng, dữ liệu, cách chấm điểm và phân quyền giữ nguyên. Không có số liệu nào được tạo thêm: mọi con số mới trên giao diện đều là phép đếm trên dữ liệu trang đã tải từ API.
+
+- Sao lưu trước khi sửa: thư mục cùng cấp `CareerAdapt_AI_backup_truoc_ui_ux_20261119` (gồm `frontend/`, `README.md`, `UPGRADE_REPORT.md`, `backend/config.py`).
+- Checklist kiểm định nội bộ: `docs/UI_UX_CHECKLIST.md`.
+
+### 1. Khảo sát ban đầu
+
+- Rà 34 route (15 của học viên đã xong quy trình, 6 của học viên mới, 13 của quản trị viên) cùng trang đăng nhập.
+- Mỗi route chạy trên Edge thật (Playwright, kênh `msedge`) ở 4 khổ màn hình, có giao diện tối và tiếng Anh, tổng cộng 350 lượt xem.
+- Máy chủ chạy trên dữ liệu tạm, không mở `data/`.
+- Kết quả khảo sát:
+  - Không có lỗi console và không có trang nào tràn ngang.
+  - Có 27 lượt xem tiếng Anh còn câu dịch dở, nửa Anh nửa Việt.
+- `app.css` dài 3.174 dòng. Phân tích tự động cho thấy:
+  - 125 khai báo chết, tức bị chính selector đó ghi đè ở phía sau;
+  - 15 giá trị z-index rời rạc, 33 cỡ chữ (nhiều cỡ lẻ nửa pixel), 37 bán kính bo góc và 65 kiểu bóng đổ.
+- Đo tương phản phát hiện 4 chỗ dưới chuẩn AA:
+  - toast ở giao diện tối: 2,27:1 và 1,99:1;
+  - số đếm trên chuông: 3,91:1;
+  - chữ gợi ý ở ô đăng nhập: 2,81:1;
+  - vòng focus trên nền navy: 2,73:1.
+
+### 2. Design system
+
+**Token mới.** Tệp `frontend/css/tokens.css` được nạp đầu tiên ở cả trang ứng dụng và trang đăng nhập. Nó chứa các thang sau:
+
+| Nhóm | Token |
+| --- | --- |
+| Cỡ chữ | `--fs-2xs` … `--fs-6xl` (11,5 → 32px) |
+| Độ đậm | `--fw-*` |
+| Khoảng cách | `--sp-1` … `--sp-12` (lưới 4px) |
+| Bo góc | `--radius-2xs` … `--radius-xl`, `--radius-pill` |
+| Bóng đổ | `--shadow-xs/md/lg/xl`, có bản cho giao diện tối |
+| Cỡ control | `--control-sm/md/lg`, `--touch` |
+| Chuyển động | `--dur-1` … `--dur-5`, `--ease-standard/out/in/spring` |
+| Lớp z-index | `--z-dropdown` … `--z-skip` |
+
+Màu vẫn nằm ở bảng màu sẵn có: `:root` trong `app.css` và `--lp-*` trong `login.css`.
+
+**Dọn CSS trùng lặp.** Đã gỡ 125 khai báo chết và 23 quy tắc rỗng. Để chứng minh giao diện không đổi:
+- chụp computed style của mọi phần tử (cả `::before` và `::after`) trên 60 trạng thái trang (sáng/tối × 1440/390 × 15 route), tổng 23.432 phần tử, trước và sau khi dọn;
+- khác biệt duy nhất là chữ "x phút trước" thay đổi theo thời gian và nhịp chớp mắt của robot.
+
+**Đưa giá trị lên token.** Các giá trị lẻ được chuyển sang token:
+
+| Loại giá trị | Số chỗ |
+| --- | --- |
+| Cỡ chữ | 361 |
+| Độ đậm | 155 |
+| Bo góc | 170 |
+| Thời lượng chuyển động | 93 |
+| z-index toàn cục | 13 |
+
+Phần này nằm trong `app.css`, `effects.css`, `login.css` và `ambient.css`.
+
+Một số giá trị cố ý giữ nguyên:
+- số hiển thị cỡ lớn (36–44px);
+- bo góc mảnh 2–3px;
+- vòng lặp trang trí dài;
+- z-index 0–3 dùng xếp lớp cục bộ.
+
+Cỡ chữ lẻ được làm tròn: 12,5 → 13, 13,5 → 14, 14,5 → 15 và 17 → 18px.
+
+### 3. Thành phần chung (`app.css`, `core.js`)
+
+| Thành phần | Sau 5.57.0 |
+| --- | --- |
+| Nút | Cao 40px. Có focus nhìn thấy được, trạng thái nhấn, disabled kèm `aria-disabled`, và `aria-busy` khi đang xử lý. Thêm cỡ `btn-lg`. Viền nút nguy hiểm theo tông màu. |
+| Ô nhập | Cùng chiều cao với nút. Có hover và trạng thái lỗi (`aria-invalid`, `:user-invalid`). Trạng thái disabled và readonly phân biệt rõ. Chữ gợi ý đạt AA. |
+| Tab | `.tab[aria-selected=true]` được tô như tab đang mở. Mọi `[role=tablist]` (Quản trị, bộ lọc Nhắc nhở, tab Lộ trình) đi được bằng mũi tên, Home và End. Hồ sơ giữ cách xử lý phím riêng như trước. |
+| Badge | Cùng chiều cao 22px. |
+| Alert | Viền theo tông màu ở cả hai giao diện. |
+| Toast | Có biểu tượng theo tông và nút đóng. Lỗi dùng `role="alert"` và hiện 7 giây. Di chuột hoặc focus vào thì dừng đếm giờ. Tối đa 4 toast. Toast nằm trên nút Trợ lý, không che nút nữa. Màu đỏ và xanh cố định nên đạt ≥ 5,9:1 ở cả giao diện tối. |
+| Modal | Có `aria-labelledby` lấy từ tiêu đề. Phím Tab không thoát ra ngoài hộp thoại. Trang nền không cuộn và có bù độ rộng thanh cuộn. Đóng hộp thoại thì focus về nút đã mở nó. Nền mờ nhẹ, tiêu đề 18px. |
+| Đang tải | Khi đổi trang hiện khung xương có `role="status"`. Khung xương chỉ hiện nếu tải lâu hơn 180 ms. Chỗ chờ nhỏ, như AI đang viết nhận xét, vẫn dùng vòng quay. |
+| Trống / Lỗi | Trạng thái trống có biểu tượng. Màn lỗi có class `.error-view`, `role="alert"`, biểu tượng và nút "Thử lại". |
+
+### 4. Micro-interaction (đều tắt khi bật `prefers-reduced-motion`)
+
+- **Đổi trang:**
+  - nội dung mới hiện mờ dần trong 300 ms; chỉ đổi opacity, nên các phần `fixed` và `sticky` không bị ảnh hưởng;
+  - khi người dùng bấm link hoặc menu, focus chuyển về vùng nội dung để trình đọc màn hình bắt đầu từ trang mới.
+- **Toast** trượt vào và trượt ra.
+- **Danh sách chuông và menu hoãn nhắc** bật lên nhẹ.
+- **Panel Trợ lý** trượt vào từ phải.
+- **Hover:**
+  - mục menu, tab, ô nhập và vùng thả tệp đổi màu êm;
+  - thẻ bài kiểm tra đậm viền và đổ bóng rõ hơn;
+  - bóng hover dùng `--shadow-md`.
+- **Hàng cuộn ngang:** menu Kế hoạch dạng hàng, mục Quản trị trên điện thoại và các hàng tab có mép mờ ở phía còn nội dung. Mép mờ không phải chuyển động, nên vẫn hiện khi bật giảm chuyển động.
+- **Có từ trước và được giữ:** thanh tiến độ chạy tới giá trị thật, số đếm tăng dần, gợn sóng khi nhấn, thẻ hiện dần.
+
+### 5. Trang được làm lại
+
+- **Kiểm tra kiến thức** (`tests.js`):
+  - dùng `pageHero` chung, giống Kế hoạch, Quản trị và Đóng góp; thông báo "tách biệt với quy trình" thành dòng mô tả của hero;
+  - 4 ô số liệu đếm từ API: số bài có sẵn, lượt đã nộp, lượt đang làm, điểm của lượt nộp gần nhất (hiện "—" khi chưa có);
+  - có tiêu đề "Chọn bài" kèm phiên bản ngân hàng câu hỏi;
+  - thẻ bài: điểm lần gần nhất dạng badge, viền nhấn khi đang làm dở, viền và bóng đậm hơn khi di chuột.
+- **Học liệu** (`resources.js`):
+  - hero có 3 số liệu đếm trên danh mục lúc tải đầu: số học liệu, số kỹ năng có học liệu, số nguồn cung cấp;
+  - thanh lọc thành một hàng có ô tìm kiếm kèm biểu tượng; gợi ý trong ô ghi đúng các trường mà API thật sự tìm (tên, nhà cung cấp, kết quả học tập);
+  - nút "Bỏ lọc";
+  - dòng số kết quả có `aria-live` và nhận focus sau khi lọc.
+- **Khai báo và JD:** tóm tắt JD khi thu gọn nay mờ dần ở cuối, không còn cắt ngang dòng "Yêu cầu chính".
+- **Tất cả các trang** đều dùng chung token và các thành phần ở mục 3.
+
+### 6. Lỗi đã sửa
+
+1. Toast ở giao diện tối có chữ trắng trên đỏ nhạt và xanh nhạt (2,27:1 và 1,99:1).
+2. Số đếm trên chuông đạt 3,91:1; nay 4,93:1.
+3. Chữ gợi ý ở ô đăng nhập đạt 2,81:1; nay 4,72:1.
+4. Vòng focus gần như không thấy trên thanh bên và các hero nền navy (2,73:1); nay là vòng trắng.
+5. Tiếng Anh còn câu dịch dở, ví dụ "1 lần ghi nhận · gần nhất …", "ôn tập mặc định: 7-day cycle", "So sánh level đã xác thực…", "0 phút. studied" và "Level bị limitations ở 1".
+   - Nguyên nhân: bộ dịch hiển thị (`translate.js`) tách câu theo "·" và dấu câu trước khi thử mẫu câu có biến. Vì vậy các mẫu đã có sẵn trong `en.json` không bao giờ được dùng.
+   - Sửa: thêm `byWholePattern`, khớp nguyên dòng trước khi tách, và bổ sung 19 mục dịch.
+   - Riêng câu "Mức bị giới hạn ở 1 vì…" bị chính máy chủ dịch từng cụm ("giới hạn" thành "limitations"). Đã thêm nguyên câu vào `data/i18n/sensitive_en.json`, để máy chủ thay cả câu trước các cụm ngắn.
+   - Kết quả quét lại: chỉ còn tên người và tên tài liệu trong kho kiến thức quản trị, là dữ liệu gốc được phép giữ nguyên.
+6. Màn lỗi chưa có class `.error-view`, nên kiểm tra `#view .error-view` trong `test_ui_e2e.py` luôn đạt mà không kiểm được gì. Nay class đã có và có test riêng cho màn lỗi.
+7. Regex trong `esc()` chứa dấu nháy làm `scripts/i18n_extract.py` đọc lệch cả phần sau của `core.js`. Trước đây các đoạn đọc lệch phải đưa vào danh sách bỏ qua. Nay hai dấu nháy được viết dạng mã `\u0022\u0027`; hàm vẫn chạy như cũ.
+8. Hộp thoại chưa giữ Tab bên trong, chưa trả focus khi đóng, chưa có tên cho trình đọc màn hình, và trang phía sau vẫn cuộn.
+9. Toast che nút Trợ lý, không đóng được bằng tay, và lỗi không được đọc ngay.
+10. Sau khi đổi trang, focus rơi về `<body>`.
+11. Các tablist ngoài Hồ sơ không đi được bằng phím mũi tên.
+
+### 7. Tệp đã sửa
+
+- **Mới:**
+  - `frontend/css/tokens.css`
+  - `docs/UI_UX_CHECKLIST.md`
+  - `tests/test_design_system.py`
+- **CSS:**
+  - `frontend/css/app.css`
+  - `frontend/css/effects.css`
+  - `frontend/css/login.css`
+  - `frontend/css/ambient.css`
+- **HTML:**
+  - `frontend/index.html`, `frontend/login.html`: nạp `tokens.css`, phiên bản 5.57.0.
+- **JavaScript:**
+  - `frontend/js/core.js`
+  - `frontend/js/main.js`
+  - `frontend/js/effects.js`
+  - `frontend/js/icons.js`: thêm `close` và `inbox`.
+  - `frontend/js/translate.js`
+  - `frontend/js/pages/tests.js`
+  - `frontend/js/pages/resources.js`
+  - `frontend/js/lang/en.json`
+- **Khác:**
+  - `data/i18n/sensitive_en.json`: thêm 1 câu.
+  - `tests/test_ui_e2e.py`: thêm 5 test.
+  - `backend/config.py`: `APP_VERSION = "5.57.0"`.
+  - `README.md`
+  - `UPGRADE_REPORT.md`
+
+Các tệp CRLF vẫn giữ CRLF và các tệp LF vẫn giữ LF; đã kiểm bằng cách đếm byte.
+
+### 8. Kiểm chứng
+
+- **Toàn bộ bộ test:** `.venv/Scripts/python -m pytest -q -p no:cacheprovider` cho **1308 passed, 11 skipped**. Trước đợt này là 1298 passed, 11 skipped. 10 test mới:
+  - 5 test trong `tests/test_design_system.py`: token, lớp z-index, cỡ chữ, không còn khai báo CSS chết;
+  - 5 test Playwright trong `tests/test_ui_e2e.py`: focus về nội dung khi đổi trang; trạng thái trống và màn lỗi; hộp thoại giữ Tab bên trong và trả focus; toast có nút đóng; phím mũi tên ở mục Quản trị.
+- **Rà soát trên Edge thật** (Playwright kênh `msedge`), máy chủ chạy trên dữ liệu tạm:
+  - Ma trận 34 route cùng trang đăng nhập, tổng **350 lượt xem**. Các khổ đã chạy:
+    - 1440, 1280, 1024 và 390 (giả lập điện thoại cảm ứng) ở giao diện sáng;
+    - 1440, 1024 và 390 ở giao diện tối;
+    - 1440 và 390 ở tiếng Anh, 1280 ở tiếng Anh với giao diện tối.
+    - Kết quả: **0 lỗi console hoặc pageerror, 0 API 5xx, 0 trang tràn ngang**.
+  - Route sâu: bài học trong Lộ trình, trình làm bài, báo cáo bài, bài đánh giá tổng hợp, bước 1 của Quy trình và Báo cáo năng lực. Tổng **42 lượt xem** ở 1440, 1280, 1024 và 390, sáng, tối và tiếng Anh. Kết quả: **0 lỗi, 0 tràn ngang**.
+  - Ngoài ra đã chụp các trạng thái toast, hộp thoại, chuông, khung xương, màn lỗi và vòng focus ở cả hai giao diện. Có chụp thêm 5 trang khi bật chuyển động; không có lỗi.
+- **Tiếng Anh:** quét chữ chưa dịch (`careerI18n.missing()`) sau khi sửa. Chỉ còn:
+  - tên người dùng;
+  - tên báo cáo nguồn ITviec, vốn được gắn `data-no-i18n` có chủ đích;
+  - tên 2 tài liệu trong Kho kiến thức AI của quản trị viên;
+  - tên bài thực hành trên trang bài học (xem mục 9).
+- **CSS:** sau khi dọn, không còn khai báo chết nào. Mọi z-index toàn cục dùng token; không còn cỡ chữ lẻ nửa pixel. `app.css` dài 3.227 dòng; số dòng tăng vì có thêm khối thành phần và khối trang.
+- **Database thật:** `data/accounts.sqlite3` và `data/careeradapt.sqlite3` giữ nguyên kích thước và thời điểm sửa (14:59 và 15:08, trước đợt này). Không đọc hay sửa `.env`.
+
+### 9. Chưa kiểm chứng / chưa làm
+
+- **Tên bài thực hành ở trang bài học, chế độ tiếng Anh.** Các tên như "Đọc và lọc dữ liệu bằng Pandas" vẫn hiện tiếng Việt, dù bản dịch đã có trong catalog riêng của máy chủ.
+  - Nguyên nhân: API `/me/journey/...` không nằm trong `TRANSLATED_PATHS` của `backend/i18n.py`.
+  - Chưa thêm, vì payload này có cả ghi chú do học viên tự viết, và quy tắc của dự án là không dịch chữ của học viên.
+  - Cần quyết định trường nào được dịch trước khi sửa.
+- **Trình đọc màn hình thật** (NVDA, Narrator) chưa được thử. Mới kiểm thuộc tính ARIA, thứ tự focus và vòng focus bằng Playwright.
+- **Thiết bị thật** (điện thoại, máy tính bảng) chưa được thử. Khổ 390 và vùng chạm 44px được kiểm bằng giả lập `is_mobile` và `has_touch`.
+- **Chuyển động** chủ yếu được kiểm ở chế độ giảm chuyển động, vì ảnh chụp cần ổn định. Khi bật chuyển động, mới chụp 5 trang ở trạng thái cuối và không có lỗi. Chưa quay lại toàn bộ chuỗi chuyển động.
+- **Chưa mở được** `#/mini/:id` (cần một bài học đã xong để có bài kiểm tra học phần) và `#/result/:id` (đánh giá theo luồng cũ).
+- **Trang giới thiệu** `/gioi-thieu` (`landing.html`) không thuộc ROUTES của ứng dụng nên không làm lại.
+- **Tương phản** đã đo cho các cặp màu token và các chỗ đã sửa. Chưa đo tự động từng phần tử.
+- **Phông chữ:** Inter không được đóng gói, nên Windows hiển thị bằng Segoe UI.
+  - Độ đậm 650 và 750 cũ nay là 700 và 800. Trên Segoe UI hình dạng chữ không đổi.
+  - Trên máy có Inter, chữ có thể đậm hơn một chút.
+
+## Bổ sung 19/11/2026 · Phiên bản 5.57.1: Lỗi đã mắc ở trang bài học (tiếng Anh) và menu Quản trị
+
+### Lỗi 1: thẻ "lỗi đã mắc" ở tiếng Anh vẫn hiện tiếng Việt
+
+**Biểu hiện:** ở chế độ tiếng Anh, thẻ lỗi đã mắc trên trang bài học vẫn hiện tiếng Việt, ví dụ tên câu "Đọc và lọc dữ liệu bằng Pandas" và tiêu chí "Lọc theo status completed". Mục 9 của bản 5.57.0 ghi nhầm đây là tên bài thực hành; thật ra đó là nội dung đề thi trong thẻ lỗi đã mắc (trường `mistakes`).
+
+**Nguyên nhân:**
+- Bản dịch của đề thi chỉ nằm trong catalog riêng của máy chủ, `data/i18n/sensitive_en.json`. Trình duyệt không bao giờ nhận catalog này.
+- Máy chủ chỉ dịch các API phòng thi và kiểm tra (`TRANSLATED_PATHS`), không dịch `/me/journey/lessons/...`.
+
+**Sửa** (`backend/api/journey.py`):
+- Ở tiếng Anh, chỉ dịch hai trường `topic` và `check` của mỗi lỗi bằng catalog đó.
+- "Bài làm khi đó" (`answer_gave`, kết quả bài làm của học viên) và phần còn lại của trang được giữ nguyên.
+- Không thêm đường dẫn nào vào `TRANSLATED_PATHS`, nên ghi chú học viên tự viết không bị đụng tới.
+
+### Lỗi 2: menu Quản trị chưa dùng được ngay
+
+Phát hiện khi viết test bàn phím, ở trang Quản trị:
+- Các nút mục đã hiện nhưng chỉ hoạt động sau khi mục đầu tiên tải xong, vì hành động được đăng ký sau `await drawPane()`. Bấm chuột hay bấm phím trong khoảng đó đều bị bỏ qua.
+- Khi số đếm tải xong, menu được vẽ lại và focus bàn phím rơi khỏi menu.
+
+**Sửa** (`frontend/js/pages/admin.js`):
+- Đăng ký hành động trước khi tải mục đầu tiên.
+- Khi vẽ lại menu, đưa focus về đúng mục đang được focus.
+
+### Test
+
+`tests/test_lesson_mistakes_english.py` gồm 2 test:
+- Ở tiếng Anh, tiêu chí và chủ đề nhận đúng bản dịch từ catalog. "Bài làm khi đó" và mọi trường khác giống hệt bản tiếng Việt.
+- Ở tiếng Việt, chữ gốc giữ nguyên.
+
+Đã thử tắt bản sửa: test thất bại; bật lại thì đạt. Test bàn phím của Quản trị chạy lặp 3 lần đều đạt; trước khi sửa, 2 trong 3 lần thất bại.
+
+### Kiểm chứng
+
+- Toàn bộ bộ test: **1310 passed, 11 skipped**.
+- Kiểm trên Edge thật, trang bài học ở tiếng Anh và tiếng Việt, khổ 1280 và 390:
+  - không có lỗi console và không tràn ngang;
+  - quét chữ chưa dịch không còn mục nào, ngoài tên người dùng.
+- **Database thật:** lúc 17:31 thời điểm sửa của `data/careeradapt.sqlite3` đổi, và tệp `-wal` vẫn tiếp tục được ghi.
+  - Nguyên nhân là máy chủ thật của người dùng: `run.py`, cổng 8000, chạy từ 10:52. Tệp `-shm` được tạo lúc 10:52:26, đúng lúc máy chủ này khởi động.
+  - Đợt này không mở database thật: pytest dùng database trong bộ nhớ, còn máy chủ thử chạy trên thư mục dữ liệu tạm.
+  - Vì vậy câu "giữ nguyên thời điểm sửa" ở mục 8 của bản 5.57.0 chỉ đúng tại lúc kiểm tra đó.
+  - Máy chủ đang chạy vẫn dùng mã backend cũ. Cần khởi động lại `run.py` thì phần dịch lỗi đã mắc và số phiên bản 5.57.1 mới có hiệu lực; phần frontend có hiệu lực ngay sau khi tải lại trang.
+
+### Tệp đã sửa
+
+- `backend/api/journey.py`
+- `frontend/js/pages/admin.js`
+- `tests/test_lesson_mistakes_english.py` (mới)
+- Phiên bản 5.57.1 ở `backend/config.py`, `frontend/index.html`, `frontend/login.html`, `README.md`

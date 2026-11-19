@@ -55,7 +55,7 @@ body::after { background: var(--amb-glow-b); animation: amb-drift-b calc(var(--a
 .hero::after { inset: 0; background: var(--amb-sweep); animation: amb-sweep 14s ease-in-out infinite; will-change: transform, opacity; }
 
 /* Cards stay solid for reading; only a light blue edge and a soft glow on hover. */
-.card { border-color: color-mix(in srgb, var(--brand) 9%, var(--border)); transition: box-shadow .2s, border-color .2s; }
+.card { border-color: color-mix(in srgb, var(--brand) 9%, var(--border)); transition: box-shadow var(--dur-3), border-color var(--dur-3); }
 .card:hover { border-color: color-mix(in srgb, var(--brand) 22%, var(--border)); box-shadow: var(--shadow), 0 8px 26px rgba(var(--amb-royal), .09); }
 :root[data-theme="dark"] .card:hover { box-shadow: var(--shadow), 0 8px 26px rgba(var(--amb-electric), .14); }
 

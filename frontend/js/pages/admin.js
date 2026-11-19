@@ -265,7 +265,12 @@ function drawChrome() {
     const hero = document.getElementById("adm-hero");
     if (hero) hero.innerHTML = heroView();
     const nav = document.getElementById("adm-nav");
-    if (nav) nav.innerHTML = navView();
+    if (!nav) return;
+    // 5.57.1: the counts arrive after the menu is drawn and the menu is drawn again; keyboard focus stays on the
+    // same section instead of falling back to the page.
+    const focused = nav.contains(document.activeElement) ? document.activeElement.dataset.tab : null;
+    nav.innerHTML = navView();
+    if (focused) nav.querySelector(`.adm-nav-item[data-tab="${focused}"]`)?.focus({ preventScroll: true });
 }
 
 async function drawPane() {
@@ -327,7 +332,6 @@ export async function renderAdmin(section = "") {
         <div class="adm-shell"><nav class="adm-nav card" id="adm-nav" role="tablist" aria-label="Các mục quản trị">${navView()}</nav>
         <section class="card adm-pane" id="admin-pane" role="tabpanel"></section></div></div>`);
     loadSummary().then(drawChrome).catch(() => {});
-    await drawPane();
     const pane = document.getElementById("admin-pane");
     // Search: an input listener (not data-act), so typing never goes through the page's click handler.
     pane.addEventListener("input", event => {
@@ -456,4 +460,6 @@ export async function renderAdmin(section = "") {
             },
         },
     });
+    // 5.57.1: the section buttons work as soon as they show; before, clicks were ignored until the first section loaded.
+    await drawPane();
 }

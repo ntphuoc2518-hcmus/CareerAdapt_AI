@@ -25,7 +25,7 @@ export function statusBadge(code) {
 }
 
 export function esc(value) {
-    return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    return String(value ?? "").replace(/[&<>\u0022\u0027]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 }
 /** Only http(s) and same-site paths become links; anything else renders as text. */
 export function safeUrl(url) {
@@ -96,17 +96,47 @@ export async function api(path, { method = "GET", body, form } = {}) {
     return data;
 }
 
+/* Toasts (5.57): an icon per tone and a close button. An error is announced at once (an alert role) and stays
+   longer; the countdown pauses while the pointer or keyboard focus is on the toast; at most four are shown. */
+const TOAST_ICONS = { good: "check", bad: "alert", warn: "alert" };
+const reducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 export function toast(message, tone = "") {
+    const host = document.getElementById("toasts");
+    if (!host) return;
     const element = document.createElement("div");
     element.className = `toast ${tone ? `toast-${tone}` : ""}`;
-    element.textContent = message;
-    document.getElementById("toasts").append(element);
-    setTimeout(() => element.remove(), 4600);
+    if (tone === "bad") element.setAttribute("role", "alert");
+    element.innerHTML = `<span class="toast-icon" aria-hidden="true">${icon(TOAST_ICONS[tone] || "info")}</span><span class="toast-text"></span><button type="button" class="toast-close" aria-label="Đóng thông báo">${icon("close")}</button>`;
+    element.querySelector(".toast-text").textContent = message;
+    host.append(element);
+    while (host.children.length > 4) host.firstElementChild.remove();
+    let remaining = tone === "bad" ? 7000 : 4600;
+    let started = 0;
+    let timer = null;
+    const leave = () => {
+        clearTimeout(timer);
+        if (!element.isConnected || element.classList.contains("is-leaving")) return;
+        if (reducedMotion()) { element.remove(); return; }
+        element.classList.add("is-leaving");
+        element.addEventListener("animationend", () => element.remove(), { once: true });
+        setTimeout(() => element.remove(), 400);
+    };
+    const run = () => { clearTimeout(timer); started = Date.now(); timer = setTimeout(leave, remaining); };
+    const pause = () => { clearTimeout(timer); remaining = Math.max(1200, remaining - (Date.now() - started)); };
+    element.addEventListener("mouseenter", pause);
+    element.addEventListener("mouseleave", run);
+    element.addEventListener("focusin", pause);
+    element.addEventListener("focusout", run);
+    element.querySelector(".toast-close").addEventListener("click", leave);
+    run();
 }
 
-export const loadingView = (text = "Đang tải dữ liệu...") => `<div class="loading"><span class="spinner" aria-hidden="true"></span>${esc(text)}</div>`;
-export const errorView = message => `<div class="alert alert-bad" role="alert"><div><strong>Không tải được dữ liệu.</strong><br>${esc(message)}<div class="row" style="margin-top:8px"><button class="btn btn-secondary btn-sm" data-act="reload">Thử lại</button></div></div></div>`;
-export const emptyView = (title, text, action = "") => `<div class="empty"><strong>${esc(title)}</strong><span>${esc(text)}</span>${action}</div>`;
+/** A short spinner line; with `page: true` (route changes) a skeleton of a page that appears only if loading takes a moment. */
+export const loadingView = (text = "Đang tải dữ liệu...", { page = false } = {}) => page
+    ? `<div class="loading is-page" role="status"><div class="sk-page" aria-hidden="true"><span class="sk sk-hero"></span><div class="sk-row"><span class="sk sk-card"></span><span class="sk sk-card"></span><span class="sk sk-card"></span></div><span class="sk sk-block"></span></div><p class="loading-text"><span class="spinner" aria-hidden="true"></span><span>${esc(text)}</span></p></div>`
+    : `<div class="loading" role="status"><span class="spinner" aria-hidden="true"></span><span>${esc(text)}</span></div>`;
+export const errorView = message => `<div class="alert alert-bad error-view" role="alert">${icon("alert")}<div><strong>Không tải được dữ liệu.</strong><p>${esc(message)}</p><div class="row error-actions"><button class="btn btn-secondary btn-sm" type="button" data-act="reload">${icon("refresh")}<span>Thử lại</span></button></div></div></div>`;
+export const emptyView = (title, text, action = "") => `<div class="empty"><span class="empty-icon" aria-hidden="true">${icon("inbox")}</span><strong>${esc(title)}</strong><span>${esc(text)}</span>${action}</div>`;
 const ALERT_ICONS = { info: "info", warn: "alert", bad: "alert", good: "check" };
 /**
  * AI comments and system explanations arrive as plain text. They are shown as short lines, never one long block:
@@ -157,10 +187,12 @@ export function setBar(html = "") {
     bar.innerHTML = html;
     bar.hidden = !html;
 }
-export function setSubnav(html = "") {
+/** The page's own menu above the view, or (side: true, 5.53) a vertical menu beside it on wide screens. */
+export function setSubnav(html = "", { side = false } = {}) {
     const nav = document.getElementById("subnav");
     nav.innerHTML = html;
     nav.hidden = !html;
+    document.getElementById("view-shell")?.classList.toggle("has-side", Boolean(html) && side);
 }
 
 export const getTheme = () => window.careerTheme.get();
@@ -177,14 +209,14 @@ export function register({ actions = {}, forms = {}, cleanup = null }) {
 }
 
 export async function withBusy(button, task) {
-    if (button) { button.classList.add("is-busy"); button.disabled = true; }
+    if (button) { button.classList.add("is-busy"); button.disabled = true; button.setAttribute("aria-busy", "true"); }
     try {
         return await task();
     } catch (error) {
         toast(error.message || "Có lỗi xảy ra.", "bad");
         return undefined;
     } finally {
-        if (button) { button.classList.remove("is-busy"); button.disabled = false; }
+        if (button) { button.classList.remove("is-busy"); button.disabled = false; button.removeAttribute("aria-busy"); }
     }
 }
 
@@ -192,15 +224,51 @@ export function formData(form) {
     return Object.fromEntries(new FormData(form).entries());
 }
 
+/* Dialogs (5.57): named by their heading, Tab stays inside, the page behind does not scroll, and closing gives
+   focus back to the control that opened the dialog. */
+let modalOpener = null;
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 export function openModal(html, { wide = false, drawer = false } = {}) {
-    closeModal();
     const root = document.getElementById("modal-root");
+    // A dialog that replaces another keeps the first opener, so focus returns to where the person started.
+    if (!root.firstElementChild) {
+        const active = document.activeElement;
+        modalOpener = active && active !== document.body && !root.contains(active) ? active : null;
+    }
     root.innerHTML = `<div class="modal-backdrop ${drawer ? "is-drawer" : ""}" data-modal-backdrop><div class="modal ${wide ? "modal-wide" : ""} ${drawer ? "modal-drawer" : ""}" role="dialog" aria-modal="true">${html}</div></div>`;
+    const dialog = root.querySelector(".modal");
+    const heading = dialog.querySelector("h2, h3");
+    if (heading) {
+        heading.id = heading.id || "modal-title";
+        dialog.setAttribute("aria-labelledby", heading.id);
+    }
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.setProperty("--scrollbar-gap", `${Math.max(0, gap)}px`);
+    document.documentElement.classList.add("has-modal");
     root.querySelector("input, select, textarea, button")?.focus();
 }
 export function closeModal() {
-    document.getElementById("modal-root").innerHTML = "";
+    const root = document.getElementById("modal-root");
+    const wasOpen = Boolean(root.firstElementChild);
+    root.innerHTML = "";
+    document.documentElement.classList.remove("has-modal");
+    if (!wasOpen) return;
+    const opener = modalOpener;
+    modalOpener = null;
+    if (opener?.isConnected) opener.focus({ preventScroll: true });
 }
+document.addEventListener("keydown", event => {
+    if (event.key !== "Tab" || event.defaultPrevented) return;
+    const dialog = document.querySelector("#modal-root .modal");
+    if (!dialog) return;
+    const items = [...dialog.querySelectorAll(FOCUSABLE)].filter(item => item.getClientRects().length);
+    if (!items.length) { event.preventDefault(); return; }
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (!dialog.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+    else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
 
 export function confirmDialog(title, text, { confirmLabel = "Xác nhận", danger = false } = {}) {
     return new Promise(resolve => {

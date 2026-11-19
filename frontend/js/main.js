@@ -123,7 +123,16 @@ function initBell() {
     document.addEventListener("click", event => document.querySelectorAll("details.rm-menu[open]").forEach(menu => { if (!menu.contains(event.target)) menu.open = false; }));
 }
 
-async function route() {
+/* 5.57: the new page fades in (opacity only, so fixed and sticky parts are untouched); off with reduced motion. */
+function enterView() {
+    const view = document.getElementById("view");
+    view.classList.remove("is-entering");
+    void view.offsetWidth;
+    view.classList.add("is-entering");
+    view.addEventListener("animationend", event => { if (event.target === view) view.classList.remove("is-entering"); }, { once: true });
+}
+
+async function route(event) {
     const path = (window.location.hash.slice(1) || "/").split("?")[0];
     const moved = MOVED[path] || (path.startsWith("/assess/") || path.startsWith("/target/") ? "/process" : null);
     if (moved) { window.location.replace(`#${moved}`); return; }
@@ -147,15 +156,45 @@ async function route() {
     }
     setTitle(match.title, match.name);
     document.title = `${match.title} · CareerAdapt AI`;
-    setView(loadingView());
+    setView(loadingView(undefined, { page: true }));
     window.scrollTo(0, 0);
+    // A link or a menu took the learner here: focus moves to the content, so a screen reader starts at the new page
+    // and the next Tab continues from it. A page that focuses its own field afterwards still wins.
+    if (event?.type === "hashchange") document.getElementById("view").focus({ preventScroll: true });
     try {
         await match.render(match.found);
     } catch (error) {
         setView(errorView(error.message));
     }
+    enterView();
     refreshBell();
 }
+
+/* Tabs (5.57): in any tab list, arrow keys, Home and End move to a tab and open it. A list with its own keys
+   (Hồ sơ) handles them first and marks the event as handled. */
+const TAB_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+document.addEventListener("keydown", event => {
+    if (event.defaultPrevented || !TAB_KEYS.includes(event.key) || event.altKey || event.ctrlKey || event.metaKey) return;
+    const tab = event.target.closest?.('[role="tab"]');
+    const list = tab?.closest('[role="tablist"]');
+    if (!list) return;
+    const tabs = [...list.querySelectorAll('[role="tab"]')].filter(item => !item.disabled && item.getClientRects().length);
+    const index = tabs.indexOf(tab);
+    if (index < 0) return;
+    event.preventDefault();
+    const step = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
+    const next = event.key === "Home" ? tabs[0] : event.key === "End" ? tabs[tabs.length - 1] : tabs[(index + step + tabs.length) % tabs.length];
+    const position = tabs.indexOf(next);
+    const label = list.getAttribute("aria-label");
+    next.focus();
+    next.click();
+    // Some lists redraw themselves on click; focus then goes to the same tab in the new list.
+    requestAnimationFrame(() => {
+        if (next.isConnected) return;
+        const fresh = [...document.querySelectorAll('[role="tablist"]')].find(item => item.getAttribute("aria-label") === label);
+        fresh?.querySelectorAll('[role="tab"]')[position]?.focus();
+    });
+});
 
 document.addEventListener("click", event => {
     if (event.target.matches("[data-modal-backdrop]")) { closeModal(); return; }

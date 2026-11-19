@@ -33,7 +33,10 @@ function addEntries(entries) {
                 if (/^\{\d+\}$/.test(parts[index - 1] || "")) return "()";
                 return /^\{\d+\}$/.test(parts[index + 1] || "") ? "(.+)" : "(.+?)";
             }).join("");
-            added.push({ regex: new RegExp(`^${body}$`, "s"), order, target, weight: source.replace(/\{\d+\}/g, "").length, anchored: !source.startsWith("{") });
+            added.push({
+                regex: new RegExp(`^${body}$`, "s"), order, target, weight: source.replace(/\{\d+\}/g, "").length, anchored: !source.startsWith("{"),
+                dotted: source.includes(" · "), multi: SENTENCE_BREAK.test(source.replace(/\{\d+\}/g, "x")),
+            });
         } else {
             exact.set(source, target);
         }
@@ -42,16 +45,32 @@ function addEntries(entries) {
     cache.clear();
 }
 
+function fill(match, order, target) {
+    const values = {};
+    order.forEach((index, position) => { values[index] = translateText(match[position + 1]); });
+    return target.replace(/\{(\d+)\}/g, (all, index) => values[index] ?? all);
+}
+
 /** A pattern that opens with a value, such as "{0} level {1}", must not claim a whole paragraph. */
 function byPattern(text, minimumCover, strict = false) {
     for (const { regex, order, target, weight, anchored } of patterns) {
         if ((strict || !anchored) && weight / text.length < minimumCover) continue;
         const match = text.match(regex);
-        if (match) {
-            const values = {};
-            order.forEach((index, position) => { values[index] = translateText(match[position + 1]); });
-            return target.replace(/\{(\d+)\}/g, (all, index) => values[index] ?? all);
-        }
+        if (match) return fill(match, order, target);
+    }
+    return null;
+}
+
+/**
+ * 5.57: a line written as one pattern with middle-dot parts ({0} lần ghi nhận · gần nhất {1}), or one that opens with
+ * fixed words and spans two sentences (Mục tiêu: {0}. So sánh …), is matched whole before it is cut into parts.
+ * Cut first, its pieces were translated word by word and came out half Vietnamese. The whole line must match.
+ */
+function byWholePattern(text) {
+    for (const { regex, order, target, anchored, dotted, multi } of patterns) {
+        if (!(dotted && text.includes(" · ")) && !(multi && anchored)) continue;
+        const match = text.match(regex);
+        if (match) return fill(match, order, target);
     }
     return null;
 }
@@ -87,7 +106,7 @@ export function translateText(text) {
         cache.set(clean, clean);
         // A line built from dotted parts is safest piece by piece; a pattern could swallow two of them.
         const multiSentence = SENTENCE_BREAK.test(clean);
-        let result = exact.get(clean) ?? exact.get(clean.toLowerCase()) ?? withoutEnding(clean) ?? (clean.includes(" · ") ? bySplitting(clean) : null)
+        let result = exact.get(clean) ?? exact.get(clean.toLowerCase()) ?? withoutEnding(clean) ?? byWholePattern(clean) ?? (clean.includes(" · ") ? bySplitting(clean) : null)
             ?? (multiSentence ? byPattern(clean, 0.6, true) ?? bySplitting(clean) : byPattern(clean, 0.4)) ?? bySplitting(clean) ?? byPattern(clean, 0);
         if (result === null) {
             result = clean;

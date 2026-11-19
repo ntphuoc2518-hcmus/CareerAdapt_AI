@@ -315,6 +315,59 @@ def test_the_reminder_filters_switch_without_reloading(app):
     assert page.get_attribute(".rm-tab[data-kind='MINI_TEST']", "aria-selected") == "true"
 
 
+# --- Shared components (5.57) ---
+
+def test_moving_to_another_page_puts_focus_on_the_content(app):
+    page = app.open("/app")
+    wait_ready(page)
+    page.click("#nav a[href='#/tests']")
+    expect(page.locator("#page-title")).to_have_text("Kiểm tra kiến thức")
+    expect(page.locator("#view")).to_be_focused()
+    assert app.errors == []
+
+
+def test_an_empty_list_shows_its_icon_and_a_failed_page_offers_a_retry(app):
+    page = app.open("/app#/tests")
+    wait_ready(page)
+    # A new learner has no attempts yet.
+    expect(page.locator("#view .empty .empty-icon")).to_have_count(1)
+    page.goto(app.base + "/app#/tests/report/khong-co-bai-nay")
+    error = page.locator("#view .error-view")
+    expect(error).to_have_attribute("role", "alert")
+    expect(error.locator("[data-act='reload']")).to_be_visible()
+    # Only the refused lookup itself may be reported.
+    assert [item for item in app.errors if "404" not in item] == []
+
+
+def test_a_dialog_keeps_focus_inside_and_returns_it_to_the_button_that_opened_it(app):
+    page = app.open("/app#/profile")
+    wait_ready(page)
+    page.click("#pf-tab-data")
+    opener = page.locator("[data-act='erase']")
+    opener.click()
+    dialog = page.locator("#modal-root .modal")
+    expect(dialog).to_have_attribute("aria-modal", "true")
+    expect(dialog).to_have_attribute("aria-labelledby", re.compile(r".+"))
+    for _ in range(5):  # Tab only ever reaches the dialog's own buttons
+        page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.closest('#modal-root') !== null")
+    page.click("#modal-root [data-dialog='no']")  # "Hủy": nothing is deleted
+    expect(dialog).to_have_count(0)
+    expect(opener).to_be_focused()
+    assert app.errors == []
+
+
+def test_a_toast_has_a_close_button(app):
+    page = app.open("/app#/profile")
+    wait_ready(page)
+    page.click("form[data-form='account'] button[type=submit]")
+    toast_box = page.locator("#toasts .toast").first
+    expect(toast_box.locator(".toast-icon")).to_have_count(1)
+    toast_box.locator(".toast-close").click()
+    expect(page.locator("#toasts .toast")).to_have_count(0)
+    assert app.errors == []
+
+
 def test_starting_the_process_opens_its_first_step(app):
     """Runs last: it starts a Career Adapt process for the test account (in the temporary database)."""
     page = app.open("/app#/process")
@@ -396,6 +449,21 @@ def test_the_optional_skill_with_weight_zero_can_be_saved(admin):
     page.click('form[data-form="skill"] button[type="submit"]')
     expect(page.locator(".toast").filter(has_text="Đã lưu kỹ năng.")).to_have_count(1)
     expect(page.locator('form[data-form="skill"]')).to_have_count(0)
+    assert admin.errors == []
+
+
+def test_arrow_keys_move_between_the_admin_sections(admin):
+    # 5.57: every tab list answers the arrow keys, Home and End, not only the one on Hồ sơ.
+    page = admin.open("/app#/admin/reviews")
+    expect(page.locator(".adm-pane-head h2")).to_have_text("Bài cần duyệt")
+    page.focus('.adm-nav-item[data-tab="reviews"]')
+    page.keyboard.press("ArrowDown")
+    expect(page.locator('.adm-nav-item[data-tab="contributions"]')).to_have_attribute("aria-selected", "true")
+    expect(page.locator(".adm-pane-head h2")).to_have_text("Câu hỏi đóng góp")
+    page.keyboard.press("End")
+    last = page.locator(".adm-nav-item").last
+    expect(last).to_have_attribute("aria-selected", "true")
+    expect(last).to_be_focused()
     assert admin.errors == []
 
 

@@ -187,8 +187,9 @@ export async function renderExamRoom(attempt, onFinished, { base = "/career-proc
 const caseRow = item => `<li class="case ${item.passed ? "is-pass" : "is-fail"}"><span class="case-mark" aria-hidden="true">${item.passed ? "✓" : "✕"}</span><div><span>${esc(item.explanation)}</span><span class="sub small nowrap">${item.points_awarded}/${item.points_max} điểm</span></div></li>`;
 
 /** The exam as it was submitted, read-only, with marks and reasons. */
-export function renderReview(data, { backHref, backLabel }) {
-    let index = 0;
+export function renderReview(data, { backHref, backLabel, start = 0 }) {
+    // 5.54: a link can open the review on one task (Kết quả bài làm > Điểm từng bài).
+    let index = Math.min(Math.max(0, Number(start) || 0), Math.max(0, data.questions.length - 1));
     const draw = () => {
         const question = data.questions[index];
         const written = ["report", "data_quality", "visualization"].includes(question.workspace);

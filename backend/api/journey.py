@@ -9,7 +9,7 @@ from typing import Literal, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
-from backend import final_assessment, learning_journey, practice
+from backend import final_assessment, i18n, learning_journey, practice
 from backend.auth import AuthenticatedUser, get_current_user
 from backend.learning_cycle_service import create_checkin, get_preferences, local_today
 from backend.store import store
@@ -61,9 +61,18 @@ def get_week(week_number: int, current_user: AuthenticatedUser = Depends(get_cur
     return learning_journey.week_detail(current_user.user_id, week_number)
 
 
+# The failed checks on a lesson quote exam content: the question's topic and the check's own text. Their English
+# lives in the reviewed server catalog (data/i18n/sensitive_en.json), which the browser never receives. Only those
+# two fields are translated here; what the learner's answer produced ("answer_gave") stays exactly as recorded.
+MISTAKE_FIELDS = ("topic", "check")
+
+
 @router.get("/me/journey/lessons/{activity_id}")
 def get_lesson(activity_id: str, current_user: AuthenticatedUser = Depends(get_current_user)):
-    return learning_journey.lesson_detail(current_user.user_id, activity_id)
+    detail = learning_journey.lesson_detail(current_user.user_id, activity_id)
+    if i18n.is_english():
+        detail["mistakes"] = [{**item, **{key: i18n.localize(item[key]) for key in MISTAKE_FIELDS if isinstance(item.get(key), str)}} for item in detail["mistakes"]]
+    return detail
 
 
 @router.get("/me/study/current")

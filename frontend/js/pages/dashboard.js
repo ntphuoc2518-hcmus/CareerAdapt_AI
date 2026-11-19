@@ -30,18 +30,26 @@ function ago(time) {
 
 const SPARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 13.9 9.6 22 12l-8.1 2.4L12 22.5l-1.9-8.1L2 12l8.1-2.4Z"/></svg>';
 
-/** The robot beside the welcome: one head in two frames (eyes open, eyes closed) so it blinks; tiles show only real figures. */
-function heroArt(readiness) {
-    const match = readiness === null || readiness === undefined
-        ? `<span class="hero-tile hero-tile-match">${icon("chart")}</span>`
-        : `<span class="hero-tile hero-tile-match">${icon("chart")}<strong>${Math.round(readiness)}%</strong><small>đáp ứng JD</small></span>`;
-    return `<div class="hero-art" aria-hidden="true">
-        <span class="hero-glass"></span>
-        <span class="hero-spark hero-spark-a">${SPARK}</span><span class="hero-spark hero-spark-b">${SPARK}</span><span class="hero-spark hero-spark-c">${SPARK}</span>
-        ${match}
-        <span class="hero-tile hero-tile-chat">${icon("chat")}</span>
-        <span class="hero-tile hero-tile-check">${icon("shield")}<i>${icon("check")}</i></span>
-        <span class="hero-orbit"><i></i></span>
+/** The robot beside the welcome (5.55): it stands in front of a glowing portal, with the platform's five skills
+ *  circling it, a decorative chart card and a "typing" chat bubble. Decoration only: no figure is drawn here (the real
+ *  figures are in the banner's progress strip), and every movement stops when the system asks for less motion. */
+const ORBIT_SKILLS = [["SQL", "database"], ["PYTHON", "code"], ["DATA_VIZ", "chart"], ["DATA_QUALITY", "filter"], ["WRITTEN_COMM", "pen"]];
+const STARS = [[8, 14, 1.6], [22, 78, 1.2], [36, 8, 1], [58, 92, 1.4], [70, 18, 1.1], [84, 60, 1.6], [92, 26, 1], [14, 52, 1.1], [48, 30, .9], [78, 84, 1.2], [4, 88, 1], [64, 6, 1.3]];
+
+function heroArt() {
+    const stars = STARS.map(([x, y, size], index) => `<i style="left:${x}%;top:${y}%;--s:${size};--d:${(index * 0.37) % 3}s"></i>`).join("");
+    const orbit = ORBIT_SKILLS.map(([code, name], index) => `<span class="hs-skill is-${code.toLowerCase()}" style="--a:${index * 72}deg">${icon(name)}</span>`).join("");
+    const bars = [0.55, 0.85, 0.4, 1].map((height, index) => `<rect x="${6 + index * 13}" y="${36 - 30 * height}" width="8" height="${30 * height}" rx="2" style="--i:${index}"/>`).join("");
+    return `<div class="hero-art hs-art" aria-hidden="true">
+        <span class="hs-aurora"><i></i><i></i><i></i></span>
+        <span class="hs-stars">${stars}</span>
+        <span class="hs-floor"></span>
+        <span class="hs-portal"><i class="hs-ring is-1"></i><i class="hs-ring is-2"></i><i class="hs-ring is-3"></i><i class="hs-core"></i></span>
+        <span class="hs-orbit">${orbit}</span>
+        <span class="hs-card hs-chart"><svg viewBox="0 0 60 44"><g class="hs-bars">${bars}</g><path class="hs-line" d="M4 30 L18 22 L31 26 L45 12 L56 8"/></svg></span>
+        <span class="hs-card hs-chat"><i></i><i></i><i></i></span>
+        <span class="hs-card hs-shield">${icon("shield")}<b>${icon("check")}</b></span>
+        <span class="hero-spark hs-spark-a">${SPARK}</span><span class="hero-spark hs-spark-b">${SPARK}</span><span class="hero-spark hs-spark-c">${SPARK}</span>
         <span class="hero-bot">
             <span class="hero-bot-halo"></span>
             ${botBody("hb", "hero-bot-body")}
@@ -51,28 +59,54 @@ function heroArt(readiness) {
     </div>`;
 }
 
-function hero(state, gap) {
+/** The greeting follows the learner's own clock. */
+function greeting() {
+    const hour = new Date().getHours();
+    return hour < 11 ? "Chào buổi sáng" : hour < 14 ? "Chào buổi trưa" : hour < 18 ? "Chào buổi chiều" : "Chào buổi tối";
+}
+
+/** Progress strip: only figures the server returned; a figure it does not have is left out, never guessed. */
+function heroStats(journey, gap) {
+    const stats = [];
+    if (journey && journey.lessons_total) {
+        stats.push(["route", "Lộ trình", `${journey.percent}%`, journey.percent]);
+        stats.push(["check", "Bài học", `${journey.lessons_done}/${journey.lessons_total}`]);
+    }
+    if (gap?.is_readiness_locked === false) stats.push(["target", "Đáp ứng JD", `${Math.round(gap.readiness)}%`, gap.readiness]);
+    if (journey?.expected_end_date) stats.push(["calendar", "Dự kiến xong", fmtDate(journey.expected_end_date)]);
+    if (!stats.length) return "";
+    return `<div class="hero-stats">${stats.map(([name, label, value, bar]) => `<div class="hero-stat">${icon(name)}<div><strong>${value}</strong><span>${label}</span>${bar === undefined ? "" : `<i class="hero-stat-bar"><b style="width:${Math.max(0, Math.min(100, Math.round(bar)))}%"></b></i>`}</div></div>`).join("")}</div>`;
+}
+
+function hero(state, gap, journey) {
     const run = state.run;
+    const plan = journey?.value || null;
     let status = "Bạn chưa thực hiện Quy trình Career Adapt";
     let tone = "is-idle";
+    let line = "Đo năng lực bằng bài làm thật, so với JD bạn nhắm tới.";
     let actions = `<a class="btn btn-light" href="#/process"><span>Bắt đầu ngay</span>${icon("arrow")}</a>`;
     if (run?.status === "COMPLETED") {
         status = `Đã hoàn tất quy trình ${esc(run.career_title)}`;
         tone = "is-done";
-        actions = `<a class="btn btn-light" href="#/plan/da/overview"><span>Xem kết quả và luyện tập</span>${icon("arrow")}</a>
+        const next = plan?.next_lesson;
+        line = next ? `Tiếp theo: <strong>${esc(next.title)}</strong> · Tuần ${next.week_number}` : "Cùng khám phá lộ trình Career Adapt và phát triển bản thân với sự hỗ trợ của AI.";
+        actions = `${next ? `<a class="btn btn-light" href="#/plan/da/roadmap/lesson/${esc(next.activity_id)}">${icon("play")}<span>Học tiếp</span></a>` : ""}
+            <a class="btn ${next ? "hero-btn-ghost" : "btn-light"}" href="#/plan/da/overview"><span>Xem kết quả và luyện tập</span>${icon("arrow")}</a>
             <a class="btn hero-btn-ghost" href="#/plan/da/roadmap">${icon("route")}<span>Lộ trình kỹ năng</span></a>`;
     } else if (run) {
         status = `Đang ở bước ${run.step_index + 1}/${state.steps.length}: ${esc(state.steps[run.step_index].label)}`;
         tone = "is-active";
+        line = "Quy trình đang chờ bạn ở bước này.";
         actions = `<a class="btn btn-light" href="#/flow"><span>Tiếp tục</span>${icon("arrow")}</a>`;
     }
-    const readiness = gap?.value?.is_readiness_locked === false ? gap.value.readiness : null;
-    return `<section class="hero hero-v2"><div class="hero-copy">
-        <span class="hero-state ${tone}"><i aria-hidden="true"></i><span>${status}</span></span>
-        <h2>Chào mừng trở lại, <span class="hero-name" data-no-i18n>${esc(app.user.full_name)}</span>! <span aria-hidden="true">👋</span></h2>
-        <p>Cùng khám phá lộ trình Career Adapt và phát triển bản thân với sự hỗ trợ của AI.</p>
-        <div class="hero-actions">${actions}</div></div>
-        ${heroArt(readiness)}</section>`;
+    const behind = plan?.behind?.days ? `<span class="hero-state is-late"><i aria-hidden="true"></i><span>Chậm lịch ${plan.behind.days} ngày</span></span>` : "";
+    return `<section class="hero hero-v2 hero-v3"><div class="hero-copy">
+        <div class="hero-states"><span class="hero-state ${tone}"><i aria-hidden="true"></i><span>${status}</span></span>${behind}</div>
+        <h2>${greeting()}, <span class="hero-name" data-no-i18n>${esc(app.user.full_name)}</span>! <span class="hero-wave" aria-hidden="true">👋</span></h2>
+        <p>${line}</p>
+        <div class="hero-actions">${actions}</div>
+        ${heroStats(plan, gap?.value)}</div>
+        ${heroArt()}</section>`;
 }
 
 const shortcut = (href, name, tone, title, text) => `<a class="card link-card" href="${href}">${tile(name, tone)}<div><strong>${esc(title)}</strong><span class="sub">${esc(text)}</span></div><span class="go">${icon("arrow")}</span></a>`;
@@ -193,7 +227,7 @@ export async function renderDashboard() {
         settle(api("/me/history")), settle(api("/learning-resources")), done ? settle(api("/tests/attempts")) : { value: null },
         done ? settle(api("/me/journey")) : { value: null },
     ]);
-    setView(`<div class="stack">${hero(state, gap)}
+    setView(`<div class="stack">${hero(state, gap, journey)}
         <div class="grid grid-3">
             ${shortcut(done ? "#/plan/da/overview" : "#/plan", "chart", "brand", "Kế hoạch Career Adapt", "Kết quả, khoảng cách kỹ năng, lộ trình và nhắc nhở.")}
             ${shortcut("#/resources", "book", "s4", "Kho tài liệu", "Học liệu đã duyệt theo từng kỹ năng.")}

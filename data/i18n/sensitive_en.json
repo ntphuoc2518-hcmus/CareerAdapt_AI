@@ -727,5 +727,6 @@
 "Sai lầm loại I trong kiểm định giả thuyết là gì?": "What is a Type I error in hypothesis testing?",
 "Sai lầm loại I là bác bỏ giả thuyết không khi nó đúng, tức báo có khác biệt trong khi thực tế không có. Mức ý nghĩa là xác suất tối đa chấp nhận cho sai lầm này.": "A Type I error rejects a true null hypothesis: it reports a difference that does not exist. The significance level is the largest accepted probability of this error.",
 "Kiểm tra nhanh: Thống kê": "Quick check: Statistics",
-"6 câu về số đo mô tả, so sánh nhóm và thử nghiệm A/B, 12 phút.": "6 questions on descriptive measures, comparing groups and A/B experiments, 12 minutes."
+"6 câu về số đo mô tả, so sánh nhóm và thử nghiệm A/B, 12 phút.": "6 questions on descriptive measures, comparing groups and A/B experiments, 12 minutes.",
+"Mức bị giới hạn ở 1 vì bài chưa có số liệu tính đúng nào; nêu khái niệm thôi chưa chứng minh được phân tích.": "The level is capped at 1 because the work has no correctly computed figure; naming a concept alone does not show analysis."
 }

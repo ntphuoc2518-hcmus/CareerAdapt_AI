@@ -1,23 +1,106 @@
-import { alertBox, api, avatarMarkup, confirmDialog, esc, formData, getLang, refreshAvatar, register, setView, toast, withBusy } from "../core.js";
-import { icon, illustration, tile } from "../icons.js";
+/** Hồ sơ (5.52): a header with the picture and who the learner is, then one settings panel at a time chosen from a
+ *  side menu. Every form, field and request is the same as before; only the layout changed. */
+import { api, avatarMarkup, confirmDialog, esc, fmtDate, fmtDateTime, formData, getLang, refreshAvatar, register, setView, toast, withBusy } from "../core.js";
+import { icon, tile } from "../icons.js";
 
 const KIND_LABELS = { MINI_TEST: "Mini-test đến hạn", ACTIVITY_DUE: "Hoạt động sắp đến hạn hoặc quá hạn", SCHEDULE: "Lịch không còn phù hợp" };
+const TABS = [["account", "Thông tin", "user"], ["goals", "Mục tiêu", "target"], ["preferences", "Nhắc nhở", "bell"], ["password", "Bảo mật", "lock"], ["data", "Dữ liệu", "shield"]];
+const TAB_KEY = "profile-tab";
+const savedTab = () => { try { return sessionStorage.getItem(TAB_KEY); } catch { return null; } };
+const rememberTab = id => { try { sessionStorage.setItem(TAB_KEY, id); } catch { /* storage may be blocked */ } };
 
-const heading = (name, title, text) => `<div class="card-title">${tile(name)}<div><h2>${esc(title)}</h2><p class="sub">${esc(text)}</p></div></div>`;
+const heading = (name, title, text) => `<div class="pf-panel-head">${tile(name, "brand", "tile-sm")}<div><h2>${esc(title)}</h2>${text ? `<p class="sub small">${esc(text)}</p>` : ""}</div></div>`;
+const saveButton = (label = "Lưu", name = "check") => `<div class="pf-actions"><button class="btn btn-primary" type="submit">${icon(name)}<span>${label}</span></button></div>`;
+
+function profileHero(user, profile) {
+    const chips = [
+        profile.major ? ["book", esc(profile.major)] : null,
+        ["clock", `${profile.weekly_hours_budget} giờ/tuần · ${profile.target_timeline_weeks} tuần`],
+        user.created_at ? ["calendar", `Tham gia <span data-no-i18n>${fmtDate(user.created_at)}</span>`] : null,
+    ].filter(Boolean);
+    return `<section class="pf-hero"><div class="pf-id">
+            <div class="pf-avatar-wrap"><span class="avatar pf-avatar ${user.avatar_version ? "has-photo" : ""}" data-user-avatar aria-hidden="true">${avatarMarkup(user)}</span>
+                <label class="pf-camera avatar-pick" title="PNG, JPG hoặc WebP, tối đa 3 MB">${icon("upload")}<span class="sr-only">${user.avatar_version ? "Đổi ảnh đại diện" : "Tải ảnh đại diện lên"}</span><input type="file" id="avatar-file" accept="image/png,image/jpeg,image/webp" hidden></label></div>
+            <div class="pf-who"><span class="pf-role">${user.role === "admin" ? "Quản trị viên" : "Học viên"}${user.contributor ? '<span class="pf-tag">Đóng góp câu hỏi</span>' : ""}</span>
+                <h2 class="pf-name" data-no-i18n>${esc(user.full_name)}</h2><span class="pf-email" data-no-i18n>${esc(user.email)}</span>
+                <div class="pf-chips">${chips.map(([name, text]) => `<span>${icon(name)}<span>${text}</span></span>`).join("")}</div></div></div>
+        <div class="pf-hero-actions">${user.avatar_version ? '<button class="btn btn-sm pf-ghost" type="button" data-act="avatar-remove">Xóa ảnh</button>' : ""}
+            ${user.role === "admin" ? `<a class="btn btn-sm pf-ghost" href="#/admin">${icon("shield")}<span>Trang quản trị</span></a>` : ""}</div></section>`;
+}
+
+function accountPanel(user) {
+    return `<form class="pf-form" data-form="account">${heading("user", "Thông tin cá nhân", "")}
+        <div class="form-grid"><label class="field"><span>Họ và tên</span><input class="input" name="full_name" required minlength="2" maxlength="100" value="${esc(user.full_name)}"></label>
+            <label class="field"><span>Số điện thoại</span><input class="input" name="phone" maxlength="20" value="${esc(user.phone || "")}"></label></div>
+        <label class="field"><span>Email</span><input class="input" value="${esc(user.email)}" disabled></label>${saveButton()}</form>`;
+}
+
+function goalsPanel(profile) {
+    return `<form class="pf-form" data-form="goals">${heading("target", "Mục tiêu học tập", "Gợi ý khi tạo lộ trình mới")}
+        <label class="field"><span>Ngành học</span><input class="input" name="major" maxlength="120" value="${esc(profile.major || "")}"></label>
+        <div class="form-grid"><label class="field"><span>Giờ học mỗi tuần</span><input class="input" type="number" name="weekly_hours_budget" min="0.5" max="40" step="0.5" required value="${profile.weekly_hours_budget}"></label>
+            <label class="field"><span>Thời hạn (tuần)</span><input class="input" type="number" name="target_timeline_weeks" min="1" max="52" required value="${profile.target_timeline_weeks}"></label></div>
+        <p class="pf-note">${icon("info")}<span>Lộ trình đã tạo không đổi theo.</span></p>${saveButton()}</form>`;
+}
+
+function preferencesPanel(preferences) {
+    const cycles = [...new Set([...preferences.preset_cycles, preferences.default_cycle_days])];
+    const zones = [...new Set(["Asia/Ho_Chi_Minh", "Asia/Bangkok", "Asia/Singapore", "Asia/Tokyo", "Europe/London", "America/New_York", preferences.timezone])];
+    return `<form class="pf-form" data-form="preferences">${heading("bell", "Nhắc nhở", "Chỉ hiện trong ứng dụng, không gửi email")}
+        <div class="form-grid"><label class="field"><span>Chu kỳ mặc định</span><select class="select" name="default_cycle_days">${cycles.map(days => `<option value="${days}" ${days === preferences.default_cycle_days ? "selected" : ""}>${days} ngày</option>`).join("")}</select></label>
+            <label class="field"><span>Múi giờ</span><select class="select" name="timezone">${zones.map(zone => `<option ${zone === preferences.timezone ? "selected" : ""}>${esc(zone)}</option>`).join("")}</select></label></div>
+        <div class="pf-toggles">${preferences.kinds.map(kind => `<label class="pf-toggle"><input type="checkbox" name="kind_${kind}" ${preferences.enabled_kinds[kind] ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>${esc(KIND_LABELS[kind] || kind)}</span></label>`).join("")}</div>
+        ${saveButton()}</form>`;
+}
+
+function passwordPanel(user) {
+    const facts = [user.password_changed_at ? `Đổi lần cuối ${fmtDate(user.password_changed_at)}` : "", user.last_login_at ? `Đăng nhập gần nhất ${fmtDateTime(user.last_login_at)}` : ""].filter(Boolean);
+    return `<form class="pf-form" data-form="password" autocomplete="off">${heading("lock", "Đổi mật khẩu", "")}
+        ${facts.length ? `<p class="pf-facts">${facts.map(fact => `<span>${esc(fact)}</span>`).join("")}</p>` : ""}
+        <label class="field"><span>Mật khẩu hiện tại</span><input class="input" type="password" name="current_password" autocomplete="current-password" required></label>
+        <div class="form-grid"><label class="field"><span>Mật khẩu mới</span><input class="input" type="password" id="new-password" name="new_password" autocomplete="new-password" required></label>
+            <label class="field"><span>Nhập lại mật khẩu mới</span><input class="input" type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" required></label></div>
+        <ul id="password-checklist"></ul>${saveButton("Đổi mật khẩu", "lock")}</form>`;
+}
+
+function dataPanel() {
+    return `<div class="pf-form">${heading("shield", "Dữ liệu cá nhân", "Bài nộp giữ tối đa 90 ngày; điểm và lịch sử vẫn còn")}
+        <div class="pf-data-row"><div>${tile("file", "brand", "tile-sm")}<div><strong>Tải dữ liệu</strong><span class="sub small">Toàn bộ dữ liệu của bạn, dạng JSON</span></div></div><button class="btn btn-secondary" type="button" data-act="export">Tải về</button></div>
+        <div class="pf-data-row is-danger"><div>${tile("alert", "bad", "tile-sm")}<div><strong>Xóa dữ liệu học tập</strong><span class="sub small">Hồ sơ, bài nộp, JD đã nhập; tài khoản vẫn còn</span></div></div><button class="btn btn-danger" type="button" data-act="erase">Xóa</button></div></div>`;
+}
+
+function openTab(id) {
+    document.querySelectorAll(".pf-tab").forEach(button => {
+        const open = button.dataset.tab === id;
+        button.classList.toggle("is-active", open);
+        button.setAttribute("aria-selected", String(open));
+        button.tabIndex = open ? 0 : -1;
+    });
+    document.querySelectorAll(".pf-panel").forEach(panel => { panel.hidden = panel.dataset.tab !== id; });
+    rememberTab(id);
+}
 
 export async function renderProfile() {
     const [me, profile, preferences] = await Promise.all([api("/auth/me"), api("/me/profile"), api("/me/reminder-preferences")]);
     const user = me.user;
-    setView(`<div class="grid grid-2">
-        <form class="card" data-form="account"><div class="form-body">${heading("user", "Tài khoản", "Thông tin tài khoản của bạn")}
-            <div class="avatar-editor"><span class="avatar avatar-lg ${user.avatar_version ? "has-photo" : ""}" data-user-avatar aria-hidden="true">${avatarMarkup(user)}</span>
-                <div class="avatar-editor-body"><strong>Ảnh đại diện</strong><span class="sub small">PNG, JPG hoặc WebP, tối đa 3 MB. Ảnh được cắt vuông ở giữa và thu nhỏ.</span>
-                    <div class="row"><label class="btn btn-secondary btn-sm avatar-pick">${icon("upload")}<span>${user.avatar_version ? "Đổi ảnh" : "Tải ảnh lên"}</span><input type="file" id="avatar-file" accept="image/png,image/jpeg,image/webp" hidden></label>${user.avatar_version ? '<button class="btn btn-ghost btn-sm" type="button" data-act="avatar-remove">Xóa ảnh</button>' : ""}</div></div></div>
-            <label class="field"><span>Họ và tên</span><input class="input" name="full_name" required minlength="2" maxlength="100" value="${esc(user.full_name)}"></label><label class="field"><span>Email</span><input class="input" value="${esc(user.email)}" disabled></label><label class="field"><span>Số điện thoại</span><input class="input" name="phone" maxlength="20" value="${esc(user.phone || "")}"></label><div class="row"><button class="btn btn-primary" type="submit">${icon("check")}<span>Lưu</span></button></div></div></form>
-        <form class="card form-body" data-form="goals">${heading("target", "Mục tiêu học tập", "Giá trị gợi ý khi tạo lộ trình học")}<label class="field"><span>Ngành học</span><input class="input" name="major" maxlength="120" value="${esc(profile.major || "")}"></label><div class="form-grid"><label class="field"><span>Giờ học mỗi tuần</span><input class="input" type="number" name="weekly_hours_budget" min="0.5" max="40" step="0.5" required value="${profile.weekly_hours_budget}"></label><label class="field"><span>Thời hạn (tuần)</span><input class="input" type="number" name="target_timeline_weeks" min="1" max="52" required value="${profile.target_timeline_weeks}"></label></div><p class="meta">${icon("info")}<span>Giờ học dùng làm giá trị gợi ý khi tạo lộ trình. Lộ trình đã tạo không đổi theo.</span></p><div class="row"><button class="btn btn-primary" type="submit">${icon("check")}<span>Lưu</span></button></div></form>
-        <form class="card with-art with-art-end" data-form="preferences"><div class="form-body">${heading("bell", "Nhắc nhở", "Cài đặt nhắc học trong ứng dụng")}<label class="field"><span>Chu kỳ mặc định</span><select class="select" name="default_cycle_days">${[...new Set([...preferences.preset_cycles, preferences.default_cycle_days])].map(days => `<option value="${days}" ${days === preferences.default_cycle_days ? "selected" : ""}>${days} ngày</option>`).join("")}</select></label><label class="field"><span>Múi giờ</span><select class="select" name="timezone">${[...new Set(["Asia/Ho_Chi_Minh", "Asia/Bangkok", "Asia/Singapore", "Asia/Tokyo", "Europe/London", "America/New_York", preferences.timezone])].map(zone => `<option ${zone === preferences.timezone ? "selected" : ""}>${esc(zone)}</option>`).join("")}</select></label>${preferences.kinds.map(kind => `<label class="check"><input type="checkbox" name="kind_${kind}" ${preferences.enabled_kinds[kind] ? "checked" : ""}> ${esc(KIND_LABELS[kind] || kind)}</label>`).join("")}<p class="sub small">Nhắc chỉ hiện trong ứng dụng. Hệ thống không gửi email hay thông báo đẩy.</p><div class="row"><button class="btn btn-primary" type="submit">${icon("check")}<span>Lưu</span></button></div></div><div class="art-soft">${illustration("calendar")}</div></form>
-        <form class="card with-art with-art-end" data-form="password" autocomplete="off"><div class="form-body">${heading("lock", "Đổi mật khẩu", "Thay đổi mật khẩu để bảo vệ tài khoản")}<label class="field"><span>Mật khẩu hiện tại</span><input class="input" type="password" name="current_password" autocomplete="current-password" required></label><label class="field"><span>Mật khẩu mới</span><input class="input" type="password" id="new-password" name="new_password" autocomplete="new-password" required></label><label class="field"><span>Nhập lại mật khẩu mới</span><input class="input" type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" required></label><ul id="password-checklist"></ul><div class="row"><button class="btn btn-primary" type="submit">${icon("lock")}<span>Đổi mật khẩu</span></button></div></div><div class="art-soft">${illustration("shield")}</div></form>
-        <section class="card stack span-all">${heading("shield", "Dữ liệu cá nhân", "Tải về hoặc xóa dữ liệu học tập của bạn")}<p class="sub small">Bạn có thể tải toàn bộ dữ liệu hoặc yêu cầu xóa hồ sơ, bài nộp và JD đã nhập. Nội dung bài nộp được giữ tối đa 90 ngày; điểm và lịch sử vẫn còn sau đó.</p>${user.role === "admin" ? alertBox("info", 'Bạn có quyền quản trị. <a href="#/admin">Mở trang quản trị</a>.') : ""}<div class="row"><button class="btn btn-secondary" data-act="export">Tải dữ liệu (JSON)</button><button class="btn btn-danger" data-act="erase">Xóa toàn bộ dữ liệu học tập</button></div></section></div>`);
+    const panels = { account: accountPanel(user), goals: goalsPanel(profile), preferences: preferencesPanel(preferences), password: passwordPanel(user), data: dataPanel() };
+    const first = TABS.some(([id]) => id === savedTab()) ? savedTab() : "account";
+    setView(`<div class="stack pf">${profileHero(user, profile)}
+        <div class="pf-layout"><nav class="card pf-nav" role="tablist" aria-label="Cài đặt hồ sơ">${TABS.map(([id, label, name]) => `<button type="button" class="pf-tab" role="tab" id="pf-tab-${id}" data-tab="${id}" aria-controls="pf-panel-${id}" aria-selected="false">${icon(name)}<span>${label}</span></button>`).join("")}</nav>
+            <div class="pf-panels">${TABS.map(([id]) => `<section class="card pf-panel" role="tabpanel" id="pf-panel-${id}" data-tab="${id}" aria-labelledby="pf-tab-${id}" hidden>${panels[id]}</section>`).join("")}</div></div></div>`);
+    openTab(first);
+    const nav = document.querySelector(".pf-nav");
+    nav.addEventListener("click", event => { const tab = event.target.closest(".pf-tab"); if (tab) openTab(tab.dataset.tab); });
+    nav.addEventListener("keydown", event => {
+        if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        const tabs = [...nav.querySelectorAll(".pf-tab")];
+        const index = tabs.indexOf(document.activeElement);
+        if (index < 0) return;
+        event.preventDefault();
+        const next = tabs[(index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        openTab(next.dataset.tab);
+        next.focus();
+    });
     document.getElementById("avatar-file").addEventListener("change", async event => {
         const file = event.target.files?.[0];
         event.target.value = "";
@@ -65,6 +148,7 @@ export async function renderProfile() {
                 const values = formData(form);
                 await api("/auth/me", { method: "PATCH", body: { full_name: values.full_name, phone: values.phone, preferred_language: getLang() } });
                 document.getElementById("user-name").textContent = values.full_name;
+                document.querySelector(".pf-name").textContent = values.full_name;
                 toast("Đã lưu thông tin.", "good");
             },
             goals: async form => {

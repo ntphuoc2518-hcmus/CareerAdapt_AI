@@ -1,0 +1,39 @@
+/* CareerAdapt AI design tokens (5.57.0). Loaded first on the app and the sign-in page.
+   One scale each for type, space, radius, elevation, control size, motion and layers. Colours stay with each
+   page's palette (app.css :root, login.css --lp-*), because the two pages have their own light and dark sets. */
+:root {
+    /* Type: 11.5 / 12 / 13 / 14 / 15 / 16 / 18 / 20 / 22 / 24 / 28 / 32. Larger display figures keep their own size. */
+    --fs-2xs: 11.5px; --fs-xs: 12px; --fs-sm: 13px; --fs-base: 14px; --fs-md: 15px; --fs-lg: 16px;
+    --fs-xl: 18px; --fs-2xl: 20px; --fs-3xl: 22px; --fs-4xl: 24px; --fs-5xl: 28px; --fs-6xl: 32px;
+    --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-heavy: 800;
+    --lh-tight: 1.2; --lh-snug: 1.4; --lh-base: 1.55;
+
+    /* Space: a 4px grid. */
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-7: 28px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px;
+
+    /* Radius: chips and bars, small controls, controls, tiles, cards, large panels, hero bands, pills. */
+    --radius-2xs: 4px; --radius-xs: 8px; --radius-sm: 10px; --radius-md: 12px; --radius: 14px; --radius-lg: 18px; --radius-xl: 22px; --radius-pill: 999px;
+
+    /* Elevation: resting card, hover lift, popover, dialog. */
+    --shadow-xs: 0 1px 2px rgba(15, 30, 61, .06);
+    --shadow-md: 0 10px 24px rgba(15, 30, 61, .08);
+    --shadow-lg: 0 16px 40px rgba(15, 30, 61, .14);
+    --shadow-xl: 0 24px 64px rgba(10, 20, 40, .24);
+
+    /* Controls: buttons and fields share one height so they line up in a row; touch screens get 44px. */
+    --control-sm: 32px; --control-md: 40px; --control-lg: 46px; --touch: 44px;
+
+    /* Motion: durations and curves for every transition. Long decorative loops keep their own rhythm. */
+    --dur-1: 120ms; --dur-2: 150ms; --dur-3: 200ms; --dur-4: 300ms; --dur-5: 450ms;
+    --ease-standard: cubic-bezier(.2, 0, 0, 1); --ease-out: cubic-bezier(.2, .7, .2, 1); --ease-in: cubic-bezier(.4, 0, 1, 1); --ease-spring: cubic-bezier(.2, .8, .2, 1.1);
+
+    /* Layers, bottom to top. Values 0-3 inside a component are local stacking and stay literal. */
+    --z-dropdown: 5; --z-subnav: 10; --z-header: 20; --z-flowbar: 25; --z-popover: 30; --z-scrim: 30; --z-drawer: 40; --z-fab: 40;
+    --z-panel: 41; --z-float: 45; --z-modal: 60; --z-toast: 70; --z-tooltip: 80; --z-skip: 100;
+}
+:root[data-theme="dark"] {
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, .35);
+    --shadow-md: 0 10px 24px rgba(0, 0, 0, .35);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, .45);
+    --shadow-xl: 0 24px 64px rgba(0, 0, 0, .55);
+}

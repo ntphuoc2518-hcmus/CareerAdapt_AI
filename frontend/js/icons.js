@@ -38,6 +38,8 @@ const PATHS = {
     flask: "M9 3h6m-5 0v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3",
     bell: "M6 9a6 6 0 1 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9Zm4 10a2 2 0 0 0 4 0",
     logout: "M15 4h4v16h-4M10 8l-4 4 4 4m-4-4h10",
+    close: "M6 6l12 12M18 6 6 18",
+    inbox: "M3 13h5l1.5 3h5l1.5-3h5M5.5 5h13L21 13v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z",
 };
 
 export const icon = (name, className = "") => `<svg class="ic ${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${PATHS[name] || PATHS.info}"/></svg>`;

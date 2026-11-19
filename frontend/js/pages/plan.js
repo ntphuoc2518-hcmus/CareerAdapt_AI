@@ -1,7 +1,7 @@
 /** Kế hoạch Career Adapt: what the finished process produced. Gap, roadmap and progress reuse their pages. */
 import { alertBox, api, emptyView, esc, fmtDate, fmtDateTime, formatText, register, setSubnav, setView, skillName, SOURCE_TYPES, withBusy } from "../core.js";
 import { openAssistantTask } from "../assistant.js";
-import { icon, skillIcon, skillTile, tile, aiAvatar } from "../icons.js";
+import { icon, skillTile, tile, aiAvatar } from "../icons.js";
 import { renderReview } from "./exam.js";
 import { renderGap } from "./gap.js";
 import { renderProgress } from "./progress.js";
@@ -11,57 +11,87 @@ import { renderRoadmap } from "./roadmap.js";
 import { pageHero } from "../hero.js";
 import { disclose } from "../disclose.js";
 import { mountPlanAdvisor } from "../plan-advisor.js";
+import { expressionForScore, expressiveHead } from "../faces.js";
 
 const CAREER_TABS = [["da", "Data Analyst", "chart"], ["backend", "Backend Developer", "code"], ["qa", "QA Tester", "flask"]];
 const SECTIONS = [["overview", "Khai báo và JD", "file"], ["exam", "Kết quả bài làm", "check"], ["gap", "Khoảng cách kỹ năng", "pulse"], ["roadmap", "Lộ trình học tập", "route"], ["rank", "Xếp hạng và lương", "trophy"], ["progress", "Nhắc nhở", "bell"]];
 const METHODS = { PICK: "Chọn từ danh sách", IMPORT: "Nhập hoặc import tệp", FORM: "Biểu mẫu" };
 
+/* 5.53: the plan's menu stands on the left like the Hồ sơ menu (a row above the page on narrower screens).
+   Careers first, then the Data Analyst sections; each item is a link, so the page and history work as before. */
 function subnav(career, section) {
-    const careers = CAREER_TABS.map(([id, label, name]) => `<a class="tab ${id === career ? "is-active" : ""}" href="#/plan/${id}${id === "da" ? "/overview" : ""}" ${id === career ? 'aria-current="page"' : ""}>${icon(name)}${label}${id === "da" ? "" : ' <span class="badge badge-warn">Sắp có</span>'}</a>`).join("");
-    const sections = career === "da" && section ? `<div class="tabs tabs-sub">${SECTIONS.map(([id, label, name]) => `<a class="tab ${id === section ? "is-active" : ""}" href="#/plan/da/${id}" ${id === section ? 'aria-current="page"' : ""}>${icon(name)}${label}</a>`).join("")}</div>` : "";
-    setSubnav(`<div class="tabs">${careers}</div>${sections}`);
+    const item = (href, name, label, active, extra = "") => `<a class="pn-item ${active ? "is-active" : ""}" href="${href}" ${active ? 'aria-current="page"' : ""}>${icon(name)}<span>${label}</span>${extra}</a>`;
+    const careers = CAREER_TABS.map(([id, label, name]) => item(`#/plan/${id}${id === "da" ? "/overview" : ""}`, name, label, id === career, id === "da" ? "" : '<span class="pn-soon">Sắp có</span>')).join("");
+    const sections = career === "da" && section
+        ? `<div class="pn-group pn-sections"><span class="pn-label">Data Analyst</span>${SECTIONS.map(([id, label, name]) => item(`#/plan/da/${id}`, name, label, id === section)).join("")}</div>` : "";
+    setSubnav(`<div class="pn"><div class="pn-group pn-careers"><span class="pn-label">Nghề</span>${careers}</div>${sections}</div>`, { side: true });
+    // As a row (narrow screens) the open item may sit past the edge; bring it into view. As a column this does nothing.
+    document.querySelectorAll("#subnav .pn-group").forEach(group => {
+        const active = group.querySelector(".pn-item.is-active");
+        if (active && group.scrollWidth > group.clientWidth) group.scrollLeft = Math.max(0, active.offsetLeft - (group.clientWidth - active.offsetWidth) / 2);
+    });
 }
 
-/** The skills reported at the start. The process is locked once finished, so they are shown, not edited. */
-function skillCard(run) {
-    const grid = run.skills.length
-        ? `<ul class="self-grid">${run.skills.map(item => `<li class="self-skill">${skillTile(item.skill_code, "tile-sm")}<div><strong>${esc(skillName(item.skill_code))}</strong>
-            <span class="self-level"><span class="level-pill level-self">${item.level}</span><span class="sub small">Mức ${item.level}/3</span>${levelSteps(Number(item.level))}</span>
-            ${item.evidence_note ? `<span class="sub small">${esc(item.evidence_note)}</span>` : ""}</div></li>`).join("")}</ul>`
-        : emptyView("Không có", "Bạn chưa khai báo kỹ năng nào.");
-    return `<section class="card self-card"><div class="rd-head">${tile("user", "brand", "tile-sm")}<div><h2>Kỹ năng bạn tự khai</h2><p class="sub small">${esc(METHODS[run.skill_method] || "")}</p></div><span class="badge badge-muted">${run.skills.length} kỹ năng</span></div>
-        ${grid}<p class="meta">${icon("info")}<span>Chỉ để so sánh với kết quả bài làm, không phải trình độ đã xác thực.</span></p></section>`;
+/* --- Khai báo và JD (5.49): one table compares what the learner reported with what the JD asks, a compact JD card
+   and a quiet reset. The process is locked once finished, so everything here is shown, not edited. --- */
+const METER_LABELS = { self: "Bạn khai", jd: "JD cần", verified: "Đã xác thực" };
+function meter(level, kind) {
+    const value = Number(level) || 0;
+    return `<span class="ov-meter is-${kind}" role="img" aria-label="${METER_LABELS[kind]}: mức ${value}/3"><span class="ov-dots" aria-hidden="true">${[1, 2, 3].map(step => `<i class="${step <= value ? "is-on" : ""}"></i>`).join("")}</span><b>${value}</b></span>`;
+}
+
+function skillTable(run) {
+    const declared = new Map(run.skills.map(item => [item.skill_code, item]));
+    const required = new Map(((run.jd || {}).requirements || []).map(item => [item.skill_code, item]));
+    const codes = [...required.keys(), ...[...declared.keys()].filter(code => !required.has(code))];
+    if (!codes.length) return `<section class="card ov-skills">${emptyView("Không có", "Bạn chưa khai báo kỹ năng nào.")}</section>`;
+    const rows = codes.map(code => {
+        const self = declared.get(code);
+        const need = required.get(code);
+        const note = self?.evidence_note ? `<span class="ov-note">${esc(self.evidence_note)}</span>` : "";
+        return `<li class="ov-row">${skillTile(code, "tile-sm")}<span class="ov-name"><strong>${esc(skillName(code))}</strong>${need?.is_core ? '<span class="ov-core">Cốt lõi</span>' : ""}${note}</span>
+            ${self ? meter(self.level, "self") : '<span class="ov-none">—</span>'}${need ? meter(need.target_level, "jd") : '<span class="ov-none">—</span>'}</li>`;
+    }).join("");
+    return `<section class="card ov-skills"><div class="ov-head"><h2>Kỹ năng</h2><span class="ov-col is-self">Bạn khai</span><span class="ov-col is-jd">JD cần</span></div>
+        <ul class="ov-rows">${rows}</ul>
+        <p class="ov-foot-note">${icon("info")}<span>Mức tự khai chưa được xác thực.</span>${METHODS[run.skill_method] ? `<span class="ov-method">${esc(METHODS[run.skill_method])}</span>` : ""}</p></section>`;
 }
 
 function jdCard(jd) {
-    const requirements = jd.requirements || [];
-    return `<section class="card self-card"><div class="rd-head">${tile("file", "brand", "tile-sm")}<div><h2>JD đã sử dụng</h2><p class="sub small">${esc(jd.name || "")}${SOURCE_TYPES[jd.source_type] ? ` · ${esc(SOURCE_TYPES[jd.source_type])}` : ""}</p></div>
-            <button class="btn btn-secondary btn-sm" type="button" data-act="jd-ai">${aiAvatar("xs")}<span>AI tóm tắt</span></button></div>
-        <div class="jd-summary"><span class="jd-summary-head"><strong>Tóm tắt</strong><span class="badge badge-muted">${jd.summary_source === "AI" ? "AI tóm tắt" : "Tóm tắt theo quy tắc, chưa dùng AI"}</span></span>${formatText(jd.summary || "")}</div>
-        ${requirements.length ? `<div class="stack-sm"><strong class="jd-req-title">Kỹ năng JD yêu cầu <span class="badge badge-muted">${requirements.length} kỹ năng</span></strong>
-            <ul class="self-grid">${requirements.map(item => `<li class="self-skill">${skillTile(item.skill_code, "tile-sm")}<div><strong>${esc(skillName(item.skill_code))}</strong><span class="self-level"><span class="level-pill level-target">${item.target_level}</span><span class="sub small">Cần mức ${item.target_level}/3</span>${levelSteps(Number(item.target_level))}</span></div></li>`).join("")}</ul></div>` : ""}</section>`;
+    const source = SOURCE_TYPES[jd.source_type];
+    return `<section class="card ov-jd"><div class="ov-jd-head">${tile("file", "brand", "tile-sm")}<h2>JD</h2>${source ? `<span class="badge badge-muted">${esc(source)}</span>` : ""}</div>
+        ${jd.summary ? `<div class="ov-summary" id="ov-summary">${formatText(jd.summary)}</div>
+        <div class="ov-jd-meta"><span class="badge ${jd.summary_source === "AI" ? "badge-info" : "badge-muted"}">${jd.summary_source === "AI" ? "AI tóm tắt" : "Tóm tắt theo quy tắc"}</span><button class="btn btn-ghost btn-sm" type="button" data-act="jd-more" aria-expanded="false" aria-controls="ov-summary">Xem thêm</button></div>` : ""}
+        <button class="btn btn-secondary ov-ai" type="button" data-act="jd-ai">${aiAvatar("xs")}<span>Phân tích JD của tôi</span></button></section>`;
 }
 
 function overviewHero(run) {
     const jd = run.jd || {};
-    const name = jd.name ? esc(jd.name) : "JD chưa có tên";
     return pageHero({
-        tone: "brand", icon: "file", kicker: "Khai báo và JD", title: `Mục tiêu: ${name}`,
-        text: "Kỹ năng bạn tự khai và JD dùng để đánh giá. Quy trình đã khóa sau khi hoàn tất.",
-        stats: [["user", "Kỹ năng tự khai", run.skills.length], ["target", "Kỹ năng JD yêu cầu", (jd.requirements || []).length], ["calendar", "Ngày hoàn tất", fmtDate(run.completed_at), "muted"]],
+        tone: "brand", icon: "file", kicker: "Khai báo và JD", title: jd.name ? esc(jd.name) : "JD chưa có tên",
+        stats: [["user", "Tự khai", run.skills.length], ["target", "JD yêu cầu", (jd.requirements || []).length], ["lock", "Hoàn tất", fmtDate(run.completed_at), "muted"]],
     });
 }
 
 async function overview(run) {
-    setView(`<div class="stack">${overviewHero(run)}${skillCard(run)}${jdCard(run.jd || {})}
-        <section class="card row-between"><div class="card-title">${tile("refresh", "bad")}<div><h2>Làm lại từ đầu</h2><p class="sub small">Hoàn tất lúc ${fmtDateTime(run.completed_at)}. Quy trình đã khóa, muốn làm lại phải reset.</p></div></div><button class="btn btn-danger" data-act="reset">${icon("refresh")}<span>Reset quy trình</span></button></section></div>`);
+    setView(`<div class="stack">${overviewHero(run)}<div class="ov-grid">${skillTable(run)}${jdCard(run.jd || {})}</div>
+        <div class="ov-reset"><span>${icon("lock")}<span>Quy trình đã khóa từ ${fmtDateTime(run.completed_at)}</span></span><button class="btn btn-ghost btn-sm is-danger" type="button" data-act="reset">${icon("refresh")}<span>Làm lại từ đầu</span></button></div></div>`);
     register({
         actions: {
             reset: element => withBusy(element, openResetDialog),
             // The server's JD task: AI when available, otherwise its rule-based explanation, never an invented one.
             "jd-ai": element => openAssistantTask("jd_analysis", element.textContent.trim()),
+            "jd-more": element => {
+                const open = element.getAttribute("aria-expanded") !== "true";
+                document.getElementById("ov-summary")?.classList.toggle("is-open", open);
+                element.setAttribute("aria-expanded", String(open));
+                element.textContent = open ? "Thu gọn" : "Xem thêm";
+            },
         },
     });
+    // The two-line preview needs "Xem thêm" only when the summary is longer than that.
+    const summary = document.getElementById("ov-summary");
+    if (summary && summary.scrollHeight <= summary.clientHeight + 2) document.querySelector('[data-act="jd-more"]')?.setAttribute("hidden", "");
 }
 
 /* Results tab. Every figure is read from /career-process/exam/review; only differences and counts are derived here. */
@@ -74,78 +104,111 @@ function scoreRing(data) {
     return `<div class="ring result-ring ${data.passed ? "is-pass" : "is-fail"}" role="img" aria-label="${esc(String(data.score))}/${esc(String(data.max_score))}"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="ring-track"/><circle cx="60" cy="60" r="52" class="ring-bar" stroke-dasharray="${(length * percent) / 100} ${length}"/><line class="ring-mark" x1="104" y1="60" x2="118" y2="60" transform="rotate(${mark} 60 60)"/></svg><div><strong>${esc(String(data.score))}</strong><span>/ ${esc(String(data.max_score))} điểm</span></div></div>`;
 }
 
-function scorePanel(data) {
+/* --- Kết quả bài làm (5.50, filled out in 5.54): a score card with the robot and every task's points, a strip of
+   what to do next, a dense skill table whose rows open their reason, and the AI comment beside the basis.
+   Every figure comes from /career-process/exam/review and /career-process/insights; nothing is scored here. --- */
+const percentOf = (part, whole) => Math.max(0, Math.min(100, Math.round((100 * Number(part)) / (Number(whole) || 1))));
+
+function taskList(data) {
+    const rows = data.questions.map((question, index) => {
+        const state = question.blank ? "is-blank" : question.correct ? "is-right" : Number(question.points_awarded) > 0 ? "is-partial" : "is-wrong";
+        return `<li><a class="rs-task ${state}" href="#/plan/da/review?q=${index}" title="${esc(question.topic)}">
+            <span class="rs-task-name"><strong>${esc(question.label)}</strong><span>${esc(skillName(question.skill_code))} · ${esc(question.tier_label)}</span></span>
+            <span class="rs-task-bar"><b style="width:${percentOf(question.points_awarded, question.max_points)}%"></b></span>
+            <span class="rs-task-pts">${question.blank ? '<span class="rs-task-tag">Trống</span>' : ""}<strong>${question.points_awarded}</strong>/${question.max_points}</span></a></li>`;
+    }).join("");
+    return `<div class="rs-tasks"><span class="rs-tasks-title">Điểm từng bài</span><ol>${rows}</ol></div>`;
+}
+
+function scoreCard(data) {
     const gap = round1(Number(data.score) - Number(data.pass_threshold));
-    const remark = data.passed ? `Cao hơn ngưỡng đạt ${gap} điểm.` : `Còn thiếu ${Math.abs(gap)} điểm để đạt ngưỡng.`;
     const pasted = data.integrity?.large_inserts || 0;
-    const notes = [data.auto_submitted ? "Bài được tự động nộp." : "", data.violations ? `Rời màn hình ${data.violations} lần.` : "", pasted ? `Máy chủ ghi nhận ${pasted} lần dán nhiều chữ (chỉ để tham khảo, không ảnh hưởng điểm).` : ""].filter(Boolean);
-    return `<section class="card result-score ${data.passed ? "is-pass" : "is-fail"}">${scoreRing(data)}
-        <div class="result-verdict"><span class="eyebrow-label">Kết quả đánh giá</span><h2>Bài kiểm tra năng lực Data Analyst</h2>
-            <span class="badge ${data.passed ? "badge-good" : "badge-bad"} verdict-badge">${icon(data.passed ? "check" : "alert")}<span>${data.passed ? "Đạt" : "Chưa đạt"}</span></span>
-            <span class="sub small">Ngưỡng đạt ${data.pass_threshold}/${data.max_score}</span>
-            ${notes.length ? `<span class="sub small">${esc(notes.join(" "))}</span>` : ""}
-            ${data.critical_violations.length ? `<span class="small" style="color:var(--bad)"><strong>Lỗi trọng yếu:</strong> ${esc(data.critical_violations.join("; "))}</span>` : ""}</div>
-        <div class="result-remark">${tile(data.passed ? "trophy" : "target", data.passed ? "good" : "warn")}<p><strong>${remark}</strong></p></div></section>`;
+    const flags = [
+        data.auto_submitted ? ["clock", "Tự động nộp"] : null,
+        data.violations ? ["alert", `Rời màn hình ${data.violations} lần`] : null,
+        pasted ? ["file", `Dán nhiều chữ ${pasted} lần`, "Máy chủ tự ghi nhận, chỉ để tham khảo, không ảnh hưởng điểm."] : null,
+    ].filter(Boolean);
+    const mood = expressionForScore(data);
+    return `<section class="card rs-score ${data.passed ? "is-pass" : "is-fail"}">
+        <div class="rs-score-main">${scoreRing(data)}
+            <div class="rs-verdict"><div class="rs-verdict-top"><span class="badge ${data.passed ? "badge-good" : "badge-bad"} verdict-badge">${icon(data.passed ? "check" : "alert")}<span>${data.passed ? "Đạt" : "Chưa đạt"}</span></span><span class="rs-bot" aria-hidden="true">${expressiveHead(mood, "rs-face")}</span></div>
+                <strong class="rs-gap">${data.passed ? `Cao hơn ngưỡng ${gap} điểm` : `Còn thiếu ${Math.abs(gap)} điểm`}</strong>
+                <span class="rs-meta"><span>Ngưỡng ${data.pass_threshold}/${data.max_score}</span><span>${fmtDateTime(data.submitted_at)}</span></span>
+                ${flags.length ? `<div class="rs-flags">${flags.map(([name, label, hint]) => `<span class="rs-flag"${hint ? ` title="${esc(hint)}"` : ""}>${icon(name)}<span>${esc(label)}</span></span>`).join("")}</div>` : ""}
+                <a class="btn btn-primary btn-glow rs-review" href="#/plan/da/review"><span>Xem lại bài làm</span>${icon("arrow")}</a></div></div>
+        ${taskList(data)}
+        ${data.critical_violations.length ? `<p class="rs-critical">${icon("alert")}<span><strong>Lỗi trọng yếu:</strong> ${esc(data.critical_violations.join("; "))}</span></p>` : ""}</section>`;
 }
 
-function reviewPanel(data) {
-    return `<section class="card result-review"><div class="card-title">${tile("quiz")}<div><h2>Bài đã làm</h2><p class="sub small">Xem từng bài, chỗ đúng sai và nhận xét.</p></div></div>
-        <p class="meta">${icon("check")}<span>${data.questions.length} bài đã chấm · nộp ${fmtDateTime(data.submitted_at)}</span></p>
-        <a class="btn btn-primary btn-glow" href="#/plan/da/review"><span>Xem lại bài làm</span>${icon("arrow")}</a></section>`;
-}
-
-function levelSteps(verified) {
-    return `<span class="lvl-steps" aria-hidden="true">${[1, 2, 3].map(step => `<i class="${step <= verified ? "is-on" : ""}"></i>`).join("")}</span>`;
-}
-
-function levelCard(data, insights) {
-    const conclusion = data.conclusion;
-    const overall = levelOf(insights.levels, conclusion.overall_level);
-    const ranking = insights.ranking;
-    const met = conclusion.skills.filter(item => item.verified_level >= item.target_level);
-    const unmet = conclusion.skills.filter(item => item.verified_level < item.target_level);
+function nextStrip(data, insights) {
+    const skills = data.conclusion.skills;
+    const unmet = skills.filter(item => item.verified_level < item.target_level);
     // Same rule as the server summary: the unmet skill furthest below its JD level.
     const weakest = unmet.length ? unmet.reduce((low, item) => (item.verified_level - item.target_level < low.verified_level - low.target_level ? item : low)) : null;
-    const facts = [
-        ["shield", "Trình độ hiện tại", esc(conclusion.overall_label), `Mức ${conclusion.overall_level}/3 · ${esc(overall.stage)}`],
-        ["target", "Kỹ năng đáp ứng JD", `${met.length}/${conclusion.skills.length}`, "kỹ năng đạt mức JD yêu cầu"],
-        ["pulse", "Khoảng cách lớn nhất", weakest ? esc(weakest.topic) : "Không có", weakest ? `${esc(skillName(weakest.skill_code))}: mức ${weakest.verified_level}, cần ${weakest.target_level}` : "Đã đáp ứng mọi kỹ năng"],
-        ["trophy", "Mức độ cạnh tranh", ranking.me ? esc(standing(ranking)) : "Chưa xếp hạng", ranking.me ? `hạng ${ranking.me.rank} trên ${ranking.total} học viên` : "Chưa có bài được chấm"],
-    ];
-    const rows = conclusion.skills.map(item => {
+    const ranking = insights.ranking;
+    const overall = levelOf(insights.levels, data.conclusion.overall_level);
+    const fact = (name, label, value, sub, tone = "") => `<div class="rs-fact ${tone}">${tile(name, "brand", "tile-sm")}<div><span>${label}</span><strong>${value}</strong>${sub ? `<small>${sub}</small>` : ""}</div></div>`;
+    return `<section class="card rs-strip">
+        ${fact("shield", "Trình độ", esc(data.conclusion.overall_label), `Mức ${data.conclusion.overall_level}/3 · ${esc(overall.stage)}`)}
+        ${fact("trophy", "Cạnh tranh", ranking.me ? esc(standing(ranking)) : "Chưa xếp hạng", ranking.me && ranking.top_percent ? `Hạng ${ranking.me.rank}/${ranking.total}` : "")}
+        ${weakest ? fact("route", "Ưu tiên học", esc(skillName(weakest.skill_code)), `Mức ${weakest.verified_level} → ${weakest.target_level}`, "is-focus") : fact("check", "Ưu tiên học", "Đã đạt mọi kỹ năng JD", "", "is-focus")}
+        <a class="btn btn-secondary rs-roadmap" href="#/plan/da/roadmap"><span>Mở lộ trình</span>${icon("arrow")}</a></section>`;
+}
+
+function resultTable(data, insights) {
+    const byskill = new Map(data.questions.map(question => [question.skill_code, question]));
+    const rows = data.conclusion.skills.map(item => {
         const gap = item.target_level - item.verified_level;
-        return `<tr><td><span class="skill-name">${skillIcon(item.skill_code)}<strong>${esc(skillName(item.skill_code))}</strong></span><span class="sub small skill-topic">${esc(item.topic)} · ${esc(item.tier_label)}</span>
-                <details class="why"><summary>Vì sao</summary><p>${esc(item.reason)} ${esc(item.compare)}</p></details></td>
-            <td><span class="level-cell"><span class="level-pill level-verified" data-level="${item.verified_level}">${item.verified_level}</span>${levelSteps(item.verified_level)}</span><span class="sub small">${esc(levelOf(insights.levels, item.verified_level).name)}</span></td>
-            <td><span class="level-cell"><span class="level-pill">${item.target_level}</span></span><span class="sub small">${esc(levelOf(insights.levels, item.target_level).name)}</span></td>
-            <td><span class="badge ${gap <= 0 ? "badge-good" : "badge-warn"}">${gap <= 0 ? "Đạt JD" : `Thiếu ${gap} mức`}</span></td></tr>`;
+        const level = levelOf(insights.levels, item.verified_level);
+        const question = byskill.get(item.skill_code);
+        const points = question ? `<span class="rs-points" title="Điểm bài ${esc(question.label)}"><span class="rs-mini"><b style="width:${percentOf(question.points_awarded, question.max_points)}%"></b></span><span><strong>${question.points_awarded}</strong>/${question.max_points}</span></span>` : '<span class="rs-points is-none">—</span>';
+        return `<li><details class="rs-row"><summary class="rs-row-main">${skillTile(item.skill_code, "tile-sm")}
+                <span class="rs-name"><strong>${esc(skillName(item.skill_code))}</strong><span>${esc(item.topic)} · ${esc(item.tier_label)}</span></span>
+                ${points}<span title="${esc(level.name)}">${meter(item.verified_level, "verified")}</span>${meter(item.target_level, "jd")}
+                <span class="badge ${gap <= 0 ? "badge-good" : "badge-warn"} rs-badge">${gap <= 0 ? "Đạt" : `Thiếu ${gap}`}</span><span class="rs-chev" aria-hidden="true">${icon("arrow")}</span></summary>
+            <p class="rs-why"><strong>Vì sao:</strong> ${esc(item.reason)} ${esc(item.compare)}</p></details></li>`;
     }).join("");
-    const next = weakest ? `Ưu tiên học ${skillName(weakest.skill_code)} trước: đang ở mức ${weakest.verified_level}, JD cần mức ${weakest.target_level}.` : "Bạn đã đáp ứng mọi kỹ năng JD yêu cầu. Hãy giữ nhịp luyện tập theo lộ trình.";
-    return `<section class="card level-card"><div class="rd-head">${tile("sparkles")}<div><h2>Nhận xét trình độ hiện tại</h2><p class="sub small">Từ điểm từng bài và quy tắc chấm, không phải chứng chỉ nghề.</p></div><button class="btn btn-secondary btn-sm" type="button" data-act="guide">${icon("info")}<span>Cách phân bậc</span></button></div>
-        <div class="level-facts">${facts.map(([name, label, value, note]) => `<div class="level-fact">${icon(name)}<div><span class="sub small">${label}</span><strong>${value}</strong><span class="sub small">${note}</span></div></div>`).join("")}</div>
-        <div class="next-step">${icon("route")}<div><span class="sub small">Việc nên làm tiếp</span><strong>${esc(next)}</strong></div><a class="btn btn-primary btn-sm" href="#/plan/da/roadmap"><span>Mở lộ trình</span>${icon("arrow")}</a></div>
-        ${data.ai.overall ? `<div class="ai-note">${aiAvatar("sm")}<div>${formatText(data.ai.overall)}</div></div>` : ""}
-        <div class="table-wrap result-table"><table><thead><tr><th>Kỹ năng</th><th>Đã xác thực</th><th>JD yêu cầu</th><th>Kết quả</th></tr></thead><tbody>${rows}</tbody></table></div>
-        <p class="sub small">${esc(conclusion.scope_note || "")}</p></section>`;
+    return `<section class="card rs-skills"><div class="rs-head"><h2>Kỹ năng</h2><span class="ov-col is-points">Điểm bài</span><span class="ov-col is-verified">Đã xác thực</span><span class="ov-col is-jd">JD cần</span>
+            <button class="btn btn-ghost btn-sm rs-guide" type="button" data-act="guide" title="Cách phân bậc">${icon("info")}<span>Cách phân bậc</span></button></div>
+        <ul class="rs-rows">${rows}</ul>
+        ${data.conclusion.scope_note ? `<p class="ov-foot-note">${icon("info")}<span>${esc(data.conclusion.scope_note)}</span></p>` : ""}</section>`;
+}
+
+function aiCard(data) {
+    if (!data.ai.overall) return "";
+    return `<section class="card rs-ai-card"><div class="rs-ai-head">${aiAvatar("sm")}<h2>Nhận xét của AI</h2><span class="badge badge-muted">Không đổi điểm</span></div>
+        <div class="rs-ai-text" id="rs-ai-text">${formatText(data.ai.overall)}</div>
+        <button class="btn btn-ghost btn-sm rs-ai-more" type="button" data-act="ai-more" aria-expanded="false" aria-controls="rs-ai-text">Xem thêm</button></section>`;
 }
 
 function examHero(data) {
     const skills = data.conclusion.skills;
     const met = skills.filter(item => item.verified_level >= item.target_level).length;
-    const gap = round1(Number(data.pass_threshold) - Number(data.score));
-    const title = data.passed ? `Bạn đã đạt bài kiểm tra với ${data.score}/${data.max_score} điểm.` : `Bạn được ${data.score}/${data.max_score} điểm, còn thiếu ${gap} điểm để đạt.`;
     return pageHero({
-        tone: "violet", icon: "check", kicker: "Kết quả bài làm", title,
-        text: `Trình độ đã xác thực: ${esc(data.conclusion.overall_label)} (mức ${data.conclusion.overall_level}/3). Điểm do bộ chấm tính từ test case, không do AI.`,
-        stats: [["quiz", "Điểm bài làm", `${data.score}/${data.max_score}`, data.passed ? "good" : "bad"], ["shield", "Ngưỡng đạt", data.pass_threshold, "muted"],
-            ["target", "Kỹ năng đạt JD", `${met}/${skills.length}`, met === skills.length ? "good" : "warn"], ["file", "Bài đã chấm", data.questions.length]],
+        tone: "violet", icon: "check", kicker: "Kết quả bài làm", title: `${data.passed ? "Đạt" : "Chưa đạt"} · ${data.score}/${data.max_score} điểm`,
+        stats: [["shield", "Ngưỡng đạt", data.pass_threshold, "muted"], ["target", "Kỹ năng đạt JD", `${met}/${skills.length}`, met === skills.length ? "good" : "warn"], ["file", "Bài đã chấm", data.questions.length]],
     });
 }
 
 async function examResult() {
     const [data, insights] = await Promise.all([api("/career-process/exam/review"), api("/career-process/insights")]);
-    setView(`<div class="stack">${examHero(data)}<div class="result-top">${scorePanel(data)}${reviewPanel(data)}</div>${levelCard(data, insights)}${basisCard(insights.basis)}</div>`);
-    register({ actions: { guide: () => openLevelGuide(insights.levels) } });
+    const ai = aiCard(data);
+    setView(`<div class="stack">${examHero(data)}${scoreCard(data)}${nextStrip(data, insights)}${resultTable(data, insights)}
+        <div class="rs-bottom ${ai ? "" : "is-single"}">${ai}${basisCard(insights.basis)}</div></div>`);
+    register({
+        actions: {
+            guide: () => openLevelGuide(insights.levels),
+            "ai-more": element => {
+                const open = element.getAttribute("aria-expanded") !== "true";
+                document.getElementById("rs-ai-text")?.classList.toggle("is-open", open);
+                element.setAttribute("aria-expanded", String(open));
+                element.textContent = open ? "Thu gọn" : "Xem thêm";
+            },
+        },
+    });
+    // "Xem thêm" only when the comment is longer than its preview.
+    const text = document.getElementById("rs-ai-text");
+    if (text && text.scrollHeight <= text.clientHeight + 2) document.querySelector('[data-act="ai-more"]')?.setAttribute("hidden", "");
 }
 
 function simulated(title) {
@@ -169,7 +232,8 @@ export async function renderPlan(career, section, rest = "") {
     }
     if (section === "review") {
         subnav("da", "exam");
-        renderReview(await api("/career-process/exam/review"), { backHref: "#/plan/da/exam", backLabel: "Quay lại kết quả" });
+        const start = new URLSearchParams(window.location.hash.split("?")[1] || "").get("q");
+        renderReview(await api("/career-process/exam/review"), { backHref: "#/plan/da/exam", backLabel: "Quay lại kết quả", start });
         return undefined;
     }
     subnav("da", section);
@@ -189,22 +253,18 @@ export async function renderPlan(career, section, rest = "") {
    below claims it); only the supporting blocks go behind the "Xem thêm" buttons. Matching is by each block's own class
    or action, not by its text, so it holds in English too. Unclaimed blocks (the main block, alerts, a running study
    session) stay visible above the buttons in their original order.
-     overview: declared skills shown · JD, reset behind buttons
-     exam:     score and review shown · level assessment, basis behind buttons
+     overview: everything shown (5.49): skill table, JD card, reset
+     exam:     everything shown (5.50): score card, next card, skill table, basis (closed)
      gap:      gap chart shown · detail, priority, other JDs behind buttons
      roadmap:  progress, next lesson and the weekly breakdown shown · final, older lessons behind buttons
-     rank:     ranking board shown · salary, level guide behind buttons
+     rank:     everything shown (5.51): hero, board with filters, comparison, salary
      progress: due tasks shown · log behind a button --- */
 const has = selector => element => Boolean(element.querySelector(selector));
 const PANELS = {
-    overview: [
-        { id: "jd", title: "JD đã sử dụng", hint: "Tóm tắt JD và các kỹ năng JD yêu cầu", icon: "file", match: has('[data-act="jd-ai"]') },
-        { id: "reset", title: "Làm lại từ đầu", hint: "Reset quy trình, xem trước dữ liệu bị xóa", icon: "refresh", tone: "rose", match: has('[data-act="reset"]') },
-    ],
-    exam: [
-        { id: "levels", title: "Nhận xét trình độ", hint: "Mức từng kỹ năng so với JD, việc nên làm tiếp", icon: "sparkles", match: el => el.matches(".level-card") },
-        { id: "basis", title: "Cơ sở đánh giá", hint: "Kết quả được tính từ đâu", icon: "info", match: el => el.matches(".basis") },
-    ],
+    // 5.49: the whole section fits on one screen, so nothing hides behind a button.
+    overview: [],
+    // 5.50: score, next step and the skill table are the section; the basis is already a closed <details>.
+    exam: [],
     gap: [
         { id: "detail", title: "Chi tiết và bằng chứng", hint: "Bảng mức, trọng số và bằng chứng từng kỹ năng", icon: "file", match: el => el.matches(".gap-card") && !el.matches(".gap-main") },
         { id: "priority", title: "Kỹ năng ưu tiên", hint: "Nên học gì trước và mức đáp ứng mục tiêu", icon: "target", match: el => el.matches(".gap-split") },
@@ -215,10 +275,8 @@ const PANELS = {
         { id: "final", title: "Bài đánh giá tổng hợp", hint: "Bài đánh giá cuối lộ trình", icon: "trophy", match: el => el.matches(".jr-final") },
         { id: "other", title: "Bài chưa xếp và bài cũ", hint: "Hoạt động chưa xếp lịch, bài từ phiên bản trước", icon: "file", match: el => el.matches(".jr-unscheduled") },
     ],
-    rank: [
-        { id: "pay", title: "Lương tham khảo", hint: "Lương theo nhóm kinh nghiệm, có nguồn công khai", icon: "growth", match: el => el.matches(".pay-card") },
-        { id: "levels", title: "Cách phân bậc kỹ năng", hint: "Ý nghĩa từng mức 0 đến 3", icon: "info", match: has('[data-act="guide"]') },
-    ],
+    // 5.51: ranking, comparison and salary are all in view; the level guide is a button in the hero.
+    rank: [],
     progress: [
         { id: "log", title: "Nhật ký và thay đổi kỹ năng", hint: "Hoạt động đã làm và các lần đổi mức", icon: "clock", match: el => el.matches(".rm-more, .rm-records") },
     ],

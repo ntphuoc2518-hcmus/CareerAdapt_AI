@@ -3,48 +3,65 @@
 
 /* Cards rise in as they enter the view. */
 .fx-hidden { opacity: 0; transform: translateY(14px); }
-.fx-in { animation: fx-rise .55s cubic-bezier(.2, .7, .2, 1) var(--fx-delay, 0ms) both; }
+.fx-in { animation: fx-rise .55s var(--ease-out) var(--fx-delay, 0ms) both; }
 @keyframes fx-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
 /* Meters fill to their value instead of appearing full. */
-.meter > span { transition: width .9s cubic-bezier(.2, .7, .2, 1); }
+.meter > span { transition: width .9s var(--ease-out); }
 
 /* Press feedback: a ripple where the pointer went down, and a slight push on buttons. */
 .fx-ripple-host { position: relative; }
 .fx-ripple-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
 .fx-ripple { position: absolute; border-radius: 50%; background: currentColor; opacity: .18; transform: scale(0); animation: fx-ripple .6s ease-out forwards; pointer-events: none; }
 @keyframes fx-ripple { to { opacity: 0; transform: scale(1); } }
-.btn { transition: transform .12s, box-shadow .15s, background-color .15s, border-color .15s; }
+.btn { transition: transform var(--dur-1), box-shadow var(--dur-2), background-color var(--dur-2), border-color var(--dur-2); }
 .btn:active:not(:disabled) { transform: scale(.97); }
 .btn-primary:hover:not(:disabled) { box-shadow: var(--btn-shadow), 0 8px 20px rgba(29, 91, 216, .25); }
 
 /* Hover lift on cards that lead somewhere or summarise one thing. */
-.link-card, .level-fact, .self-skill, .gap-stat, .rd-next, .review-topics li, .rm-stat { transition: transform .18s, box-shadow .18s, border-color .18s; }
-.link-card:hover, .self-skill:hover, .level-fact:hover, .review-topics li:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15, 30, 61, .08); }
-.link-card .go { transition: transform .18s, background-color .15s, border-color .15s, color .15s; }
+.link-card, .level-fact, .self-skill, .gap-stat, .rd-next, .review-topics li, .rm-stat { transition: transform var(--dur-3), box-shadow var(--dur-3), border-color var(--dur-3); }
+.link-card:hover, .self-skill:hover, .level-fact:hover, .review-topics li:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.link-card .go { transition: transform var(--dur-3), background-color var(--dur-2), border-color var(--dur-2), color var(--dur-2); }
 .link-card:hover .go { transform: translateX(3px); }
-.nav-link .ic { transition: transform .18s; }
+.nav-link .ic { transition: transform var(--dur-3); }
 .nav-link:hover .ic { transform: translateX(2px); }
-.tab { transition: color .15s, background-color .15s; }
+.tab { transition: color var(--dur-2), background-color var(--dur-2); }
 
 /* Dialogs pop in; toasts slide in. */
-.modal-backdrop { animation: fx-fade .18s ease-out; }
-.modal:not(.modal-drawer) { animation: fx-pop .22s cubic-bezier(.2, .8, .2, 1.1); }
-.toast { animation: fx-toast .28s cubic-bezier(.2, .8, .2, 1); }
+.modal-backdrop { animation: fx-fade var(--dur-3) ease-out; }
+.modal:not(.modal-drawer) { animation: fx-pop var(--dur-3) var(--ease-spring); }
+.toast { animation: fx-toast var(--dur-4) var(--ease-out); }
 @keyframes fx-fade { from { opacity: 0; } }
 @keyframes fx-pop { from { opacity: 0; transform: translateY(10px) scale(.97); } }
 @keyframes fx-toast { from { opacity: 0; transform: translateX(24px); } }
 
 /* Scroll aids: a progress line under the header and a back-to-top button above the assistant button. */
 .fx-scroll-line { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, var(--brand), #36CFFF); transform: scaleX(0); transform-origin: left center; pointer-events: none; }
-.fx-top { position: fixed; right: 22px; bottom: 84px; z-index: 45; display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--brand); box-shadow: var(--shadow); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .2s, transform .2s; }
+.fx-top { position: fixed; right: 22px; bottom: 84px; z-index: var(--z-float); display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--brand); box-shadow: var(--shadow-md); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity var(--dur-3), transform var(--dur-3); }
 .fx-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
 .fx-top:hover { background: var(--brand); color: #fff; }
 .fx-top svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+/* 5.57 micro-interactions: the page fades in after each route change (opacity only, so fixed and sticky parts are
+   untouched), toasts slide out, the bell list, snooze menus and the assistant panel open with a short pop or slide,
+   fields and buttons ease their colour, and a row that scrolls sideways fades at the edge that has more to show. */
+#view.is-entering { animation: fx-view var(--dur-4) var(--ease-out) both; }
+@keyframes fx-view { from { opacity: 0; } }
+.toast.is-leaving { animation: fx-toast-out var(--dur-3) var(--ease-in) forwards; }
+@keyframes fx-toast-out { to { opacity: 0; transform: translateX(16px); } }
+.bell-panel:not([hidden]) { transform-origin: top right; animation: fx-pop-sm var(--dur-3) var(--ease-out); }
+details.rm-menu[open] .rm-menu-list { transform-origin: top left; animation: fx-pop-sm var(--dur-2) var(--ease-out); }
+@keyframes fx-pop-sm { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.assistant-panel:not([hidden]) { animation: fx-panel var(--dur-4) var(--ease-out); }
+@keyframes fx-panel { from { opacity: 0; transform: translateX(28px); } }
+.nav-link, .pn-item, .adm-nav-item, .pf-tab, .rm-tab { transition: background-color var(--dur-2), color var(--dur-2), box-shadow var(--dur-2); }
+.fx-edge-end { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+.fx-edge-start { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
+.fx-edge-start.fx-edge-end { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
+
 @media (prefers-reduced-motion: reduce) {
     .fx-hidden { opacity: 1; transform: none; }
-    .fx-in, .fx-ripple, .modal-backdrop, .modal, .toast { animation: none !important; }
+    .fx-in, .fx-ripple, .modal-backdrop, .modal, .toast, #view.is-entering, .bell-panel, .rm-menu-list, .assistant-panel { animation: none !important; }
     .meter > span, .btn, .link-card, .fx-top { transition: none; }
     .btn:active:not(:disabled), .link-card:hover, .self-skill:hover, .level-fact:hover, .review-topics li:hover { transform: none; }
 }

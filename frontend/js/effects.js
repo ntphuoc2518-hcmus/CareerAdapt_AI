@@ -122,6 +122,25 @@ function scrollAids() {
     update();
 }
 
+/* 5.57: a row that scrolls sideways (the plan menu as a row, the admin sections on a phone, tab rows) fades at the
+   edge that still has more to show. Not motion, so it stays on when the system asks for less motion. */
+const EDGE_SELECTOR = ".pn-group, .adm-nav, .tabs, .rm-tabs";
+function scrollEdges(root) {
+    root.querySelectorAll(EDGE_SELECTOR).forEach(row => {
+        if (row.dataset.fxEdges) return;
+        row.dataset.fxEdges = "1";
+        const update = () => {
+            const max = row.scrollWidth - row.clientWidth;
+            const scrolls = max > 2 && /(auto|scroll)/.test(window.getComputedStyle(row).overflowX);
+            row.classList.toggle("fx-edge-start", scrolls && row.scrollLeft > 2);
+            row.classList.toggle("fx-edge-end", scrolls && row.scrollLeft < max - 2);
+        };
+        row.addEventListener("scroll", update, { passive: true });
+        if ("ResizeObserver" in window) new ResizeObserver(update).observe(row);
+        requestAnimationFrame(update);
+    });
+}
+
 export function initEffects() {
     if ("IntersectionObserver" in window) {
         let batch = 0;
@@ -145,8 +164,11 @@ export function initEffects() {
     const view = document.getElementById("view");
     // Count-ups change text every frame; one pass per frame is enough to pick up newly rendered content.
     let pending = false;
-    if (view) new MutationObserver(() => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; enhance(view); }); } }).observe(view, { childList: true, subtree: true });
+    if (view) new MutationObserver(() => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; enhance(view); scrollEdges(view); }); } }).observe(view, { childList: true, subtree: true });
+    const subnav = document.getElementById("subnav");
+    if (subnav) new MutationObserver(() => requestAnimationFrame(() => scrollEdges(subnav))).observe(subnav, { childList: true });
     document.addEventListener("pointerdown", ripple);
     scrollAids();
     enhance(document);
+    scrollEdges(document);
 }

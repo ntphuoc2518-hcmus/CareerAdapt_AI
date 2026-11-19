@@ -1,5 +1,6 @@
 import { api, emptyView, esc, fmtDate, fmtHours, formData, register, safeUrl, setView, skillName, statusBadge } from "../core.js";
 import { icon, skillIcon, tile } from "../icons.js";
+import { pageHero } from "../hero.js";
 
 const TYPES = { COURSE: "Khóa học", LECTURE: "Bài giảng", EXERCISE: "Bài tập", OFFICIAL_DOC: "Tài liệu chính thức", ARTICLE: "Bài viết", INTERNAL_GUIDE: "Hướng dẫn nội bộ" };
 // Provider logos are not ours to use; the tile shows the kind of resource instead.
@@ -16,20 +17,38 @@ function card(item) {
         <p class="sub small">${esc(item.source_note)}</p></article>`;
 }
 
+/* 5.57: the shared page hero counts the catalogue as it stood on the first, unfiltered load; filtering only changes
+   the result line under the toolbar, which is announced to screen readers. */
+function resourcesHero(overview) {
+    return pageHero({
+        tone: "green", icon: "book", kicker: "Học liệu", title: "Học liệu đã duyệt cho lộ trình của bạn",
+        text: "Chỉ hiển thị học liệu đã duyệt, đã kiểm tra link và không bị tạm ẩn. Hệ thống không tự sinh liên kết.",
+        stats: [["book", "Học liệu", overview.total, "good"], ["chart", "Kỹ năng có học liệu", overview.skills, "teal"], ["user", "Nguồn cung cấp", overview.providers, "violet"]],
+    });
+}
+
 export async function renderResources() {
-    const draw = async filters => {
+    let overview = null;
+    const draw = async (filters, { focusResults = false } = {}) => {
         const query = new URLSearchParams(Object.entries(filters).filter(([, value]) => value)).toString();
         const data = await api(`/learning-resources${query ? `?${query}` : ""}`);
+        overview = overview || { total: data.total, skills: data.filters.skills.length, providers: data.filters.providers.length };
+        const filtered = Object.values(filters).some(Boolean);
         const options = (values, selected, map = value => value) => values.map(value => `<option value="${esc(value)}" ${selected === value ? "selected" : ""}>${esc(map(value))}</option>`).join("");
-        setView(`<div class="stack"><p class="page-intro">Chỉ hiển thị học liệu đã duyệt, đã kiểm tra link và không bị tạm ẩn. Hệ thống không tự sinh liên kết.</p>
-            <form class="card" data-form="filter"><div class="form-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end">
-                <label class="field"><span>Tìm kiếm</span><input class="input" name="q" value="${esc(filters.q || "")}"></label>
+        setView(`<div class="stack">${resourcesHero(overview)}
+            <form class="card res-filter" data-form="filter" role="search" aria-label="Bộ lọc học liệu"><div class="res-filter-grid">
+                <label class="field res-search"><span>Tìm kiếm</span><span class="res-search-box">${icon("search")}<input class="input" name="q" value="${esc(filters.q || "")}" placeholder="Tên, nhà cung cấp hoặc kết quả học tập"></span></label>
                 <label class="field"><span>Kỹ năng</span><select class="select" name="skill_id"><option value="">Tất cả</option>${options(data.filters.skills, filters.skill_id, skillName)}</select></label>
                 <label class="field"><span>Mức</span><select class="select" name="level"><option value="">Tất cả</option>${options(["1", "2", "3"], filters.level)}</select></label>
                 <label class="field"><span>Nhà cung cấp</span><select class="select" name="provider"><option value="">Tất cả</option>${options(data.filters.providers, filters.provider)}</select></label>
-                <button class="btn btn-primary" type="submit">${icon("search")}<span>Lọc</span></button></div></form>
-            ${data.items.length ? `<p class="sub">${data.total} học liệu</p><div class="grid grid-2">${data.items.map(card).join("")}</div>` : `<div class="card">${emptyView("Không có học liệu phù hợp", "Hãy đổi bộ lọc.")}</div>`}</div>`);
+                <div class="res-filter-actions"><button class="btn btn-primary" type="submit">${icon("filter")}<span>Lọc</span></button>${filtered ? '<button class="btn btn-ghost" type="button" data-act="clear-filters">Bỏ lọc</button>' : ""}</div></div></form>
+            <p class="sub res-count" id="res-count" tabindex="-1" aria-live="polite">${data.total} học liệu</p>
+            ${data.items.length ? `<div class="grid grid-2">${data.items.map(card).join("")}</div>` : `<div class="card">${emptyView("Không có học liệu phù hợp", "Hãy đổi bộ lọc.")}</div>`}</div>`);
+        if (focusResults) document.getElementById("res-count")?.focus({ preventScroll: true });
     };
     await draw({});
-    register({ forms: { filter: async form => draw(formData(form)) } });
+    register({
+        actions: { "clear-filters": () => draw({}, { focusResults: true }) },
+        forms: { filter: async form => draw(formData(form), { focusResults: true }) },
+    });
 }

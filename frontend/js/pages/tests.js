@@ -2,14 +2,35 @@
 import { alertBox, api, confirmDialog, emptyView, esc, fmtDateTime, register, setView, skillName, toast, withBusy } from "../core.js";
 import { questionInput, readAnswer } from "./questions.js";
 import { icon, skillTile, tile } from "../icons.js";
+import { pageHero } from "../hero.js";
 
 const testTile = item => (item.mode === "PRACTICE" ? tile("sparkles", "brand") : item.skills?.length === 1 ? skillTile(item.skills[0]) : tile("trophy", "warn"));
 
+/* 5.57: the shared page hero (as on Kế hoạch, Quản trị and Đóng góp) with counts taken from the two lists above;
+   no figure is computed beyond counting. The separation from the process, once an alert, is the hero's own line. */
+function testsHero(catalog, history) {
+    const submitted = history.attempts.filter(item => item.status === "SUBMITTED");
+    const open = history.attempts.length - submitted.length;
+    const latest = submitted.slice().sort((a, b) => String(b.submitted_at || "").localeCompare(String(a.submitted_at || "")))[0];
+    return pageHero({
+        tone: "teal", icon: "quiz", kicker: "Kiểm tra kiến thức", title: "Luyện tập kiến thức theo từng kỹ năng",
+        text: "Đây là phần luyện tập kiến thức, tách biệt với bài kiểm tra trong Quy trình Career Adapt và không làm thay đổi kết quả của quy trình.",
+        stats: [["quiz", "Bài có sẵn", catalog.blueprints.length], ["check", "Lượt đã nộp", submitted.length, "teal"], ["clock", "Đang làm", open, open ? "amber" : "muted"], ["trophy", "Điểm gần nhất", latest?.composite_score ?? "—", "violet"]],
+    });
+}
+
+function testCard(item) {
+    const blocked = item.attempts_remaining === 0 && !item.in_progress_attempt_id;
+    return `<article class="card stack-sm test-card ${item.in_progress_attempt_id ? "is-open" : ""}"><div class="card-title">${testTile(item)}<h3>${esc(item.title)}</h3></div><p class="small sub">${esc(item.description || "")}</p>
+        <div class="test-card-meta"><p class="meta">${icon("clock")}<span>${item.item_count} câu · ${item.time_limit_minutes ? `${item.time_limit_minutes} phút` : "Không giới hạn giờ"}${item.mode === "PRACTICE" ? " · Luyện tập" : ""}</span></p>${item.last_score !== null ? `<span class="badge badge-muted"><span>Lần gần nhất:</span> <strong>${item.last_score}</strong></span>` : ""}</div>
+        ${item.attempts_remaining === 0 ? '<p class="small text-warn">Đã hết lượt trong 24 giờ.</p>' : ""}<button class="btn ${item.in_progress_attempt_id ? "btn-primary" : "btn-secondary"}" data-act="start" data-id="${esc(item.blueprint_id)}" ${blocked ? "disabled" : ""}><span>${item.in_progress_attempt_id ? "Tiếp tục làm" : "Bắt đầu"}</span>${icon("arrow")}</button></article>`;
+}
+
 export async function renderTests() {
     const [catalog, history] = await Promise.all([api("/tests/blueprints"), api("/tests/attempts")]);
-    setView(`<div class="stack">${alertBox("info", "Đây là phần luyện tập kiến thức, tách biệt với bài kiểm tra trong Quy trình Career Adapt và không làm thay đổi kết quả của quy trình.")}
-        <div class="row-between"><span class="sub">Ngân hàng câu hỏi ${esc(catalog.bank_version)}</span></div>
-        <div class="grid grid-3 grid-even push-last">${catalog.blueprints.map(item => `<article class="card stack-sm"><div class="card-title">${testTile(item)}<h3>${esc(item.title)}</h3></div><p class="small sub">${esc(item.description || "")}</p><p class="meta">${icon("clock")}<span>${item.item_count} câu · ${item.time_limit_minutes ? `${item.time_limit_minutes} phút` : "Không giới hạn giờ"}${item.mode === "PRACTICE" ? " · Luyện tập" : ""}</span></p>${item.last_score !== null ? `<p class="small">Lần gần nhất: <strong>${item.last_score}</strong></p>` : ""}${item.attempts_remaining === 0 ? '<p class="small" style="color:var(--warn)">Đã hết lượt trong 24 giờ.</p>' : ""}<button class="btn ${item.in_progress_attempt_id ? "btn-primary" : "btn-secondary"}" data-act="start" data-id="${esc(item.blueprint_id)}" ${item.attempts_remaining === 0 && !item.in_progress_attempt_id ? "disabled" : ""}><span>${item.in_progress_attempt_id ? "Tiếp tục làm" : "Bắt đầu"}</span>${icon("arrow")}</button></article>`).join("")}</div>
+    setView(`<div class="stack">${testsHero(catalog, history)}
+        <section class="stack-sm"><div class="section-head"><h2 class="section-title">Chọn bài</h2><span class="sub small">Ngân hàng câu hỏi ${esc(catalog.bank_version)}</span></div>
+        <div class="grid grid-3 grid-even push-last">${catalog.blueprints.map(testCard).join("")}</div></section>
         <section class="card"><h2 class="h-ic">${icon("clock")}<span>Lịch sử làm bài</span></h2>${history.attempts.length ? `<div class="table-wrap"><table><thead><tr><th>Bài</th><th>Thời gian</th><th class="num">Điểm</th><th>Kết quả</th></tr></thead><tbody>${history.attempts.map(item => `<tr><td>${item.status === "SUBMITTED" ? `<a href="#/tests/report/${esc(item.attempt_id)}">${esc(item.title)}</a>` : `<a href="#/tests/run/${esc(item.attempt_id)}">${esc(item.title)}</a>`}</td><td class="nowrap">${fmtDateTime(item.submitted_at || item.started_at)}</td><td class="num">${item.composite_score ?? "—"}</td><td>${item.status === "SUBMITTED" ? esc(item.band?.label || "") : "Đang làm"}</td></tr>`).join("")}</tbody></table></div>` : emptyView("Chưa có lượt làm bài", "Chọn một bài ở trên để bắt đầu.")}</section></div>`);
     register({
         actions: {

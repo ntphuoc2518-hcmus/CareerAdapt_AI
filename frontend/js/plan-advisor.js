@@ -18,7 +18,6 @@ const ADVICE = {
         text: "Tôi có thể tóm tắt hành trình của bạn, giải thích JD mục tiêu và gợi ý việc nên làm tiếp.",
         asks: [
             { task: "journey_report", label: "Tổng hợp hành trình của tôi", icon: "route" },
-            { task: "jd_analysis", label: "Phân tích JD của tôi", icon: "file" },
             { question: "Dựa trên hành trình của tôi, tôi nên làm gì tiếp theo?", label: "Tôi nên làm gì tiếp theo?", icon: "arrow" },
         ],
     },
