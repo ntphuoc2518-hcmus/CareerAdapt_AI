@@ -1,0 +1,42 @@
+/* Facial expressions of the CareerAdapt robot (5.43): an SVG face drawn on the painted head's empty visor.
+   Shared by the app and the sign-in page. The element that carries .xbot gives the size and position. */
+.xbot { display: block; }
+.xbot > .xbot-shell, .xbot > .xbot-face { position: absolute; inset: 0; width: 100%; height: 100%; }
+.xbot > .xbot-face { overflow: visible; transform-origin: 50% 64%; transition: opacity .11s ease, transform .11s ease; }
+.xbot.is-switching > .xbot-face { opacity: 0; transform: scaleY(.55); }
+
+.xf-shine { fill: #FFFFFF; opacity: .9; }
+.xf-line { fill: none; stroke: #8FE7FF; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
+.xf-thin { stroke-width: 4.5; }
+.xf-mouth { stroke: #8FE7FF; stroke-width: 3; stroke-linejoin: round; }
+.xf-tongue { fill: #FFD3E4; opacity: .85; }
+.xf-blush path { fill: none; stroke: #FF8FB8; stroke-width: 3; stroke-linecap: round; }
+.xf-dots circle { fill: #8FE7FF; }
+.xf-sparks path { fill: #FDE68A; }
+.xf-tears path { fill: #7DD3FC; }
+.xf-eye, .xf-star, .xf-sparks path, .xf-dots circle { transform-box: fill-box; transform-origin: center; }
+
+/* A blink only changes the eyes in place, so it stays when the system asks for less motion (as elsewhere). */
+.xf-eyes.is-blinking .xf-eye { animation: xf-blink 3.6s infinite; }
+.xf-eyes.is-blinking .xf-eye + .xf-eye { animation-delay: .03s; }
+@keyframes xf-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } }
+
+@media (prefers-reduced-motion: no-preference) {
+    .xf-star { animation: xf-star 1.6s ease-in-out infinite; }
+    .xf-star + .xf-star { animation-delay: -.8s; }
+    .xf-sparks path { animation: xf-twinkle 1.8s ease-in-out infinite; }
+    .xf-sparks path + path { animation-delay: -.9s; }
+    .xf-dots circle { animation: xf-dot 1.2s ease-in-out infinite; }
+    .xf-dots circle:nth-child(2) { animation-delay: .2s; }
+    .xf-dots circle:nth-child(3) { animation-delay: .4s; }
+    .xf-look-up { animation: xf-ponder 3.2s ease-in-out infinite; }
+    .xf-tears path { opacity: 0; animation: xf-tear 1.5s ease-in infinite; }
+    .xf-tears path:nth-child(2) { animation-delay: -.38s; }
+    .xf-tears path:nth-child(3) { animation-delay: -.19s; }
+    .xf-tears path:nth-child(4) { animation-delay: -.57s; }
+}
+@keyframes xf-star { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.14) rotate(18deg); } }
+@keyframes xf-twinkle { 0%, 100% { opacity: .3; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.1); } }
+@keyframes xf-dot { 0%, 100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+@keyframes xf-ponder { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(3px, -2px); } }
+@keyframes xf-tear { 0% { opacity: 0; transform: translateY(0) scale(.7); } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(30px) scale(1); } }

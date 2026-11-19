@@ -1,0 +1,138 @@
+{
+  "version": "SKILL-OPTIONS-1.0",
+  "note": "Lựa chọn tự khai. Mức 0-1 nhận đề Cơ bản, mức 2 nhận đề Trung bình, mức 3 nhận đề Khó. Tự khai chỉ để chọn độ khó, không phải bằng chứng.",
+  "skills": {
+    "SQL": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng viết câu lệnh SQL."
+      },
+      {
+        "level": 1,
+        "label": "Biết code cơ bản",
+        "detail": "Viết được SELECT, WHERE, ORDER BY trên một bảng."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm bài tập hoặc project",
+        "detail": "Dùng thành thạo JOIN, GROUP BY, tính chỉ số trên dữ liệu thật."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Dùng CTE, hàm cửa sổ, tối ưu truy vấn trong công việc hoặc project lớn."
+      }
+    ],
+    "DATA_QUALITY": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng kiểm tra hay làm sạch dữ liệu."
+      },
+      {
+        "level": 1,
+        "label": "Biết cơ bản",
+        "detail": "Nhận ra được dòng trùng, ô trống, giá trị vô lý."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm thực tế",
+        "detail": "Làm sạch theo các bước và đối soát số dòng trước, sau."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Đặt quy tắc kiểm tra đầu vào, đánh giá được tác động của dữ liệu lỗi."
+      }
+    ],
+    "PYTHON": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng dùng Python cho dữ liệu."
+      },
+      {
+        "level": 1,
+        "label": "Biết code cơ bản",
+        "detail": "Đọc tệp CSV và lọc dữ liệu bằng Pandas."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm bài tập hoặc project",
+        "detail": "Dùng groupby, tạo cột mới, làm sạch dữ liệu bằng Pandas."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Tự viết hàm phân tích, xử lý thời gian và các trường hợp biên."
+      }
+    ],
+    "DATA_VIZ": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng làm biểu đồ phân tích."
+      },
+      {
+        "level": 1,
+        "label": "Biết cơ bản",
+        "detail": "Biết chọn loại biểu đồ cho một câu hỏi đơn giản."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm bài tập hoặc project",
+        "detail": "Vẽ biểu đồ có đủ tiêu đề, trục và rút ra được nhận xét."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Thiết kế dashboard cho quản lý và tránh được lỗi gây hiểu sai."
+      }
+    ],
+    "WRITTEN_COMM": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng viết báo cáo số liệu."
+      },
+      {
+        "level": 1,
+        "label": "Biết cơ bản",
+        "detail": "Tóm tắt được số liệu thành vài câu dễ hiểu."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm thực tế",
+        "detail": "Viết email báo cáo có số liệu, khuyến nghị và giới hạn."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Viết báo cáo điều hành có cấu trúc, người phụ trách và thời hạn."
+      }
+    ],
+    "STATISTICS": [
+      {
+        "level": 0,
+        "label": "Chưa biết",
+        "detail": "Chưa từng tính số đo thống kê trên dữ liệu."
+      },
+      {
+        "level": 1,
+        "label": "Biết cơ bản",
+        "detail": "Tính được trung bình, trung vị, lớn nhất, nhỏ nhất."
+      },
+      {
+        "level": 2,
+        "label": "Đã làm bài tập hoặc project",
+        "detail": "Mô tả phân phối và so sánh hai nhóm bằng code."
+      },
+      {
+        "level": 3,
+        "label": "Chuyên sâu",
+        "detail": "Thiết kế và đọc kết quả thử nghiệm A/B, kiểm định giả thuyết."
+      }
+    ]
+  }
+}

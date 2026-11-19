@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1560" viewBox="0 0 2600 1560" font-family="'Segoe UI', 'DejaVu Sans', Arial, sans-serif">
+<rect width="100%" height="100%" fill="#F8FAFD"/>
+<text x="90" y="64" font-size="20" font-weight="800" fill="#0F766E" text-anchor="start">CAREERADAPT AI</text>
+<text x="90" y="116" font-size="46" font-weight="800" fill="#0F1E3D" text-anchor="start">Tình huống lạm dụng (Misuse cases)</text>
+<text x="92" y="152" font-size="19" font-weight="500" fill="#5B6B85" text-anchor="start">Phiên bản 5.9 • kẻ tấn công, mục tiêu bị đe dọa và biện pháp giảm thiểu • CSC10014 Week 02, mục 5</text>
+<rect x="2220" y="44" width="290" height="46" rx="23" fill="#E7EDF6" stroke="none" stroke-width="1.5"/>
+<text x="2365" y="74" font-size="16" font-weight="800" fill="#33415C" text-anchor="middle">BẢO MẬT</text>
+<line x1="90" y1="178" x2="2510" y2="178" stroke="#C9D3E3" stroke-width="1.4"/>
+<rect x="330" y="210" width="1270" height="1150" rx="18" fill="#FFFFFF" stroke="#203B5B" stroke-width="3"/>
+<text x="362" y="248" font-size="26" font-weight="800" fill="#0F1E3D" text-anchor="start">CareerAdapt AI</text>
+<text x="362" y="274" font-size="15" font-weight="500" fill="#5B6B85" text-anchor="start">Mỗi biện pháp là bước hệ thống luôn thực hiện («include») và có test tự động</text>
+<line x1="184" y1="780" x2="488" y2="380" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="2356" y1="780" x2="2142" y2="380" stroke="#B91C1C" stroke-width="2"/>
+<line x1="184" y1="780" x2="488" y2="590" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="2356" y1="780" x2="2142" y2="590" stroke="#B91C1C" stroke-width="2"/>
+<line x1="2356" y1="780" x2="2142" y2="800" stroke="#B91C1C" stroke-width="2"/>
+<line x1="184" y1="780" x2="488" y2="1010" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="2356" y1="780" x2="2142" y2="1010" stroke="#B91C1C" stroke-width="2"/>
+<line x1="184" y1="780" x2="488" y2="1230" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="2356" y1="780" x2="2142" y2="1230" stroke="#B91C1C" stroke-width="2"/>
+<ellipse cx="690" cy="380" rx="202" ry="40" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="690" y="371.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-01</text>
+<text x="690" y="393.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Đăng nhập tài khoản</text>
+<ellipse cx="1930" cy="380" rx="212" ry="44" fill="#1F2937" stroke="#111827" stroke-width="2.4"/>
+<text x="1930" y="371.5" font-size="13" font-weight="700" fill="#FCA5A5" text-anchor="middle">M1</text>
+<text x="1930" y="393.5" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">Dò mật khẩu</text>
+<ellipse cx="1235" cy="380" rx="190" ry="40" fill="#ECFDF5" stroke="#047857" stroke-width="2.4"/>
+<text x="1235" y="371.5" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">S1</text>
+<text x="1235" y="393.5" font-size="18" font-weight="650" fill="#064E3B" text-anchor="middle">Giới hạn đăng nhập sai</text>
+<text x="1235" y="442" font-size="12.5" font-weight="600" fill="#047857" text-anchor="middle">có test tự động</text>
+<path d="M892 380 L1045 380" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1031.5,386.5 1045.0,380.0 1031.5,373.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="967" y="351" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1025" y="368" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1425 380 L1718 380" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1704.5,386.5 1718.0,380.0 1704.5,373.5" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1537" y="351" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1595" y="368" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">«mitigates»</text>
+<path d="M1760 350 Q1310.0 205 840 350" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="851.0,339.8 840.0,350.0 854.8,352.3" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1177" y="259" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1235" y="276" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">«threatens»</text>
+<ellipse cx="690" cy="590" rx="202" ry="40" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="690" y="581.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-04</text>
+<text x="690" y="603.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Làm bài kiểm tra năng lực</text>
+<ellipse cx="1930" cy="590" rx="212" ry="44" fill="#1F2937" stroke="#111827" stroke-width="2.4"/>
+<text x="1930" y="581.5" font-size="13" font-weight="700" fill="#FCA5A5" text-anchor="middle">M2</text>
+<text x="1930" y="603.5" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">Chạy mã độc trong bài làm</text>
+<ellipse cx="1235" cy="590" rx="190" ry="40" fill="#ECFDF5" stroke="#047857" stroke-width="2.4"/>
+<text x="1235" y="581.5" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">S2</text>
+<text x="1235" y="603.5" font-size="18" font-weight="650" fill="#064E3B" text-anchor="middle">Chạy mã trong sandbox</text>
+<text x="1235" y="652" font-size="12.5" font-weight="600" fill="#047857" text-anchor="middle">có test tự động</text>
+<path d="M892 590 L1045 590" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1031.5,596.5 1045.0,590.0 1031.5,583.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="967" y="561" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1025" y="578" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1425 590 L1718 590" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1704.5,596.5 1718.0,590.0 1704.5,583.5" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1537" y="561" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1595" y="578" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">«mitigates»</text>
+<path d="M1760 560 Q1310.0 415 840 560" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="851.0,549.8 840.0,560.0 854.8,562.3" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1177" y="469" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1235" y="486" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">«threatens»</text>
+<ellipse cx="690" cy="800" rx="202" ry="40" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="690" y="791.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-04.1</text>
+<text x="690" y="813.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Chấm bài theo rubric</text>
+<ellipse cx="1930" cy="800" rx="212" ry="44" fill="#1F2937" stroke="#111827" stroke-width="2.4"/>
+<text x="1930" y="781.0" font-size="13" font-weight="700" fill="#FCA5A5" text-anchor="middle">M3</text>
+<text x="1930" y="803.0" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">Chèn lệnh vào bài làm</text>
+<text x="1930" y="824.0" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">để lái AI chấm</text>
+<ellipse cx="1235" cy="800" rx="190" ry="40" fill="#ECFDF5" stroke="#047857" stroke-width="2.4"/>
+<text x="1235" y="791.5" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">S3</text>
+<text x="1235" y="813.5" font-size="18" font-weight="650" fill="#064E3B" text-anchor="middle">Kiểm chứng nhận xét AI</text>
+<text x="1235" y="862" font-size="12.5" font-weight="600" fill="#047857" text-anchor="middle">có test tự động</text>
+<path d="M892 800 L1045 800" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1031.5,806.5 1045.0,800.0 1031.5,793.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="967" y="771" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1025" y="788" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1425 800 L1718 800" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1704.5,806.5 1718.0,800.0 1704.5,793.5" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1537" y="771" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1595" y="788" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">«mitigates»</text>
+<path d="M1760 770 Q1310.0 625 840 770" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="851.0,759.8 840.0,770.0 854.8,772.3" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1177" y="679" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1235" y="696" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">«threatens»</text>
+<ellipse cx="690" cy="1010" rx="202" ry="40" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="690" y="1001.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-05</text>
+<text x="690" y="1023.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Xem kết quả bài làm</text>
+<ellipse cx="1930" cy="1010" rx="212" ry="44" fill="#1F2937" stroke="#111827" stroke-width="2.4"/>
+<text x="1930" y="1001.5" font-size="13" font-weight="700" fill="#FCA5A5" text-anchor="middle">M4</text>
+<text x="1930" y="1023.5" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">Xem kết quả của người khác</text>
+<path d="M1760 980 Q1310.0 835 840 980" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="851.0,969.8 840.0,980.0 854.8,982.3" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1177" y="889" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1235" y="906" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">«threatens»</text>
+<ellipse cx="690" cy="1230" rx="202" ry="40" fill="#FFF1E6" stroke="#C2410C" stroke-width="2.4"/>
+<text x="690" y="1221.5" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">UC-11 · có AI</text>
+<text x="690" y="1243.5" font-size="18" font-weight="650" fill="#7C2D12" text-anchor="middle">Nhận tư vấn học tập</text>
+<ellipse cx="1930" cy="1230" rx="212" ry="44" fill="#1F2937" stroke="#111827" stroke-width="2.4"/>
+<text x="1930" y="1211.0" font-size="13" font-weight="700" fill="#FCA5A5" text-anchor="middle">M5</text>
+<text x="1930" y="1233.0" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">Hỏi trợ lý dữ liệu</text>
+<text x="1930" y="1254.0" font-size="18" font-weight="650" fill="#FFFFFF" text-anchor="middle">của người khác</text>
+<path d="M1760 1260 Q1310.0 1400 840 1260" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="854.8,1257.6 840.0,1260.0 851.1,1270.1" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1177" y="1331" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1235" y="1348" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">«threatens»</text>
+<ellipse cx="1235" cy="1120" rx="190" ry="40" fill="#ECFDF5" stroke="#047857" stroke-width="2.4"/>
+<text x="1235" y="1111.5" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">S4</text>
+<text x="1235" y="1133.5" font-size="18" font-weight="650" fill="#064E3B" text-anchor="middle">Kiểm tra quyền truy cập</text>
+<text x="1235" y="1182" font-size="12.5" font-weight="600" fill="#047857" text-anchor="middle">có test tự động</text>
+<path d="M886 1022 L1049 1108" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1034.0,1107.5 1049.0,1108.0 1040.1,1095.9" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="962" y="1033" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1020" y="1050" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M886 1218 L1049 1134" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1040.0,1146.0 1049.0,1134.0 1034.0,1134.4" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="962" y="1175" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1020" y="1192" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1421 1106 L1724 1022" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1712.7,1031.9 1724.0,1022.0 1709.2,1019.3" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1529" y="1033" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1587" y="1050" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">«mitigates»</text>
+<path d="M1421 1134 L1724 1218" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1709.2,1220.7 1724.0,1218.0 1712.7,1208.1" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1529" y="1179" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1587" y="1196" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">«mitigates»</text>
+<path d="M690 630 L690 760" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="683.5,746.5 690.0,760.0 696.5,746.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="702" y="683" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="760" y="700" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<g stroke="#1E3A5F" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="150" cy="752" r="15"/><line x1="150" y1="767" x2="150" y2="808"/><line x1="124" y1="782" x2="176" y2="782"/><line x1="150" y1="808" x2="128" y2="840"/><line x1="150" y1="808" x2="172" y2="840"/></g>
+<text x="150" y="724" font-size="15" font-weight="700" fill="#1E3A5F" text-anchor="middle">Tác nhân chính</text>
+<text x="150" y="866" font-size="17" font-weight="700" fill="#1E3A5F" text-anchor="middle">Người học</text>
+<g stroke="#B91C1C" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="2390" cy="752" r="15"/><line x1="2390" y1="767" x2="2390" y2="808"/><line x1="2364" y1="782" x2="2416" y2="782"/><line x1="2390" y1="808" x2="2368" y2="840"/><line x1="2390" y1="808" x2="2412" y2="840"/></g>
+<text x="2390" y="724" font-size="15" font-weight="700" fill="#B91C1C" text-anchor="middle">Tác nhân lạm dụng</text>
+<text x="2390" y="866" font-size="17" font-weight="700" fill="#B91C1C" text-anchor="middle">Kẻ tấn công</text>
+<text x="90" y="1400" font-size="15" font-weight="800" fill="#0F1E3D" text-anchor="start">CHÚ GIẢI</text>
+<line x1="90" y1="1434" x2="150" y2="1434" stroke="#8A97AD" stroke-width="2"/>
+<text x="165" y="1439" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Association: tác nhân tham gia mục tiêu</text>
+<path d="M560 1434 L622 1434" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="608.5,1440.5 622.0,1434.0 608.5,1427.5" fill="none" stroke="#B91C1C" stroke-width="2.4" stroke-linejoin="round"/>
+<text x="638" y="1439" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">«threatens»: đe dọa mục tiêu</text>
+<path d="M859.2 1434 L921.2 1434" fill="none" stroke="#047857" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="907.7,1440.5 921.2,1434.0 907.7,1427.5" fill="none" stroke="#047857" stroke-width="2.4" stroke-linejoin="round"/>
+<text x="937.2" y="1439" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">«mitigates»: giảm thiểu</text>
+<ellipse cx="1151.4" cy="1434" rx="30" ry="14" fill="#1F2937" stroke="#111827" stroke-width="2"/>
+<text x="1195.4" y="1439" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Misuse case</text>
+<ellipse cx="1328.8000000000002" cy="1434" rx="30" ry="14" fill="#ECFDF5" stroke="#047857" stroke-width="2"/>
+<text x="1372.8000000000002" y="1439" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Biện pháp bảo mật</text>
+<text x="90" y="1490" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">S4 dùng chung cho M4 và M5: mọi truy vấn và công cụ của trợ lý chỉ đọc dữ liệu của tài khoản đang đăng nhập, không nhận mã người dùng từ AI.</text>
+<text x="90" y="1520" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Tên test cụ thể cho từng biện pháp: docs/01_usecases.md, mục 5 • Nguồn PlantUML: docs/01_misuse_cases.puml</text>
+</svg>

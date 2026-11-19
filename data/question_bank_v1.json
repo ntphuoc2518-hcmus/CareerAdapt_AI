@@ -1,0 +1,3318 @@
+{
+  "bank_version": "QB-DA-1.0",
+  "difficulty_points": {
+    "1": 1,
+    "2": 2,
+    "3": 3
+  },
+  "blueprints": [
+    {
+      "blueprint_id": "DA_FULL_ASSESSMENT",
+      "title": "Bài kiểm tra năng lực Data Analyst (toàn diện)",
+      "description": "Đo cả 5 kỹ năng theo khung Data Analyst v1.0. Đề được rút ngẫu nhiên theo ma trận kỹ năng × mức độ, có giới hạn thời gian và báo cáo đánh giá chi tiết.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 35,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 50,
+      "max_attempts_per_24h": 3,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "SQL": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        },
+        "DATA_QUALITY": {
+          "1": 1,
+          "2": 3,
+          "3": 1
+        },
+        "PYTHON": {
+          "1": 2,
+          "2": 1,
+          "3": 1
+        },
+        "DATA_VIZ": {
+          "1": 1,
+          "2": 2,
+          "3": 1
+        },
+        "WRITTEN_COMM": {
+          "1": 1,
+          "2": 2,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_SQL",
+      "title": "Kiểm tra nhanh: SQL",
+      "description": "6 câu SQL từ cơ bản tới nâng cao, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "SQL": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_DATA_QUALITY",
+      "title": "Kiểm tra nhanh: Chất lượng dữ liệu",
+      "description": "6 câu về phát hiện và xử lý dữ liệu lỗi, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "DATA_QUALITY": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_PYTHON",
+      "title": "Kiểm tra nhanh: Python/Pandas",
+      "description": "6 câu Pandas căn bản và trung cấp, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "PYTHON": {
+          "1": 3,
+          "2": 2,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_DATA_VIZ",
+      "title": "Kiểm tra nhanh: Trực quan hóa",
+      "description": "6 câu chọn biểu đồ và nguyên tắc trình bày, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "DATA_VIZ": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_WRITTEN_COMM",
+      "title": "Kiểm tra nhanh: Giao tiếp viết",
+      "description": "6 câu về báo cáo, diễn giải số liệu và nêu giới hạn, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "WRITTEN_COMM": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "SKILL_CHECK_STATISTICS",
+      "title": "Kiểm tra nhanh: Thống kê",
+      "description": "6 câu về số đo mô tả, so sánh nhóm và thử nghiệm A/B, 12 phút.",
+      "mode": "ASSESSMENT",
+      "time_limit_minutes": 12,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 5,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "STATISTICS": {
+          "1": 2,
+          "2": 3,
+          "3": 1
+        }
+      }
+    },
+    {
+      "blueprint_id": "DA_PRACTICE",
+      "title": "Luyện tập tự do (không tính điểm)",
+      "description": "10 câu ngẫu nhiên, không giới hạn thời gian, xem đáp án và giải thích ngay sau mỗi câu.",
+      "mode": "PRACTICE",
+      "time_limit_minutes": 0,
+      "pass_mark_percent": 60,
+      "core_skill_min_percent": 0,
+      "max_attempts_per_24h": 0,
+      "show_answers_after_submit": true,
+      "matrix": {
+        "SQL": {
+          "1": 1,
+          "2": 1
+        },
+        "DATA_QUALITY": {
+          "1": 1,
+          "2": 1
+        },
+        "PYTHON": {
+          "1": 1,
+          "2": 1
+        },
+        "DATA_VIZ": {
+          "1": 1,
+          "2": 1
+        },
+        "WRITTEN_COMM": {
+          "1": 1,
+          "2": 1
+        }
+      }
+    }
+  ],
+  "items": [
+    {
+      "item_id": "SQL-001",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "single",
+      "topic": "Lọc sau tổng hợp",
+      "stem": "Mệnh đề nào dùng để lọc các nhóm SAU khi đã tổng hợp bằng GROUP BY (ví dụ: chỉ giữ vùng có tổng doanh thu > 300.000)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "WHERE"
+        },
+        {
+          "id": "b",
+          "text": "HAVING"
+        },
+        {
+          "id": "c",
+          "text": "ORDER BY"
+        },
+        {
+          "id": "d",
+          "text": "LIMIT"
+        }
+      ],
+      "answer": "b",
+      "explanation": "WHERE lọc từng dòng trước khi nhóm; HAVING lọc kết quả sau khi tổng hợp."
+    },
+    {
+      "item_id": "SQL-002",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "single",
+      "topic": "Hàm đếm và NULL",
+      "stem": "Bảng orders có 10 dòng, cột region có 2 giá trị NULL. COUNT(region) trả về bao nhiêu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "10"
+        },
+        {
+          "id": "b",
+          "text": "8"
+        },
+        {
+          "id": "c",
+          "text": "2"
+        },
+        {
+          "id": "d",
+          "text": "Báo lỗi"
+        }
+      ],
+      "answer": "b",
+      "explanation": "COUNT(cột) bỏ qua NULL; chỉ COUNT(*) đếm mọi dòng."
+    },
+    {
+      "item_id": "SQL-003",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Hàm đếm và NULL",
+      "stem": "Cột region gồm các giá trị: 'Nam', 'Bac', NULL, 'Nam', 'Bac', NULL. Kết quả của SELECT COUNT(DISTINCT region) là bao nhiêu?",
+      "answer": 2,
+      "tolerance": 0,
+      "unit": "giá trị",
+      "explanation": "DISTINCT giữ 'Nam' và 'Bac'; COUNT bỏ qua NULL nên kết quả là 2."
+    },
+    {
+      "item_id": "SQL-004",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "single",
+      "topic": "JOIN",
+      "stem": "Để tìm khách hàng CHƯA từng đặt đơn, truy vấn nào đúng?",
+      "code": "SELECT c.customer_id\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.customer_id\n-- ???",
+      "options": [
+        {
+          "id": "a",
+          "text": "WHERE o.order_id IS NULL"
+        },
+        {
+          "id": "b",
+          "text": "WHERE o.order_id = NULL"
+        },
+        {
+          "id": "c",
+          "text": "WHERE c.customer_id IS NULL"
+        },
+        {
+          "id": "d",
+          "text": "Đổi thành INNER JOIN, không cần WHERE"
+        }
+      ],
+      "answer": "a",
+      "explanation": "LEFT JOIN giữ mọi khách hàng; khách không có đơn sẽ có cột của orders là NULL. So sánh '= NULL' luôn không đúng."
+    },
+    {
+      "item_id": "SQL-005",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Công thức doanh thu ròng",
+      "stem": "Một đơn completed có Quantity = 3, Unit_Price = 100.000, Discount = 0,1. Doanh thu ròng theo công thức Quantity × Unit_Price × (1 − Discount) là bao nhiêu (VNĐ)?",
+      "answer": 270000,
+      "tolerance": 0,
+      "unit": "VNĐ",
+      "explanation": "3 × 100.000 × 0,9 = 270.000."
+    },
+    {
+      "item_id": "SQL-006",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Tổng hợp theo tháng",
+      "stem": "Chọn TẤT CẢ thành phần cần có để tính doanh thu ròng theo tháng chỉ cho đơn hoàn thành.",
+      "options": [
+        {
+          "id": "a",
+          "text": "WHERE status = 'completed'"
+        },
+        {
+          "id": "b",
+          "text": "SUM(quantity * unit_price * (1 - discount))"
+        },
+        {
+          "id": "c",
+          "text": "GROUP BY tháng của order_date"
+        },
+        {
+          "id": "d",
+          "text": "AVG(unit_price) thay cho SUM"
+        },
+        {
+          "id": "e",
+          "text": "GROUP BY order_id"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Cần lọc trạng thái, tính tổng doanh thu ròng và nhóm theo tháng. AVG hoặc nhóm theo order_id cho kết quả sai mức chi tiết."
+    },
+    {
+      "item_id": "SQL-007",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "ordering",
+      "topic": "Thứ tự thực thi logic",
+      "stem": "Sắp xếp các mệnh đề theo THỨ TỰ THỰC THI LOGIC của một câu SELECT.",
+      "options": [
+        {
+          "id": "from",
+          "text": "FROM / JOIN"
+        },
+        {
+          "id": "where",
+          "text": "WHERE"
+        },
+        {
+          "id": "group",
+          "text": "GROUP BY"
+        },
+        {
+          "id": "having",
+          "text": "HAVING"
+        },
+        {
+          "id": "select",
+          "text": "SELECT"
+        },
+        {
+          "id": "order",
+          "text": "ORDER BY"
+        }
+      ],
+      "answer": [
+        "from",
+        "where",
+        "group",
+        "having",
+        "select",
+        "order"
+      ],
+      "explanation": "Hiểu thứ tự này giải thích vì sao không dùng được alias của SELECT trong WHERE."
+    },
+    {
+      "item_id": "SQL-008",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "single",
+      "topic": "Window function",
+      "stem": "Bảng monthly(month, revenue). Cách nào tính doanh thu LŨY KẾ theo tháng mà vẫn giữ mỗi tháng một dòng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "SUM(revenue) OVER (ORDER BY month)"
+        },
+        {
+          "id": "b",
+          "text": "SUM(revenue) ... GROUP BY month"
+        },
+        {
+          "id": "c",
+          "text": "MAX(revenue) OVER ()"
+        },
+        {
+          "id": "d",
+          "text": "COUNT(*) OVER (PARTITION BY month)"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Window SUM với ORDER BY tạo running total mà không gộp dòng."
+    },
+    {
+      "item_id": "SQL-009",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "single",
+      "topic": "Window function",
+      "stem": "Doanh thu ba nhân viên là 100, 100, 90 (giảm dần). RANK() OVER (ORDER BY revenue DESC) trả về dãy nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1, 2, 3"
+        },
+        {
+          "id": "b",
+          "text": "1, 1, 2"
+        },
+        {
+          "id": "c",
+          "text": "1, 1, 3"
+        },
+        {
+          "id": "d",
+          "text": "1, 2, 2"
+        }
+      ],
+      "answer": "c",
+      "explanation": "RANK cho cùng hạng khi bằng nhau và bỏ qua thứ hạng kế tiếp; DENSE_RANK mới cho 1, 1, 2."
+    },
+    {
+      "item_id": "DQ-001",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "single",
+      "topic": "Kiểm tra NULL",
+      "stem": "Điều kiện nào tìm đúng các đơn bị thiếu Region?",
+      "options": [
+        {
+          "id": "a",
+          "text": "WHERE region = NULL"
+        },
+        {
+          "id": "b",
+          "text": "WHERE region IS NULL"
+        },
+        {
+          "id": "c",
+          "text": "WHERE region = ''"
+        },
+        {
+          "id": "d",
+          "text": "WHERE region <> NULL"
+        }
+      ],
+      "answer": "b",
+      "explanation": "NULL không so sánh được bằng '='; phải dùng IS NULL. Chuỗi rỗng là trường hợp khác cần kiểm tra riêng."
+    },
+    {
+      "item_id": "DQ-002",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "multiple",
+      "topic": "Chiều chất lượng dữ liệu",
+      "stem": "Chọn TẤT CẢ các chiều chất lượng dữ liệu theo DAMA-DMBOK.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Completeness (đầy đủ)"
+        },
+        {
+          "id": "b",
+          "text": "Uniqueness (duy nhất)"
+        },
+        {
+          "id": "c",
+          "text": "Validity (hợp lệ)"
+        },
+        {
+          "id": "d",
+          "text": "Popularity (phổ biến)"
+        },
+        {
+          "id": "e",
+          "text": "Timeliness (kịp thời)"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Popularity không phải chiều chất lượng dữ liệu."
+    },
+    {
+      "item_id": "DQ-003",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "single",
+      "topic": "Trùng lặp",
+      "stem": "Hai dòng giống hệt nhau ở mọi cột (cùng order_id ORD006). Cách xử lý chuẩn trước khi tính doanh thu là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Giữ cả hai vì có thể khách đặt hai lần"
+        },
+        {
+          "id": "b",
+          "text": "Loại bản trùng, giữ một dòng và ghi nhật ký"
+        },
+        {
+          "id": "c",
+          "text": "Xóa cả hai dòng"
+        },
+        {
+          "id": "d",
+          "text": "Nhân đôi doanh thu dòng còn lại"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Trùng lặp hoàn toàn cùng khóa đơn là lỗi ghi nhận; giữ một bản và ghi lại bước làm sạch để đối chiếu."
+    },
+    {
+      "item_id": "DQ-004",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Đối chiếu số dòng",
+      "stem": "Tập 10 dòng có: 1 cặp trùng hoàn toàn, 1 đơn Quantity = 0, 1 đơn status = 'cancelled' (các lỗi ở các đơn khác nhau). Sau khi làm sạch, còn bao nhiêu đơn completed hợp lệ?",
+      "answer": 7,
+      "tolerance": 0,
+      "unit": "dòng",
+      "explanation": "10 → 9 (bỏ trùng) → 8 (bỏ Quantity = 0) → 7 (chỉ completed)."
+    },
+    {
+      "item_id": "DQ-005",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "single",
+      "topic": "Giá trị thiếu",
+      "stem": "Một đơn completed có Region = NULL. Khi báo cáo doanh thu theo vùng, cách làm phù hợp nhất là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bỏ đơn đó khỏi mọi tổng"
+        },
+        {
+          "id": "b",
+          "text": "Gán vào vùng có doanh thu lớn nhất"
+        },
+        {
+          "id": "c",
+          "text": "Gán nhãn 'Unknown', giữ trong tổng và ghi chú giới hạn"
+        },
+        {
+          "id": "d",
+          "text": "Đoán vùng theo tên khách hàng"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Giữ doanh thu để tổng khớp, tách nhãn 'Unknown' và minh bạch về dữ liệu thiếu."
+    },
+    {
+      "item_id": "DQ-006",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "ordering",
+      "topic": "Quy trình làm sạch",
+      "stem": "Sắp xếp các bước của quy trình làm sạch dữ liệu hợp lý nhất.",
+      "options": [
+        {
+          "id": "profile",
+          "text": "Khảo sát dữ liệu (profiling)"
+        },
+        {
+          "id": "dedup",
+          "text": "Loại bản ghi trùng"
+        },
+        {
+          "id": "invalid",
+          "text": "Xử lý giá trị không hợp lệ (Quantity ≤ 0)"
+        },
+        {
+          "id": "missing",
+          "text": "Chuẩn hóa giá trị thiếu"
+        },
+        {
+          "id": "reconcile",
+          "text": "Đối chiếu số dòng và tổng kiểm soát"
+        }
+      ],
+      "answer": [
+        "profile",
+        "dedup",
+        "invalid",
+        "missing",
+        "reconcile"
+      ],
+      "explanation": "Hiểu dữ liệu trước, làm sạch theo thứ tự ảnh hưởng, cuối cùng đối chiếu để chứng minh không mất dữ liệu ngoài ý muốn."
+    },
+    {
+      "item_id": "DQ-007",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "single",
+      "topic": "Ngoại lai",
+      "stem": "Phần lớn đơn có Quantity từ 1–5, nhưng một đơn có Quantity = 500. Bước hợp lý đầu tiên là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Xóa ngay vì là ngoại lai"
+        },
+        {
+          "id": "b",
+          "text": "Thay bằng giá trị trung bình"
+        },
+        {
+          "id": "c",
+          "text": "Kiểm tra với nghiệp vụ (đơn sỉ hay lỗi nhập) trước khi quyết định"
+        },
+        {
+          "id": "d",
+          "text": "Bỏ qua, không ảnh hưởng"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Ngoại lai có thể hợp lệ (đơn sỉ). Cần xác minh nguồn trước khi sửa hoặc loại."
+    },
+    {
+      "item_id": "DQ-008",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Phòng ngừa lỗi",
+      "stem": "Chọn TẤT CẢ biện pháp giúp NGĂN lỗi tái diễn trong pipeline dữ liệu đơn hàng.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ràng buộc CHECK (quantity > 0)"
+        },
+        {
+          "id": "b",
+          "text": "Khóa duy nhất trên order_id"
+        },
+        {
+          "id": "c",
+          "text": "Kiểm thử tự động số dòng/tổng sau mỗi lần nạp"
+        },
+        {
+          "id": "d",
+          "text": "Sửa tay file Excel mỗi tháng"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Ràng buộc và kiểm thử tự động phòng ngừa lỗi; sửa tay không bền vững và không lặp lại được."
+    },
+    {
+      "item_id": "PY-001",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "single",
+      "topic": "Nạp dữ liệu",
+      "stem": "Lệnh nào nạp file orders.csv thành DataFrame?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pd.read_csv('orders.csv')"
+        },
+        {
+          "id": "b",
+          "text": "pd.open('orders.csv')"
+        },
+        {
+          "id": "c",
+          "text": "pd.DataFrame('orders.csv')"
+        },
+        {
+          "id": "d",
+          "text": "open('orders.csv').to_df()"
+        }
+      ],
+      "answer": "a",
+      "explanation": "pandas.read_csv đọc file CSV thành DataFrame."
+    },
+    {
+      "item_id": "PY-002",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "single",
+      "topic": "Khám phá dữ liệu",
+      "stem": "Phương thức nào cho biết kiểu dữ liệu từng cột và số giá trị không null?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.head()"
+        },
+        {
+          "id": "b",
+          "text": "df.info()"
+        },
+        {
+          "id": "c",
+          "text": "df.shape"
+        },
+        {
+          "id": "d",
+          "text": "df.sum()"
+        }
+      ],
+      "answer": "b",
+      "explanation": "df.info() liệt kê dtype và số non-null của từng cột."
+    },
+    {
+      "item_id": "PY-003",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Thống kê mô tả",
+      "stem": "df = pd.DataFrame({'x': [1, 2, None, 4]}). Giá trị của df['x'].mean() là bao nhiêu? (làm tròn 2 chữ số)",
+      "answer": 2.33,
+      "tolerance": 0.01,
+      "unit": "",
+      "explanation": "Pandas bỏ qua NaN khi tính mean: (1 + 2 + 4) / 3 ≈ 2,33."
+    },
+    {
+      "item_id": "PY-004",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "single",
+      "topic": "Groupby",
+      "stem": "Cách nào tính tổng doanh thu theo tháng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.groupby('month')['revenue'].sum()"
+        },
+        {
+          "id": "b",
+          "text": "df['revenue'].groupby().sum('month')"
+        },
+        {
+          "id": "c",
+          "text": "df.sum('month')"
+        },
+        {
+          "id": "d",
+          "text": "df.sort_values('month').sum()"
+        }
+      ],
+      "answer": "a",
+      "explanation": "groupby theo khóa, chọn cột rồi áp hàm tổng hợp."
+    },
+    {
+      "item_id": "PY-005",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "single",
+      "topic": "Ngày tháng",
+      "stem": "Cột order_date đang ở dạng chuỗi '2026-01-15'. Cách đúng để trích tháng là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df['order_date'].month"
+        },
+        {
+          "id": "b",
+          "text": "pd.to_datetime(df['order_date']).dt.month"
+        },
+        {
+          "id": "c",
+          "text": "df['order_date'][5:7]"
+        },
+        {
+          "id": "d",
+          "text": "int(df['order_date'])"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Chuyển sang datetime rồi dùng accessor .dt."
+    },
+    {
+      "item_id": "PY-006",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Làm sạch với Pandas",
+      "stem": "Chọn TẤT CẢ thao tác đúng để bỏ dòng trùng hoàn toàn và giữ đơn có quantity dương.",
+      "options": [
+        {
+          "id": "a",
+          "text": "df = df.drop_duplicates()"
+        },
+        {
+          "id": "b",
+          "text": "df = df[df['quantity'] > 0]"
+        },
+        {
+          "id": "c",
+          "text": "df = df.dropna()  # để bỏ trùng"
+        },
+        {
+          "id": "d",
+          "text": "df = df.unique()"
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "dropna xử lý giá trị thiếu, không xử lý trùng; DataFrame không có .unique()."
+    },
+    {
+      "item_id": "PY-007",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "single",
+      "topic": "Pivot table",
+      "stem": "Muốn bảng có hàng là region, cột là month, giá trị là tổng revenue. Lệnh nào đúng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.pivot_table(index='region', columns='month', values='revenue', aggfunc='sum')"
+        },
+        {
+          "id": "b",
+          "text": "df.pivot(index='month', values='region')"
+        },
+        {
+          "id": "c",
+          "text": "df.groupby('region').pivot('month')"
+        },
+        {
+          "id": "d",
+          "text": "df.melt(id_vars='region')"
+        }
+      ],
+      "answer": "a",
+      "explanation": "pivot_table hỗ trợ tổng hợp khi có nhiều dòng cho cùng một ô."
+    },
+    {
+      "item_id": "PY-008",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "single",
+      "topic": "Vector hóa",
+      "stem": "Với 5 triệu dòng, cách nào tính cột net_revenue hiệu quả nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Vòng for qua df.iterrows()"
+        },
+        {
+          "id": "b",
+          "text": "df.apply(lambda r: ..., axis=1)"
+        },
+        {
+          "id": "c",
+          "text": "df['net'] = df['qty'] * df['price'] * (1 - df['discount'])"
+        },
+        {
+          "id": "d",
+          "text": "Ghi ra Excel rồi tính bằng công thức"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Phép toán vector hóa chạy trên mảng NumPy, nhanh hơn nhiều lần so với lặp từng dòng."
+    },
+    {
+      "item_id": "VIZ-001",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Chọn biểu đồ",
+      "stem": "So sánh tổng doanh thu giữa 3 vùng (Nam, Bắc, Unknown) nên dùng biểu đồ nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ cột"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ phân tán"
+        },
+        {
+          "id": "d",
+          "text": "Bản đồ nhiệt"
+        }
+      ],
+      "answer": "a",
+      "explanation": "So sánh giá trị giữa các nhóm rời rạc dùng biểu đồ cột."
+    },
+    {
+      "item_id": "VIZ-002",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Chọn biểu đồ",
+      "stem": "Thể hiện xu hướng doanh thu qua 12 tháng nên dùng biểu đồ nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ histogram"
+        },
+        {
+          "id": "d",
+          "text": "Bảng số liệu không có biểu đồ"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Biểu đồ đường thể hiện thay đổi liên tục theo thời gian."
+    },
+    {
+      "item_id": "VIZ-003",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Chọn biểu đồ",
+      "stem": "Muốn xem phân phối giá trị đơn hàng (bao nhiêu đơn rơi vào từng khoảng giá) nên dùng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Histogram"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "d",
+          "text": "Biểu đồ vùng xếp chồng"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Histogram chia giá trị liên tục thành các khoảng và đếm tần suất."
+    },
+    {
+      "item_id": "VIZ-004",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Nguyên tắc trình bày",
+      "stem": "Chọn TẤT CẢ thực hành tốt cho biểu đồ cột doanh thu trong báo cáo.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tiêu đề nêu thông điệp chính"
+        },
+        {
+          "id": "b",
+          "text": "Nhãn trục kèm đơn vị (VNĐ)"
+        },
+        {
+          "id": "c",
+          "text": "Trục giá trị bắt đầu từ 0"
+        },
+        {
+          "id": "d",
+          "text": "Hiệu ứng 3D để nổi bật"
+        },
+        {
+          "id": "e",
+          "text": "Dùng 8 màu khác nhau cho 3 cột"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "3D làm sai lệch cảm nhận độ cao; màu chỉ nên mã hóa khi mang thông tin."
+    },
+    {
+      "item_id": "VIZ-005",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "single",
+      "topic": "Biểu đồ gây hiểu lầm",
+      "stem": "Biểu đồ cột có trục Y bắt đầu từ 500.000 khi so sánh 540.000 và 630.000. Vấn đề là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Không có vấn đề"
+        },
+        {
+          "id": "b",
+          "text": "Phóng đại chênh lệch, khiến 14% trông như gấp nhiều lần"
+        },
+        {
+          "id": "c",
+          "text": "Làm giảm chênh lệch"
+        },
+        {
+          "id": "d",
+          "text": "Chỉ sai màu sắc"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Chiều dài cột phải tỉ lệ với giá trị; cắt trục làm méo tỉ lệ."
+    },
+    {
+      "item_id": "VIZ-006",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "single",
+      "topic": "Chọn biểu đồ",
+      "stem": "Muốn xem mối quan hệ giữa mức giảm giá và số lượng mua trên từng đơn, nên dùng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ phân tán (scatter)"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ cột xếp chồng"
+        },
+        {
+          "id": "d",
+          "text": "Biểu đồ đường theo order_id"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Scatter thể hiện quan hệ giữa hai biến định lượng."
+    },
+    {
+      "item_id": "VIZ-007",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "single",
+      "topic": "Khả năng tiếp cận",
+      "stem": "Cách nào giúp biểu đồ dễ đọc với người mù màu đỏ–xanh lá?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chỉ dùng đỏ và xanh lá để phân biệt tăng/giảm"
+        },
+        {
+          "id": "b",
+          "text": "Kết hợp màu tương phản với nhãn/ký hiệu trực tiếp"
+        },
+        {
+          "id": "c",
+          "text": "Bỏ chú thích"
+        },
+        {
+          "id": "d",
+          "text": "Dùng nhiều sắc độ đỏ"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Không để màu là kênh duy nhất; thêm nhãn, hình dạng hoặc độ sáng khác nhau."
+    },
+    {
+      "item_id": "VIZ-008",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Thiết kế dashboard",
+      "stem": "Sắp xếp các khối của dashboard điều hành theo thứ tự ưu tiên đọc (từ trên-trái xuống).",
+      "options": [
+        {
+          "id": "kpi",
+          "text": "Thẻ KPI chính (tổng doanh thu, % thay đổi)"
+        },
+        {
+          "id": "trend",
+          "text": "Biểu đồ xu hướng theo thời gian"
+        },
+        {
+          "id": "breakdown",
+          "text": "Phân rã theo vùng/sản phẩm"
+        },
+        {
+          "id": "detail",
+          "text": "Bảng chi tiết đơn hàng"
+        }
+      ],
+      "answer": [
+        "kpi",
+        "trend",
+        "breakdown",
+        "detail"
+      ],
+      "explanation": "Đi từ tổng quan đến chi tiết: người đọc nắm thông điệp trước, sau đó mới đào sâu."
+    },
+    {
+      "item_id": "COMM-001",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Tóm tắt điều hành",
+      "stem": "Đoạn mở đầu của báo cáo gửi Ban Giám đốc nên chứa gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lịch sử công ty"
+        },
+        {
+          "id": "b",
+          "text": "Phát hiện chính và khuyến nghị (BLUF)"
+        },
+        {
+          "id": "c",
+          "text": "Toàn bộ câu lệnh SQL"
+        },
+        {
+          "id": "d",
+          "text": "Danh sách công cụ đã dùng"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Bottom Line Up Front: người đọc bận cần kết luận trước, chi tiết sau."
+    },
+    {
+      "item_id": "COMM-002",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Diễn giải số liệu",
+      "stem": "Doanh thu tháng 1 là 630.000, tháng 2 là 540.000. Câu nào diễn đạt chính xác?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Doanh thu tháng 2 giảm 14,29% so với tháng 1"
+        },
+        {
+          "id": "b",
+          "text": "Doanh thu tháng 2 giảm 16,67% so với tháng 1"
+        },
+        {
+          "id": "c",
+          "text": "Doanh thu giảm 90.000%"
+        },
+        {
+          "id": "d",
+          "text": "Doanh thu tăng 14,29%"
+        }
+      ],
+      "answer": "a",
+      "explanation": "(540.000 − 630.000) / 630.000 = −14,29%. 16,67% là chia nhầm cho tháng 2."
+    },
+    {
+      "item_id": "COMM-003",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Diễn giải số liệu",
+      "stem": "Tháng 1: 630.000 VNĐ; tháng 2: 540.000 VNĐ. Tăng trưởng MoM là bao nhiêu phần trăm? (nhập số âm nếu giảm, 2 chữ số thập phân)",
+      "answer": -14.29,
+      "tolerance": 0.05,
+      "unit": "%",
+      "explanation": "(540.000 − 630.000) / 630.000 × 100 = −14,29%."
+    },
+    {
+      "item_id": "COMM-004",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Nêu giới hạn",
+      "stem": "Báo cáo dựa trên 10 đơn hàng trong 2 tháng. Chọn TẤT CẢ giới hạn nên nêu.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cỡ mẫu nhỏ"
+        },
+        {
+          "id": "b",
+          "text": "Khung thời gian ngắn, chưa thấy tính mùa vụ"
+        },
+        {
+          "id": "c",
+          "text": "Có đơn thiếu thông tin vùng"
+        },
+        {
+          "id": "d",
+          "text": "Dữ liệu chứng minh xu hướng cả năm"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Không thể khái quát xu hướng cả năm từ 2 tháng dữ liệu."
+    },
+    {
+      "item_id": "COMM-005",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "single",
+      "topic": "Tương quan và nhân quả",
+      "stem": "Tháng có nhiều khuyến mãi cũng có doanh thu cao hơn. Kết luận nào thận trọng nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Khuyến mãi chắc chắn làm tăng doanh thu"
+        },
+        {
+          "id": "b",
+          "text": "Hai yếu tố cùng tăng; cần thí nghiệm hoặc thêm dữ liệu để kết luận nhân quả"
+        },
+        {
+          "id": "c",
+          "text": "Doanh thu cao gây ra khuyến mãi"
+        },
+        {
+          "id": "d",
+          "text": "Không có mối liên hệ nào"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Tương quan chưa phải nhân quả; có thể có yếu tố gây nhiễu như mùa lễ."
+    },
+    {
+      "item_id": "COMM-006",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "ordering",
+      "topic": "Cấu trúc báo cáo",
+      "stem": "Sắp xếp các phần của một báo cáo phân tích theo thứ tự hợp lý.",
+      "options": [
+        {
+          "id": "question",
+          "text": "Bối cảnh và câu hỏi kinh doanh"
+        },
+        {
+          "id": "method",
+          "text": "Dữ liệu và phương pháp"
+        },
+        {
+          "id": "findings",
+          "text": "Phát hiện chính"
+        },
+        {
+          "id": "recommend",
+          "text": "Khuyến nghị"
+        },
+        {
+          "id": "limits",
+          "text": "Giới hạn và bước tiếp theo"
+        }
+      ],
+      "answer": [
+        "question",
+        "method",
+        "findings",
+        "recommend",
+        "limits"
+      ],
+      "explanation": "Cấu trúc giúp người đọc theo dõi từ vấn đề đến hành động."
+    },
+    {
+      "item_id": "COMM-007",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "single",
+      "topic": "Truyền đạt bất định",
+      "stem": "Dự báo doanh thu tháng tới có sai số lớn. Cách trình bày tốt nhất cho người không chuyên?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chỉ đưa một con số để dễ nhớ"
+        },
+        {
+          "id": "b",
+          "text": "Đưa khoảng giá trị, mức tin cậy và điều gì sẽ làm thay đổi kết luận"
+        },
+        {
+          "id": "c",
+          "text": "Không đưa dự báo"
+        },
+        {
+          "id": "d",
+          "text": "Đưa công thức mô hình chi tiết"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Khoảng và giả định giúp người ra quyết định hiểu mức rủi ro mà không cần kiến thức thống kê."
+    },
+    {
+      "item_id": "COMM-008",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Ngôn ngữ rõ ràng",
+      "stem": "Câu nào phù hợp nhất cho email gửi quản lý không chuyên kỹ thuật?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Query JOIN 3 bảng với CTE cho ra delta âm 90k"
+        },
+        {
+          "id": "b",
+          "text": "Doanh thu tháng 2 giảm 90.000 VNĐ (−14%) so với tháng 1, chủ yếu do một đơn bị hủy"
+        },
+        {
+          "id": "c",
+          "text": "Số liệu có biến động"
+        },
+        {
+          "id": "d",
+          "text": "Xem file đính kèm"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Nêu con số, hướng thay đổi và nguyên nhân bằng ngôn ngữ nghiệp vụ."
+    },
+    {
+      "item_id": "SQL-010",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "single",
+      "topic": "Hàm cửa sổ",
+      "stem": "Cần lấy đơn hàng có giá trị lớn nhất của MỖI khách hàng (nếu bằng nhau chỉ giữ 1 dòng). Cách nào đúng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "SELECT customer_id, MAX(amount) FROM orders GROUP BY customer_id, rồi JOIN lại orders theo amount"
+        },
+        {
+          "id": "b",
+          "text": "Dùng ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY amount DESC, order_id) rồi lọc rn = 1"
+        },
+        {
+          "id": "c",
+          "text": "Dùng RANK() OVER (ORDER BY amount DESC) rồi lọc rank = 1"
+        },
+        {
+          "id": "d",
+          "text": "SELECT DISTINCT customer_id, amount FROM orders ORDER BY amount DESC LIMIT 1"
+        }
+      ],
+      "answer": "b",
+      "explanation": "ROW_NUMBER theo từng khách hàng với khóa phụ để phá hòa đảm bảo đúng 1 dòng/khách; JOIN lại theo MAX có thể trả nhiều dòng khi hòa, RANK không phân vùng sẽ chỉ lấy đơn lớn nhất toàn bảng."
+    },
+    {
+      "item_id": "SQL-011",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "numeric",
+      "topic": "LEFT JOIN và nhân bản dòng",
+      "stem": "Bảng customers có 3 khách (A, B, C). Bảng orders có: A 2 đơn, B 1 đơn, C không có đơn. Bảng payments có: A 3 lần thanh toán, B 0, C 1. Câu SELECT COUNT(*) FROM customers c LEFT JOIN orders o ON o.cid = c.id LEFT JOIN payments p ON p.cid = c.id trả về bao nhiêu dòng?",
+      "answer": 8,
+      "tolerance": 0,
+      "unit": "dòng",
+      "explanation": "A: 2 đơn × 3 thanh toán = 6; B: 1 × (không thanh toán → 1 dòng NULL) = 1; C: (không đơn → 1 dòng NULL) × 1 = 1. Tổng 8 — hai JOIN một-nhiều cùng lúc sẽ nhân bản dòng, cần tổng hợp trước khi JOIN."
+    },
+    {
+      "item_id": "SQL-012",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "multiple",
+      "topic": "Lọc dữ liệu",
+      "stem": "Những điều kiện nào trả về đúng các dòng có region là NULL? (chọn tất cả đáp án đúng)",
+      "options": [
+        {
+          "id": "a",
+          "text": "WHERE region IS NULL"
+        },
+        {
+          "id": "b",
+          "text": "WHERE region = NULL"
+        },
+        {
+          "id": "c",
+          "text": "WHERE COALESCE(region, '__') = '__'"
+        },
+        {
+          "id": "d",
+          "text": "WHERE region <> 'Nam' AND region <> 'Bac'"
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "So sánh = hoặc <> với NULL cho kết quả UNKNOWN nên bị loại; phải dùng IS NULL hoặc thay NULL bằng giá trị đại diện."
+    },
+    {
+      "item_id": "DQ-009",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Quy trình xử lý sự cố dữ liệu",
+      "stem": "Dashboard doanh thu sáng nay giảm 40% bất thường. Sắp xếp các bước xử lý theo thứ tự hợp lý.",
+      "options": [
+        {
+          "id": "verify",
+          "text": "Xác minh số liệu với nguồn gốc (hệ thống bán hàng) để loại trừ lỗi hiển thị"
+        },
+        {
+          "id": "scope",
+          "text": "Khoanh vùng: ngày, kênh, bảng nào bị ảnh hưởng"
+        },
+        {
+          "id": "cause",
+          "text": "Tìm nguyên nhân gốc (ví dụ: job ETL lỗi, thiếu file)"
+        },
+        {
+          "id": "fix",
+          "text": "Sửa và chạy lại dữ liệu, kiểm tra lại tổng"
+        },
+        {
+          "id": "notify",
+          "text": "Thông báo người dùng và thêm kiểm tra tự động để phát hiện sớm lần sau"
+        }
+      ],
+      "answer": [
+        "verify",
+        "scope",
+        "cause",
+        "fix",
+        "notify"
+      ],
+      "explanation": "Xác minh trước khi hành động, khoanh vùng rồi mới tìm nguyên nhân; sau khi sửa phải đối soát và phòng ngừa tái diễn."
+    },
+    {
+      "item_id": "DQ-010",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "numeric",
+      "topic": "Đối soát dữ liệu",
+      "stem": "Hệ thống nguồn ghi nhận 1.250 đơn hàng trong ngày. Kho dữ liệu có 1.262 dòng, trong đó 20 dòng là bản ghi trùng (cùng order_id xuất hiện lần thứ hai). Sau khi khử trùng, kho dữ liệu còn THIẾU bao nhiêu đơn so với nguồn?",
+      "answer": 8,
+      "tolerance": 0,
+      "unit": "đơn",
+      "explanation": "1.262 − 20 = 1.242 đơn duy nhất; 1.250 − 1.242 = 8 đơn bị thiếu. Trùng lặp có thể che giấu việc mất dữ liệu nếu chỉ so tổng số dòng."
+    },
+    {
+      "item_id": "DQ-011",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Kiểm tra chất lượng tự động",
+      "stem": "Bạn thiết kế bộ kiểm tra tự động chạy sau mỗi lần nạp bảng orders. Những kiểm tra nào hữu ích? (chọn tất cả đáp án đúng)",
+      "options": [
+        {
+          "id": "a",
+          "text": "order_id là duy nhất và không NULL"
+        },
+        {
+          "id": "b",
+          "text": "Số dòng hôm nay không lệch quá ±30% so với trung bình 7 ngày"
+        },
+        {
+          "id": "c",
+          "text": "amount không âm, trừ các dòng có loại giao dịch hoàn tiền"
+        },
+        {
+          "id": "d",
+          "text": "Bảng phải có đúng 1.000 dòng mỗi ngày"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Kiểm tra khóa, biến động khối lượng và miền giá trị có ngoại lệ nghiệp vụ là hợp lý; ngưỡng cứng cố định số dòng sẽ báo lỗi giả liên tục."
+    },
+    {
+      "item_id": "DQ-012",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "single",
+      "topic": "Giá trị thiếu",
+      "stem": "Cột age có một số giá trị NULL. Việc nào nên làm TRƯỚC khi quyết định điền hay loại bỏ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Điền 0 cho tất cả"
+        },
+        {
+          "id": "b",
+          "text": "Đếm tỷ lệ thiếu và xem dòng thiếu có khác biệt gì so với dòng đủ"
+        },
+        {
+          "id": "c",
+          "text": "Xóa cả cột age"
+        },
+        {
+          "id": "d",
+          "text": "Điền giá trị ngẫu nhiên"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Cần biết quy mô và kiểu thiếu dữ liệu để chọn cách xử lý không làm lệch kết quả."
+    },
+    {
+      "item_id": "PY-009",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "single",
+      "topic": "Merge trong pandas",
+      "stem": "orders (1.000 dòng) merge với customers theo customer_id (how='left') cho ra 1.150 dòng. Nguyên nhân khả dĩ nhất là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pandas tự thêm dòng trống"
+        },
+        {
+          "id": "b",
+          "text": "customers có customer_id bị trùng nên mỗi đơn khớp nhiều khách"
+        },
+        {
+          "id": "c",
+          "text": "orders có NULL ở customer_id"
+        },
+        {
+          "id": "d",
+          "text": "how='left' luôn tăng số dòng"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Khóa trùng ở bảng bên phải gây nhân bản dòng. Dùng validate='many_to_one' trong merge để phát hiện sớm."
+    },
+    {
+      "item_id": "PY-010",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "numeric",
+      "topic": "groupby và transform",
+      "stem": "df có cột store và sales: (A,10), (A,30), (B,20), (B,20), (B,50). Sau df['share'] = df['sales'] / df.groupby('store')['sales'].transform('sum'), giá trị share của dòng (B,50) là bao nhiêu? (làm tròn 2 chữ số thập phân)",
+      "answer": 0.56,
+      "tolerance": 0.01,
+      "unit": "",
+      "explanation": "Tổng của B là 90; 50/90 ≈ 0,56. transform giữ nguyên số dòng nên dùng được để tính tỷ trọng trong nhóm."
+    },
+    {
+      "item_id": "PY-011",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Hiệu năng và tính đúng",
+      "stem": "Những cách viết nào vừa đúng vừa hiệu quả với DataFrame lớn? (chọn tất cả đáp án đúng)",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.loc[df['amount'] > 0, 'flag'] = 1"
+        },
+        {
+          "id": "b",
+          "text": "Vòng for qua df.iterrows() để tính cột mới"
+        },
+        {
+          "id": "c",
+          "text": "df['total'] = df['price'] * df['qty']"
+        },
+        {
+          "id": "d",
+          "text": "df[df['amount'] > 0]['flag'] = 1"
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "Phép toán vector hóa và .loc gán trực tiếp; iterrows chậm, còn gán qua chỉ mục xâu chuỗi (d) có thể không cập nhật df gốc (SettingWithCopyWarning)."
+    },
+    {
+      "item_id": "PY-012",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "single",
+      "topic": "Xử lý ngày tháng",
+      "stem": "Cột order_date đang ở dạng chuỗi '2026-03-15'. Cách nào đúng để tạo cột tháng phục vụ tổng hợp?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df['month'] = df['order_date'][5:7]"
+        },
+        {
+          "id": "b",
+          "text": "df['month'] = pd.to_datetime(df['order_date']).dt.to_period('M')"
+        },
+        {
+          "id": "c",
+          "text": "df['month'] = int(df['order_date'])"
+        },
+        {
+          "id": "d",
+          "text": "df['month'] = df['order_date'].sum()"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Chuyển sang kiểu datetime rồi dùng .dt để trích tháng; cắt chuỗi trên Series không cắt từng giá trị."
+    },
+    {
+      "item_id": "VIZ-009",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "single",
+      "topic": "Biểu đồ gây hiểu lầm",
+      "stem": "Biểu đồ cột so sánh doanh thu 2 quý (980 và 1.020 triệu) có trục tung bắt đầu từ 950. Vấn đề chính là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Màu sắc chưa đẹp"
+        },
+        {
+          "id": "b",
+          "text": "Chênh lệch 4% trông như gấp đôi vì chiều dài cột không còn tỷ lệ với giá trị"
+        },
+        {
+          "id": "c",
+          "text": "Nên dùng biểu đồ tròn"
+        },
+        {
+          "id": "d",
+          "text": "Không có vấn đề"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Biểu đồ cột mã hóa giá trị bằng chiều dài nên trục phải bắt đầu từ 0; nếu muốn nhấn chênh lệch nhỏ, hãy biểu diễn trực tiếp mức chênh lệch."
+    },
+    {
+      "item_id": "VIZ-010",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Thiết kế dashboard",
+      "stem": "Sắp xếp các bước thiết kế một dashboard theo thứ tự hợp lý.",
+      "options": [
+        {
+          "id": "audience",
+          "text": "Xác định người dùng và quyết định họ cần đưa ra"
+        },
+        {
+          "id": "metrics",
+          "text": "Chọn chỉ số chính và định nghĩa thống nhất"
+        },
+        {
+          "id": "charts",
+          "text": "Chọn loại biểu đồ phù hợp cho từng câu hỏi"
+        },
+        {
+          "id": "layout",
+          "text": "Bố cục: chỉ số quan trọng nhất ở góc trên trái"
+        },
+        {
+          "id": "test",
+          "text": "Thử với người dùng thật và điều chỉnh"
+        }
+      ],
+      "answer": [
+        "audience",
+        "metrics",
+        "charts",
+        "layout",
+        "test"
+      ],
+      "explanation": "Bắt đầu từ người dùng và quyết định, rồi mới đến chỉ số, hình thức và bố cục; cuối cùng kiểm chứng với người dùng."
+    },
+    {
+      "item_id": "VIZ-011",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "multiple",
+      "topic": "So sánh nhiều nhóm",
+      "stem": "Cần so sánh xu hướng doanh thu theo tháng của 12 cửa hàng. Những lựa chọn nào hợp lý? (chọn tất cả đáp án đúng)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Small multiples: 12 biểu đồ đường nhỏ cùng thang đo"
+        },
+        {
+          "id": "b",
+          "text": "Một biểu đồ đường, làm nổi 1–2 cửa hàng cần chú ý, các đường còn lại màu xám"
+        },
+        {
+          "id": "c",
+          "text": "12 biểu đồ tròn, mỗi tháng một biểu đồ"
+        },
+        {
+          "id": "d",
+          "text": "Một biểu đồ đường với 12 màu khác nhau và chú thích dài"
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Small multiples và làm nổi có chọn lọc giữ được khả năng so sánh; 12 màu khiến người xem không phân biệt được, biểu đồ tròn không thể hiện xu hướng."
+    },
+    {
+      "item_id": "VIZ-012",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Chọn biểu đồ",
+      "stem": "Để thể hiện doanh thu theo 12 tháng trong năm, biểu đồ nào phù hợp nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ phân tán"
+        },
+        {
+          "id": "d",
+          "text": "Bản đồ nhiệt địa lý"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Biểu đồ đường thể hiện xu hướng theo thời gian rõ ràng nhất."
+    },
+    {
+      "item_id": "COMM-009",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Cấu trúc báo cáo",
+      "stem": "Sắp xếp các phần của một bản tóm tắt phân tích gửi ban giám đốc theo thứ tự hiệu quả nhất.",
+      "options": [
+        {
+          "id": "finding",
+          "text": "Kết luận chính và con số quan trọng nhất"
+        },
+        {
+          "id": "impact",
+          "text": "Tác động tới kinh doanh"
+        },
+        {
+          "id": "action",
+          "text": "Đề xuất hành động"
+        },
+        {
+          "id": "evidence",
+          "text": "Bằng chứng và phương pháp tóm tắt"
+        },
+        {
+          "id": "limits",
+          "text": "Giới hạn dữ liệu và bước tiếp theo"
+        }
+      ],
+      "answer": [
+        "finding",
+        "impact",
+        "action",
+        "evidence",
+        "limits"
+      ],
+      "explanation": "Cấu trúc kim tự tháp ngược: điều quan trọng nhất trước, chi tiết hỗ trợ sau, minh bạch về giới hạn ở cuối."
+    },
+    {
+      "item_id": "COMM-010",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "single",
+      "topic": "Tương quan và nhân quả",
+      "stem": "Phân tích cho thấy khách dùng mã giảm giá có giá trị đơn trung bình cao hơn 25%. Cách viết nào chính xác nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mã giảm giá làm tăng giá trị đơn 25%"
+        },
+        {
+          "id": "b",
+          "text": "Đơn có dùng mã giảm giá cao hơn 25% trung bình; chưa xác định được mã giảm giá là nguyên nhân — cần thử nghiệm A/B để kiểm chứng"
+        },
+        {
+          "id": "c",
+          "text": "Nên phát mã giảm giá cho mọi khách"
+        },
+        {
+          "id": "d",
+          "text": "Mã giảm giá không có tác dụng"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Dữ liệu quan sát chỉ cho thấy tương quan (khách mua nhiều có thể chủ động tìm mã); cần nêu rõ giới hạn và cách kiểm chứng."
+    },
+    {
+      "item_id": "COMM-011",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Báo cáo khi dữ liệu chưa chắc chắn",
+      "stem": "Bạn phải gửi báo cáo đúng hạn nhưng dữ liệu tuần cuối còn thiếu 10%. Những cách nào phù hợp? (chọn tất cả đáp án đúng)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gửi đúng hạn, ghi rõ tuần cuối thiếu ~10% dữ liệu và kết luận nào có thể thay đổi"
+        },
+        {
+          "id": "b",
+          "text": "Hẹn ngày cập nhật số liệu đầy đủ"
+        },
+        {
+          "id": "c",
+          "text": "Tự ước lượng phần thiếu nhưng không nói ra"
+        },
+        {
+          "id": "d",
+          "text": "Bỏ tuần cuối mà không ghi chú"
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Minh bạch về giới hạn và kế hoạch cập nhật giữ được lòng tin; che giấu hay âm thầm ước lượng làm người đọc ra quyết định sai."
+    },
+    {
+      "item_id": "COMM-012",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Tiêu đề rõ ràng",
+      "stem": "Tiêu đề email báo cáo nào tốt nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Báo cáo"
+        },
+        {
+          "id": "b",
+          "text": "Gửi anh/chị file"
+        },
+        {
+          "id": "c",
+          "text": "Doanh thu T3 tăng 8% — cần duyệt ngân sách quảng cáo trước 05/04"
+        },
+        {
+          "id": "d",
+          "text": "Re: Re: Fwd: số liệu"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Tiêu đề nêu kết luận chính và việc người nhận cần làm, kèm thời hạn."
+    },
+    {
+      "item_id": "SQL-013",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "single",
+      "topic": "Sắp xếp kết quả",
+      "stem": "Mệnh đề nào sắp xếp kết quả theo doanh thu từ cao xuống thấp?",
+      "options": [
+        {
+          "id": "a",
+          "text": "ORDER BY revenue DESC"
+        },
+        {
+          "id": "b",
+          "text": "GROUP BY revenue"
+        },
+        {
+          "id": "c",
+          "text": "SORT revenue DESC"
+        },
+        {
+          "id": "d",
+          "text": "ORDER BY revenue ASC"
+        }
+      ],
+      "answer": "a",
+      "explanation": "ORDER BY ... DESC sắp xếp giảm dần. GROUP BY chỉ gom nhóm, không bảo đảm thứ tự."
+    },
+    {
+      "item_id": "SQL-014",
+      "skill_code": "SQL",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Lọc dòng bằng WHERE",
+      "stem": "Bảng orders có 5 dòng với quantity lần lượt là 0, 2, 3, 0, 5. Câu SELECT COUNT(*) FROM orders WHERE quantity > 0 trả về bao nhiêu?",
+      "answer": 3,
+      "tolerance": 0,
+      "unit": "dòng",
+      "explanation": "WHERE giữ 3 dòng có quantity là 2, 3 và 5."
+    },
+    {
+      "item_id": "SQL-015",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "numeric",
+      "topic": "INNER JOIN và số dòng",
+      "stem": "Bảng orders có 4 đơn, trong đó 1 đơn có customer_id không tồn tại trong bảng customers. Mỗi customer_id chỉ xuất hiện một lần trong customers. INNER JOIN hai bảng theo customer_id trả về bao nhiêu dòng?",
+      "answer": 3,
+      "tolerance": 0,
+      "unit": "dòng",
+      "explanation": "INNER JOIN chỉ giữ dòng khớp ở cả hai bảng, nên đơn không có khách hàng tương ứng bị loại: còn 3 dòng."
+    },
+    {
+      "item_id": "SQL-016",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "single",
+      "topic": "LEFT JOIN",
+      "stem": "Bạn cần danh sách MỌI khách hàng, kể cả người chưa có đơn nào, kèm số đơn của họ. Nên nối từ customers sang orders bằng phép nối nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "INNER JOIN"
+        },
+        {
+          "id": "b",
+          "text": "LEFT JOIN"
+        },
+        {
+          "id": "c",
+          "text": "CROSS JOIN"
+        },
+        {
+          "id": "d",
+          "text": "Không cần JOIN, chỉ đọc bảng orders"
+        }
+      ],
+      "answer": "b",
+      "explanation": "LEFT JOIN giữ mọi dòng của bảng bên trái; khách chưa có đơn nhận NULL ở các cột của orders."
+    },
+    {
+      "item_id": "SQL-017",
+      "skill_code": "SQL",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Tránh chia cho 0",
+      "stem": "Chọn TẤT CẢ cách viết tránh được phép chia cho 0 khi tính tỷ lệ thay đổi so với tháng trước (prev là doanh thu tháng trước).",
+      "options": [
+        {
+          "id": "a",
+          "text": "(cur - prev) / NULLIF(prev, 0)"
+        },
+        {
+          "id": "b",
+          "text": "CASE WHEN prev = 0 THEN NULL ELSE (cur - prev) / prev END"
+        },
+        {
+          "id": "c",
+          "text": "(cur - prev) / COALESCE(prev, 0)"
+        },
+        {
+          "id": "d",
+          "text": "Đổi phép chia thành phép nhân"
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "NULLIF(prev, 0) và CASE WHEN đều trả về NULL khi tháng trước bằng 0. COALESCE(prev, 0) lại tạo ra số 0 ở mẫu số."
+    },
+    {
+      "item_id": "SQL-018",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "single",
+      "topic": "Hàm cửa sổ LAG",
+      "stem": "Hàm cửa sổ nào lấy giá trị của dòng liền TRƯỚC theo thứ tự sắp xếp, dùng để so sánh doanh thu với tháng trước?",
+      "options": [
+        {
+          "id": "a",
+          "text": "LEAD"
+        },
+        {
+          "id": "b",
+          "text": "RANK"
+        },
+        {
+          "id": "c",
+          "text": "LAG"
+        },
+        {
+          "id": "d",
+          "text": "SUM"
+        }
+      ],
+      "answer": "c",
+      "explanation": "LAG lấy dòng liền trước, LEAD lấy dòng liền sau. RANK và SUM không trả về giá trị của dòng khác."
+    },
+    {
+      "item_id": "SQL-019",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "numeric",
+      "topic": "RANK và đồng hạng",
+      "stem": "Doanh thu theo vùng: Nam 700, Bac 370, Trung 370, Tay 100. Với RANK() OVER (ORDER BY doanh_thu DESC), vùng Tay nhận hạng mấy?",
+      "answer": 4,
+      "tolerance": 0,
+      "unit": "hạng",
+      "explanation": "RANK cho hai vùng đồng hạng 2 và bỏ qua hạng 3, nên vùng Tay nhận hạng 4. DENSE_RANK mới cho hạng 3."
+    },
+    {
+      "item_id": "SQL-020",
+      "skill_code": "SQL",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Truy vấn nhiều bước bằng CTE",
+      "stem": "Sắp xếp các bước của một truy vấn dùng CTE để tính tỷ lệ thay đổi doanh thu theo tháng.",
+      "options": [
+        {
+          "id": "clean",
+          "text": "CTE làm sạch: bỏ dòng trùng, chỉ giữ đơn hoàn thành"
+        },
+        {
+          "id": "month",
+          "text": "CTE tổng hợp doanh thu theo tháng"
+        },
+        {
+          "id": "lag",
+          "text": "Dùng LAG lấy doanh thu tháng trước"
+        },
+        {
+          "id": "ratio",
+          "text": "Tính tỷ lệ thay đổi và xử lý trường hợp tháng trước bằng 0"
+        }
+      ],
+      "answer": [
+        "clean",
+        "month",
+        "lag",
+        "ratio"
+      ],
+      "explanation": "Làm sạch trước, tổng hợp sau, rồi mới so sánh giữa các tháng; tỷ lệ được tính ở bước cuối."
+    },
+    {
+      "item_id": "DQ-013",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "single",
+      "topic": "Nhận diện dòng trùng",
+      "stem": "Hai dòng có cùng order_id và mọi cột đều giống hệt nhau. Đây là loại lỗi dữ liệu nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dữ liệu trùng lặp"
+        },
+        {
+          "id": "b",
+          "text": "Giá trị thiếu"
+        },
+        {
+          "id": "c",
+          "text": "Sai định dạng ngày"
+        },
+        {
+          "id": "d",
+          "text": "Giá trị ngoại lai"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Hai bản ghi giống hệt nhau là dữ liệu trùng lặp; giữ cả hai sẽ đếm đơn hàng hai lần."
+    },
+    {
+      "item_id": "DQ-014",
+      "skill_code": "DATA_QUALITY",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Tỷ lệ giá trị thiếu",
+      "stem": "Cột region có 10 dòng, trong đó 2 dòng để trống. Tỷ lệ giá trị thiếu của cột này là bao nhiêu phần trăm?",
+      "answer": 20,
+      "tolerance": 0,
+      "unit": "%",
+      "explanation": "2 / 10 = 20%."
+    },
+    {
+      "item_id": "DQ-015",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "single",
+      "topic": "Xử lý vùng bị thiếu",
+      "stem": "Vài đơn thiếu giá trị region. Báo cáo cần tổng doanh thu theo vùng, và tổng các vùng phải khớp với tổng toàn bộ. Cách xử lý nào phù hợp nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Xóa các đơn thiếu region"
+        },
+        {
+          "id": "b",
+          "text": "Gán nhãn 'Unknown' và ghi chú trong báo cáo"
+        },
+        {
+          "id": "c",
+          "text": "Điền vùng có nhiều đơn nhất"
+        },
+        {
+          "id": "d",
+          "text": "Bỏ cột region khỏi báo cáo"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Gán nhãn Unknown giữ được tổng doanh thu và cho người đọc thấy phần chưa rõ vùng. Xóa dòng làm lệch tổng; tự điền vùng là bịa dữ liệu."
+    },
+    {
+      "item_id": "DQ-016",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Dấu hiệu cần kiểm tra lại",
+      "stem": "Chọn TẤT CẢ dấu hiệu cho thấy cần kiểm tra lại dữ liệu trước khi đưa vào báo cáo.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Số dòng sau JOIN nhiều hơn bảng đơn hàng gốc"
+        },
+        {
+          "id": "b",
+          "text": "Tổng doanh thu trước và sau làm sạch chênh nhau mà không giải thích được"
+        },
+        {
+          "id": "c",
+          "text": "Có đơn ghi discount = 1,5 (giảm 150%)"
+        },
+        {
+          "id": "d",
+          "text": "Tên cột được đặt bằng tiếng Anh"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Số dòng tăng sau JOIN, chênh lệch không giải thích được và giá trị ngoài miền hợp lệ đều là dấu hiệu lỗi. Ngôn ngữ đặt tên cột không ảnh hưởng chất lượng."
+    },
+    {
+      "item_id": "DQ-017",
+      "skill_code": "DATA_QUALITY",
+      "level": 2,
+      "type": "ordering",
+      "topic": "Nhật ký làm sạch",
+      "stem": "Sắp xếp các việc cần ghi vào nhật ký làm sạch dữ liệu theo đúng trình tự thực hiện.",
+      "options": [
+        {
+          "id": "start",
+          "text": "Ghi số dòng ban đầu"
+        },
+        {
+          "id": "dup",
+          "text": "Bỏ dòng trùng và ghi số dòng còn lại"
+        },
+        {
+          "id": "rule",
+          "text": "Loại dòng vi phạm quy tắc nghiệp vụ và ghi số dòng còn lại"
+        },
+        {
+          "id": "check",
+          "text": "Đối soát: số dòng ban đầu trừ số dòng đã loại bằng số dòng cuối"
+        }
+      ],
+      "answer": [
+        "start",
+        "dup",
+        "rule",
+        "check"
+      ],
+      "explanation": "Phải biết số dòng ban đầu trước, ghi từng bước loại bỏ, rồi mới đối soát được tổng số dòng bị loại."
+    },
+    {
+      "item_id": "DQ-018",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "single",
+      "topic": "Ràng buộc ở nguồn",
+      "stem": "Quy tắc nào chặn được đơn hàng có số lượng không hợp lệ ngay tại thời điểm ghi vào bảng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "ORDER BY quantity"
+        },
+        {
+          "id": "b",
+          "text": "Tạo chỉ mục trên cột quantity"
+        },
+        {
+          "id": "c",
+          "text": "CHECK (quantity > 0)"
+        },
+        {
+          "id": "d",
+          "text": "Đổi tên cột quantity"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Ràng buộc CHECK từ chối dòng vi phạm khi ghi. Chỉ mục và ORDER BY không kiểm tra giá trị."
+    },
+    {
+      "item_id": "DQ-019",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "numeric",
+      "topic": "Tác động của dữ liệu lỗi",
+      "stem": "Doanh thu tính trên dữ liệu chưa làm sạch là 1.320.000 đồng; sau khi làm sạch là 1.200.000 đồng. Dữ liệu lỗi làm doanh thu bị thổi phồng bao nhiêu phần trăm so với số đã làm sạch?",
+      "answer": 10,
+      "tolerance": 0.1,
+      "unit": "%",
+      "explanation": "(1.320.000 − 1.200.000) / 1.200.000 = 10%."
+    },
+    {
+      "item_id": "DQ-020",
+      "skill_code": "DATA_QUALITY",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Bộ kiểm tra tự động",
+      "stem": "Chọn TẤT CẢ kiểm tra nên có trong bộ kiểm tra tự động chạy mỗi lần nạp bảng đơn hàng.",
+      "options": [
+        {
+          "id": "a",
+          "text": "order_id là duy nhất"
+        },
+        {
+          "id": "b",
+          "text": "quantity lớn hơn 0"
+        },
+        {
+          "id": "c",
+          "text": "status nằm trong danh sách giá trị cho phép"
+        },
+        {
+          "id": "d",
+          "text": "Biểu đồ dùng màu dễ nhìn"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Tính duy nhất, miền giá trị và danh sách giá trị cho phép đều kiểm tra được bằng máy. Màu biểu đồ không phải chất lượng dữ liệu."
+    },
+    {
+      "item_id": "PY-013",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "single",
+      "topic": "Đọc tệp CSV",
+      "stem": "Hàm nào của pandas đọc tệp orders.csv thành DataFrame?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pd.open_csv('orders.csv')"
+        },
+        {
+          "id": "b",
+          "text": "pd.read_csv('orders.csv')"
+        },
+        {
+          "id": "c",
+          "text": "pd.load('orders.csv')"
+        },
+        {
+          "id": "d",
+          "text": "pd.csv('orders.csv')"
+        }
+      ],
+      "answer": "b",
+      "explanation": "pd.read_csv là hàm đọc CSV của pandas; các tên còn lại không tồn tại."
+    },
+    {
+      "item_id": "PY-014",
+      "skill_code": "PYTHON",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Lọc bằng điều kiện",
+      "stem": "Cột quantity của df có các giá trị [4, 0, 0, 7, 1, 0]. Biểu thức len(df[df['quantity'] > 0]) trả về bao nhiêu?",
+      "answer": 3,
+      "tolerance": 0,
+      "unit": "dòng",
+      "explanation": "Có 3 giá trị lớn hơn 0: 4, 7 và 1."
+    },
+    {
+      "item_id": "PY-015",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "single",
+      "topic": "Tổng hợp bằng groupby",
+      "stem": "Lệnh df.groupby('region')['net'].sum() trả về kết quả nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tổng net của toàn bộ bảng"
+        },
+        {
+          "id": "b",
+          "text": "Tổng net theo từng vùng"
+        },
+        {
+          "id": "c",
+          "text": "Số dòng của từng vùng"
+        },
+        {
+          "id": "d",
+          "text": "Bảng đã sắp xếp theo vùng"
+        }
+      ],
+      "answer": "b",
+      "explanation": "groupby gom các dòng cùng vùng rồi sum cộng cột net trong từng nhóm."
+    },
+    {
+      "item_id": "PY-016",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "single",
+      "topic": "Điền giá trị thiếu",
+      "stem": "Lệnh nào thay các giá trị thiếu trong cột region bằng 'Unknown'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df['region'] = df['region'].fillna('Unknown')"
+        },
+        {
+          "id": "b",
+          "text": "df = df.dropna(subset=['region'])"
+        },
+        {
+          "id": "c",
+          "text": "df['region'] = df['region'].astype(str)"
+        },
+        {
+          "id": "d",
+          "text": "df['region'] = 'Unknown'"
+        }
+      ],
+      "answer": "a",
+      "explanation": "fillna thay giá trị thiếu bằng giá trị chỉ định. dropna xóa dòng; astype(str) biến NaN thành chuỗi 'nan'."
+    },
+    {
+      "item_id": "PY-017",
+      "skill_code": "PYTHON",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Gán cột trên tập đã lọc",
+      "stem": "Chọn TẤT CẢ cách an toàn để thêm cột net cho các đơn đã hoàn thành mà không gặp cảnh báo SettingWithCopy.",
+      "options": [
+        {
+          "id": "a",
+          "text": "done = df[df['status'] == 'completed'].copy() rồi gán done['net'] = ..."
+        },
+        {
+          "id": "b",
+          "text": "df.loc[df['status'] == 'completed', 'net'] = ..."
+        },
+        {
+          "id": "c",
+          "text": "df[df['status'] == 'completed']['net'] = ..."
+        },
+        {
+          "id": "d",
+          "text": "Tắt cảnh báo rồi gán như cách c"
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Tạo bản sao bằng .copy() hoặc gán qua .loc đều rõ ràng về đối tượng được sửa. Gán trên lát cắt nối chuỗi có thể không ghi vào dữ liệu gốc."
+    },
+    {
+      "item_id": "PY-018",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "single",
+      "topic": "Bảng xoay pivot_table",
+      "stem": "Lệnh nào tạo bảng có mỗi vùng là một dòng, mỗi tháng là một cột và ô là tổng doanh thu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.sort_values(['region', 'month'])"
+        },
+        {
+          "id": "b",
+          "text": "df.melt(id_vars='region')"
+        },
+        {
+          "id": "c",
+          "text": "df.pivot_table(index='region', columns='month', values='net', aggfunc='sum')"
+        },
+        {
+          "id": "d",
+          "text": "df.merge(df, on='region')"
+        }
+      ],
+      "answer": "c",
+      "explanation": "pivot_table với index, columns, values và aggfunc='sum' tạo đúng bảng vùng × tháng. melt làm ngược lại."
+    },
+    {
+      "item_id": "PY-019",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "numeric",
+      "topic": "Thay đổi theo kỳ với pct_change",
+      "stem": "Cho s = pd.Series([200, 250, 200]). Giá trị cuối cùng của s.pct_change() * 100 là bao nhiêu?",
+      "answer": -20,
+      "tolerance": 0.01,
+      "unit": "%",
+      "explanation": "(200 − 250) / 250 = −20%. pct_change luôn chia cho giá trị của kỳ liền trước."
+    },
+    {
+      "item_id": "PY-020",
+      "skill_code": "PYTHON",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Hàm tính thay đổi theo tháng",
+      "stem": "Sắp xếp các bước của một hàm pandas tính tỷ lệ thay đổi doanh thu theo tháng.",
+      "options": [
+        {
+          "id": "date",
+          "text": "Chuyển order_date sang kiểu ngày"
+        },
+        {
+          "id": "month",
+          "text": "Tạo cột tháng từ order_date"
+        },
+        {
+          "id": "group",
+          "text": "groupby theo tháng và tính tổng doanh thu"
+        },
+        {
+          "id": "change",
+          "text": "Tính tỷ lệ thay đổi và xử lý tháng trước bằng 0"
+        }
+      ],
+      "answer": [
+        "date",
+        "month",
+        "group",
+        "change"
+      ],
+      "explanation": "Cần kiểu ngày để tách tháng, có tháng mới tổng hợp được, và có chuỗi doanh thu theo tháng mới tính được thay đổi."
+    },
+    {
+      "item_id": "VIZ-013",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Xu hướng theo thời gian",
+      "stem": "Loại biểu đồ nào phù hợp nhất để cho thấy doanh thu thay đổi qua 12 tháng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ phân tán"
+        },
+        {
+          "id": "d",
+          "text": "Bảng số liệu không có biểu đồ"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Biểu đồ đường nối các điểm theo thời gian nên người xem thấy ngay xu hướng."
+    },
+    {
+      "item_id": "VIZ-014",
+      "skill_code": "DATA_VIZ",
+      "level": 1,
+      "type": "single",
+      "topic": "Tỉ trọng trong tổng",
+      "stem": "Bạn muốn cho thấy 3 nhóm sản phẩm chiếm bao nhiêu phần trong tổng doanh thu. Lựa chọn nào phù hợp?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ tròn hoặc cột chồng 100%"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ đường"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ phân tán"
+        },
+        {
+          "id": "d",
+          "text": "Biểu đồ tần suất (histogram)"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Biểu đồ tròn hoặc cột chồng 100% thể hiện phần trong tổng khi số nhóm ít."
+    },
+    {
+      "item_id": "VIZ-015",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "single",
+      "topic": "Gốc của trục tung",
+      "stem": "Trong biểu đồ cột so sánh doanh thu giữa các vùng, trục tung nên bắt đầu từ giá trị nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Từ giá trị nhỏ nhất trong dữ liệu"
+        },
+        {
+          "id": "b",
+          "text": "Từ 0"
+        },
+        {
+          "id": "c",
+          "text": "Từ giá trị trung bình"
+        },
+        {
+          "id": "d",
+          "text": "Tùy ý, miễn biểu đồ đẹp"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Chiều cao cột biểu diễn độ lớn, nên trục phải bắt đầu từ 0; cắt trục làm chênh lệch trông lớn hơn thực tế."
+    },
+    {
+      "item_id": "VIZ-016",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Thành phần của biểu đồ",
+      "stem": "Chọn TẤT CẢ thành phần cần có để người xem hiểu đúng một biểu đồ mà không cần hỏi lại.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tiêu đề nêu nội dung biểu đồ"
+        },
+        {
+          "id": "b",
+          "text": "Nhãn trục kèm đơn vị"
+        },
+        {
+          "id": "c",
+          "text": "Kỳ dữ liệu hoặc nguồn dữ liệu"
+        },
+        {
+          "id": "d",
+          "text": "Hiệu ứng 3D"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Tiêu đề, nhãn trục kèm đơn vị và kỳ dữ liệu giúp đọc đúng. Hiệu ứng 3D làm sai lệch cảm nhận về độ lớn."
+    },
+    {
+      "item_id": "VIZ-017",
+      "skill_code": "DATA_VIZ",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Đọc tỉ trọng từ biểu đồ",
+      "stem": "Biểu đồ cột cho thấy doanh thu: vùng Nam 600, vùng Bắc 300, vùng Trung 100 (triệu đồng). Vùng Nam chiếm bao nhiêu phần trăm tổng doanh thu?",
+      "answer": 60,
+      "tolerance": 0,
+      "unit": "%",
+      "explanation": "600 / (600 + 300 + 100) = 60%."
+    },
+    {
+      "item_id": "VIZ-018",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "single",
+      "topic": "Phân phối giá trị",
+      "stem": "Bạn cần xem giá trị đơn hàng tập trung ở khoảng nào và có lệch về một phía không. Biểu đồ nào phù hợp?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Biểu đồ tròn"
+        },
+        {
+          "id": "b",
+          "text": "Biểu đồ đường theo ngày"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ tần suất (histogram)"
+        },
+        {
+          "id": "d",
+          "text": "Biểu đồ cột chồng"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Histogram chia giá trị thành các khoảng và đếm số đơn trong từng khoảng, nên cho thấy hình dạng phân phối."
+    },
+    {
+      "item_id": "VIZ-019",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "single",
+      "topic": "Phần đầu của dashboard",
+      "stem": "Người quản lý cần biết ngay doanh thu tháng này so với mục tiêu. Thành phần nào nên đặt ở đầu dashboard?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bảng chi tiết từng đơn hàng"
+        },
+        {
+          "id": "b",
+          "text": "Thẻ KPI doanh thu kèm so sánh với mục tiêu"
+        },
+        {
+          "id": "c",
+          "text": "Biểu đồ phân tán giá và số lượng"
+        },
+        {
+          "id": "d",
+          "text": "Đoạn mô tả cách lấy dữ liệu"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Thẻ KPI kèm so sánh trả lời câu hỏi chính trong một lần nhìn; chi tiết đặt bên dưới."
+    },
+    {
+      "item_id": "VIZ-020",
+      "skill_code": "DATA_VIZ",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Trình tự thiết kế dashboard",
+      "stem": "Sắp xếp các bước thiết kế một dashboard theo trình tự hợp lý.",
+      "options": [
+        {
+          "id": "question",
+          "text": "Xác định câu hỏi người xem cần trả lời"
+        },
+        {
+          "id": "metric",
+          "text": "Chọn chỉ số trả lời câu hỏi đó"
+        },
+        {
+          "id": "chart",
+          "text": "Chọn loại biểu đồ cho từng chỉ số"
+        },
+        {
+          "id": "layout",
+          "text": "Sắp xếp bố cục và thêm chú giải insight"
+        }
+      ],
+      "answer": [
+        "question",
+        "metric",
+        "chart",
+        "layout"
+      ],
+      "explanation": "Câu hỏi của người xem quyết định chỉ số; chỉ số quyết định biểu đồ; bố cục và chú giải làm sau cùng."
+    },
+    {
+      "item_id": "COMM-013",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Câu mở đầu bản tóm tắt",
+      "stem": "Bản tóm tắt gửi quản lý nên mở đầu bằng nội dung nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Kết luận chính kèm con số"
+        },
+        {
+          "id": "b",
+          "text": "Mô tả cách lấy dữ liệu"
+        },
+        {
+          "id": "c",
+          "text": "Danh sách công cụ đã dùng"
+        },
+        {
+          "id": "d",
+          "text": "Lời cảm ơn"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Người đọc bận cần kết luận trước; cách làm và công cụ để ở phần sau."
+    },
+    {
+      "item_id": "COMM-014",
+      "skill_code": "WRITTEN_COMM",
+      "level": 1,
+      "type": "single",
+      "topic": "Viết con số rõ ràng",
+      "stem": "Câu nào truyền đạt kết quả rõ ràng nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Doanh thu giảm khá nhiều."
+        },
+        {
+          "id": "b",
+          "text": "Doanh thu là 480."
+        },
+        {
+          "id": "c",
+          "text": "Doanh thu tháng 2 đạt 480 triệu đồng, giảm 20% so với tháng 1."
+        },
+        {
+          "id": "d",
+          "text": "Tháng 2 không tốt bằng tháng 1."
+        }
+      ],
+      "answer": "c",
+      "explanation": "Câu rõ ràng có con số, đơn vị và mốc so sánh."
+    },
+    {
+      "item_id": "COMM-015",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "single",
+      "topic": "Nêu giới hạn của dữ liệu",
+      "stem": "Dữ liệu chỉ có 2 tháng. Câu nào nêu giới hạn một cách đúng mực?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Doanh thu chắc chắn sẽ tiếp tục giảm."
+        },
+        {
+          "id": "b",
+          "text": "Hai tháng chưa đủ để kết luận xu hướng dài hạn."
+        },
+        {
+          "id": "c",
+          "text": "Nguyên nhân là chương trình khuyến mãi."
+        },
+        {
+          "id": "d",
+          "text": "Không cần thu thập thêm dữ liệu."
+        }
+      ],
+      "answer": "b",
+      "explanation": "Hai điểm dữ liệu không đủ để nói về xu hướng dài hạn hay nguyên nhân; nêu rõ điều này là trung thực với người đọc."
+    },
+    {
+      "item_id": "COMM-016",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Khuyến nghị thực hiện được",
+      "stem": "Chọn TẤT CẢ yếu tố làm cho một khuyến nghị có thể thực hiện được.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hành động cụ thể"
+        },
+        {
+          "id": "b",
+          "text": "Người hoặc nhóm phụ trách"
+        },
+        {
+          "id": "c",
+          "text": "Thời hạn thực hiện"
+        },
+        {
+          "id": "d",
+          "text": "Thật nhiều thuật ngữ chuyên môn"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Khuyến nghị cần hành động cụ thể, người phụ trách và thời hạn. Thuật ngữ nhiều chỉ làm khó người đọc."
+    },
+    {
+      "item_id": "COMM-017",
+      "skill_code": "WRITTEN_COMM",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Tính phần trăm thay đổi để viết báo cáo",
+      "stem": "Doanh thu giảm từ 600 triệu đồng xuống 480 triệu đồng. Phần trăm thay đổi là bao nhiêu (ghi số âm nếu giảm)?",
+      "answer": -20,
+      "tolerance": 0.01,
+      "unit": "%",
+      "explanation": "(480 − 600) / 600 = −20%."
+    },
+    {
+      "item_id": "COMM-018",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "single",
+      "topic": "Tương quan và nguyên nhân",
+      "stem": "Doanh thu giảm đúng tháng công ty đổi giao diện website. Cách viết nào thận trọng và đúng nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Giao diện mới làm doanh thu giảm."
+        },
+        {
+          "id": "b",
+          "text": "Doanh thu giảm trong cùng tháng đổi giao diện; cần thử nghiệm để xác định nguyên nhân."
+        },
+        {
+          "id": "c",
+          "text": "Giao diện mới không liên quan gì đến doanh thu."
+        },
+        {
+          "id": "d",
+          "text": "Nên quay lại giao diện cũ ngay."
+        }
+      ],
+      "answer": "b",
+      "explanation": "Hai việc xảy ra cùng lúc chưa chứng minh được quan hệ nhân quả; cần thử nghiệm hoặc thêm dữ liệu."
+    },
+    {
+      "item_id": "COMM-019",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Cấu trúc báo cáo phân tích",
+      "stem": "Sắp xếp các phần của một báo cáo phân tích gửi cho người ra quyết định.",
+      "options": [
+        {
+          "id": "summary",
+          "text": "Tóm tắt kết luận"
+        },
+        {
+          "id": "finding",
+          "text": "Phát hiện chính kèm số liệu"
+        },
+        {
+          "id": "action",
+          "text": "Khuyến nghị"
+        },
+        {
+          "id": "limit",
+          "text": "Giới hạn và bước tiếp theo"
+        }
+      ],
+      "answer": [
+        "summary",
+        "finding",
+        "action",
+        "limit"
+      ],
+      "explanation": "Kết luận đi trước, số liệu chứng minh theo sau, rồi đến việc cần làm; giới hạn và bước tiếp theo khép lại báo cáo."
+    },
+    {
+      "item_id": "COMM-020",
+      "skill_code": "WRITTEN_COMM",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Kế hoạch đo lường",
+      "stem": "Chọn TẤT CẢ thành phần cần có trong kế hoạch đo lường hiệu quả của một khuyến nghị.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chỉ số dùng để theo dõi"
+        },
+        {
+          "id": "b",
+          "text": "Mức hiện tại và mức mục tiêu"
+        },
+        {
+          "id": "c",
+          "text": "Thời điểm đo lại"
+        },
+        {
+          "id": "d",
+          "text": "Màu sắc của slide trình bày"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Cần biết đo chỉ số nào, đang ở đâu và muốn tới đâu, và khi nào đo lại. Màu slide không thuộc kế hoạch đo lường."
+    },
+    {
+      "item_id": "STAT-001",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Trung bình cộng",
+      "stem": "Giá trị của 4 đơn hàng là 100, 200, 300 và 400 nghìn đồng. Giá trị trung bình là bao nhiêu nghìn đồng?",
+      "answer": 250,
+      "tolerance": 0,
+      "unit": "nghìn đồng",
+      "explanation": "(100 + 200 + 300 + 400) / 4 = 250."
+    },
+    {
+      "item_id": "STAT-002",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Trung vị với số phần tử lẻ",
+      "stem": "Giá trị của 5 đơn hàng, đã sắp xếp: 50, 100, 170, 200, 320 nghìn đồng. Trung vị là bao nhiêu nghìn đồng?",
+      "answer": 170,
+      "tolerance": 0,
+      "unit": "nghìn đồng",
+      "explanation": "Với 5 giá trị đã sắp xếp, trung vị là giá trị đứng giữa: 170."
+    },
+    {
+      "item_id": "STAT-003",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "single",
+      "topic": "Số đo ít bị ảnh hưởng bởi ngoại lai",
+      "stem": "Dữ liệu có một đơn hàng giá trị rất lớn so với phần còn lại. Số đo nào ít bị ảnh hưởng bởi đơn hàng đó nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trung bình"
+        },
+        {
+          "id": "b",
+          "text": "Trung vị"
+        },
+        {
+          "id": "c",
+          "text": "Giá trị lớn nhất"
+        },
+        {
+          "id": "d",
+          "text": "Khoảng biến thiên"
+        }
+      ],
+      "answer": "b",
+      "explanation": "Trung vị chỉ phụ thuộc vào vị trí ở giữa nên gần như không đổi khi có một giá trị ngoại lai; trung bình thì bị kéo theo."
+    },
+    {
+      "item_id": "STAT-004",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "single",
+      "topic": "Yếu vị",
+      "stem": "Giá trị xuất hiện nhiều lần nhất trong một tập dữ liệu được gọi là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trung vị (median)"
+        },
+        {
+          "id": "b",
+          "text": "Trung bình (mean)"
+        },
+        {
+          "id": "c",
+          "text": "Yếu vị (mode)"
+        },
+        {
+          "id": "d",
+          "text": "Phương sai (variance)"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Yếu vị (mode) là giá trị có tần suất cao nhất."
+    },
+    {
+      "item_id": "STAT-005",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "numeric",
+      "topic": "Khoảng biến thiên",
+      "stem": "Giá trị đơn hàng lớn nhất là 320 nghìn đồng, nhỏ nhất là 50 nghìn đồng. Khoảng biến thiên là bao nhiêu nghìn đồng?",
+      "answer": 270,
+      "tolerance": 0,
+      "unit": "nghìn đồng",
+      "explanation": "Khoảng biến thiên = lớn nhất − nhỏ nhất = 320 − 50 = 270."
+    },
+    {
+      "item_id": "STAT-006",
+      "skill_code": "STATISTICS",
+      "level": 1,
+      "type": "multiple",
+      "topic": "Số đo độ phân tán",
+      "stem": "Chọn TẤT CẢ số đo cho biết dữ liệu phân tán nhiều hay ít.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Độ lệch chuẩn"
+        },
+        {
+          "id": "b",
+          "text": "Khoảng biến thiên"
+        },
+        {
+          "id": "c",
+          "text": "Khoảng tứ phân vị"
+        },
+        {
+          "id": "d",
+          "text": "Trung bình"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Độ lệch chuẩn, khoảng biến thiên và khoảng tứ phân vị đo độ phân tán. Trung bình đo vị trí trung tâm."
+    },
+    {
+      "item_id": "STAT-007",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "single",
+      "topic": "Trung bình và trung vị trên dữ liệu lệch",
+      "stem": "Giá trị đơn hàng của một cửa hàng phần lớn ở mức thấp, chỉ có vài đơn rất lớn. So với trung vị, giá trị trung bình sẽ thế nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lớn hơn trung vị"
+        },
+        {
+          "id": "b",
+          "text": "Nhỏ hơn trung vị"
+        },
+        {
+          "id": "c",
+          "text": "Luôn bằng trung vị"
+        },
+        {
+          "id": "d",
+          "text": "Không thể so sánh"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Vài giá trị rất lớn kéo trung bình lên, còn trung vị vẫn ở giữa nhóm đơn nhỏ, nên trung bình lớn hơn trung vị."
+    },
+    {
+      "item_id": "STAT-008",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Trung vị với số phần tử chẵn",
+      "stem": "Giá trị của 4 đơn hàng, đã sắp xếp: 100, 150, 250, 300 nghìn đồng. Trung vị là bao nhiêu nghìn đồng?",
+      "answer": 200,
+      "tolerance": 0,
+      "unit": "nghìn đồng",
+      "explanation": "Với số phần tử chẵn, trung vị là trung bình của hai giá trị ở giữa: (150 + 250) / 2 = 200."
+    },
+    {
+      "item_id": "STAT-009",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "single",
+      "topic": "Ý nghĩa của độ lệch chuẩn",
+      "stem": "Hai cửa hàng có cùng doanh thu trung bình mỗi ngày. Độ lệch chuẩn của cửa hàng A là 5, của cửa hàng B là 50 (triệu đồng). Nhận xét nào đúng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Doanh thu của B dao động giữa các ngày nhiều hơn A"
+        },
+        {
+          "id": "b",
+          "text": "B bán được nhiều hơn A"
+        },
+        {
+          "id": "c",
+          "text": "A có nhiều ngày bán hàng hơn B"
+        },
+        {
+          "id": "d",
+          "text": "Hai cửa hàng ổn định như nhau"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Độ lệch chuẩn lớn hơn nghĩa là các ngày lệch xa mức trung bình hơn, tức doanh thu của B dao động nhiều hơn."
+    },
+    {
+      "item_id": "STAT-010",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "single",
+      "topic": "Đọc hệ số tương quan",
+      "stem": "Hệ số tương quan giữa mức giảm giá và biên lợi nhuận là −0,8. Điều này cho biết gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hai đại lượng không liên quan"
+        },
+        {
+          "id": "b",
+          "text": "Quan hệ cùng chiều, mạnh"
+        },
+        {
+          "id": "c",
+          "text": "Quan hệ ngược chiều, mạnh"
+        },
+        {
+          "id": "d",
+          "text": "Giảm giá làm lợi nhuận giảm đúng 80%"
+        }
+      ],
+      "answer": "c",
+      "explanation": "Dấu âm cho biết hai đại lượng đi ngược chiều; giá trị tuyệt đối gần 1 cho biết mối liên hệ mạnh."
+    },
+    {
+      "item_id": "STAT-011",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "multiple",
+      "topic": "Tương quan và nhân quả",
+      "stem": "Chọn TẤT CẢ phát biểu đúng về tương quan và quan hệ nhân quả.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tương quan cao chưa chứng minh được quan hệ nhân quả"
+        },
+        {
+          "id": "b",
+          "text": "Hai đại lượng có thể cùng bị chi phối bởi một yếu tố thứ ba"
+        },
+        {
+          "id": "c",
+          "text": "Hệ số tương quan 0,9 nghĩa là X gây ra Y"
+        },
+        {
+          "id": "d",
+          "text": "Thử nghiệm có nhóm đối chứng giúp kết luận về nhân quả"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "Tương quan cao chưa chứng minh nhân quả vì có thể do một yếu tố thứ ba; muốn kết luận nhân quả cần thử nghiệm có đối chứng."
+    },
+    {
+      "item_id": "STAT-012",
+      "skill_code": "STATISTICS",
+      "level": 2,
+      "type": "numeric",
+      "topic": "Tỷ lệ chuyển đổi",
+      "stem": "Trang sản phẩm có 800 lượt truy cập và 40 đơn hàng. Tỷ lệ chuyển đổi là bao nhiêu phần trăm?",
+      "answer": 5,
+      "tolerance": 0,
+      "unit": "%",
+      "explanation": "40 / 800 = 5%."
+    },
+    {
+      "item_id": "STAT-013",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "single",
+      "topic": "Đọc giá trị p",
+      "stem": "Một thử nghiệm A/B cho giá trị p = 0,03 với mức ý nghĩa 0,05. Kết luận nào đúng?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bác bỏ giả thuyết không: khác biệt có ý nghĩa thống kê"
+        },
+        {
+          "id": "b",
+          "text": "Xác suất giả thuyết không đúng là 3%"
+        },
+        {
+          "id": "c",
+          "text": "Phiên bản mới tốt hơn 3%"
+        },
+        {
+          "id": "d",
+          "text": "Chưa đủ bằng chứng để bác bỏ giả thuyết không"
+        }
+      ],
+      "answer": "a",
+      "explanation": "p nhỏ hơn mức ý nghĩa nên bác bỏ giả thuyết không. Giá trị p không phải là xác suất giả thuyết không đúng và không cho biết hiệu ứng lớn hay nhỏ."
+    },
+    {
+      "item_id": "STAT-014",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "single",
+      "topic": "Vai trò của nhóm đối chứng",
+      "stem": "Trong thử nghiệm A/B, nhóm đối chứng dùng để làm gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Làm mốc so sánh để tách tác động của thay đổi khỏi các yếu tố khác"
+        },
+        {
+          "id": "b",
+          "text": "Tăng tổng số người tham gia"
+        },
+        {
+          "id": "c",
+          "text": "Thử phiên bản thứ ba"
+        },
+        {
+          "id": "d",
+          "text": "Giảm chi phí thử nghiệm"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Nhóm đối chứng không nhận thay đổi, nên chênh lệch giữa hai nhóm phản ánh tác động của thay đổi chứ không phải của mùa vụ hay yếu tố bên ngoài."
+    },
+    {
+      "item_id": "STAT-015",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "multiple",
+      "topic": "Thiết kế thử nghiệm A/B",
+      "stem": "Chọn TẤT CẢ thực hành đúng khi chạy một thử nghiệm A/B.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chia người dùng vào hai nhóm một cách ngẫu nhiên"
+        },
+        {
+          "id": "b",
+          "text": "Xác định chỉ số chính và cỡ mẫu trước khi chạy"
+        },
+        {
+          "id": "c",
+          "text": "Dừng thử nghiệm ngay khi lần đầu thấy p < 0,05"
+        },
+        {
+          "id": "d",
+          "text": "Chạy đủ thời gian đã định"
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "Chia ngẫu nhiên, xác định chỉ số và cỡ mẫu trước, và chạy đủ thời gian là thực hành đúng. Dừng ngay khi vừa thấy p < 0,05 làm tăng khả năng kết luận sai."
+    },
+    {
+      "item_id": "STAT-016",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "numeric",
+      "topic": "Mức tăng tương đối",
+      "stem": "Tỷ lệ chuyển đổi của nhóm đối chứng là 4%, của nhóm thử là 5%. Mức tăng tương đối của nhóm thử so với nhóm đối chứng là bao nhiêu phần trăm?",
+      "answer": 25,
+      "tolerance": 0.1,
+      "unit": "%",
+      "explanation": "(5 − 4) / 4 = 25%. Mức tăng tuyệt đối là 1 điểm phần trăm."
+    },
+    {
+      "item_id": "STAT-017",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "ordering",
+      "topic": "Trình tự một thử nghiệm A/B",
+      "stem": "Sắp xếp các bước của một thử nghiệm A/B theo đúng trình tự.",
+      "options": [
+        {
+          "id": "goal",
+          "text": "Nêu giả thuyết và chọn chỉ số chính"
+        },
+        {
+          "id": "size",
+          "text": "Tính cỡ mẫu và thời gian chạy"
+        },
+        {
+          "id": "run",
+          "text": "Chia ngẫu nhiên và chạy thử nghiệm"
+        },
+        {
+          "id": "read",
+          "text": "Phân tích kết quả và kết luận"
+        }
+      ],
+      "answer": [
+        "goal",
+        "size",
+        "run",
+        "read"
+      ],
+      "explanation": "Giả thuyết và chỉ số phải có trước, vì chúng quyết định cỡ mẫu; phân tích chỉ làm sau khi đã chạy đủ."
+    },
+    {
+      "item_id": "STAT-018",
+      "skill_code": "STATISTICS",
+      "level": 3,
+      "type": "single",
+      "topic": "Sai lầm loại I",
+      "stem": "Sai lầm loại I trong kiểm định giả thuyết là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Kết luận có khác biệt trong khi thực tế không có"
+        },
+        {
+          "id": "b",
+          "text": "Kết luận không có khác biệt trong khi thực tế có"
+        },
+        {
+          "id": "c",
+          "text": "Chọn cỡ mẫu quá lớn"
+        },
+        {
+          "id": "d",
+          "text": "Tính sai giá trị trung bình"
+        }
+      ],
+      "answer": "a",
+      "explanation": "Sai lầm loại I là bác bỏ giả thuyết không khi nó đúng, tức báo có khác biệt trong khi thực tế không có. Mức ý nghĩa là xác suất tối đa chấp nhận cho sai lầm này."
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "version": "SUPP-1.0",
+  "note": "Học liệu tự học cho yêu cầu JD chưa có rubric. Không xếp lịch, không chấm điểm, không tính là bằng chứng năng lực.",
+  "topics": [
+    {
+      "label": "Excel / Google Sheets",
+      "terms": [
+        "excel",
+        "google sheets",
+        "spreadsheet",
+        "bang tinh"
+      ],
+      "resource_ids": [
+        "RES_X_EXCEL_HELP",
+        "RES_X_EXCEL_PIVOT",
+        "RES_X_SHEETS"
+      ]
+    },
+    {
+      "label": "Thống kê / A-B testing",
+      "terms": [
+        "thong ke",
+        "statistic",
+        "a/b",
+        "experiment"
+      ],
+      "resource_ids": [
+        "RES_X_STATS_OPENSTAX"
+      ]
+    },
+    {
+      "label": "Power Query / DAX",
+      "terms": [
+        "power query",
+        "dax"
+      ],
+      "resource_ids": [
+        "RES_X_DAX",
+        "RES_X_POWER_QUERY",
+        "RES_X_PBI_PREPARE"
+      ]
+    },
+    {
+      "label": "Power BI / Tableau",
+      "terms": [
+        "power bi",
+        "tableau"
+      ],
+      "resource_ids": [
+        "RES_MS_PBI_START",
+        "RES_X_PL300"
+      ]
+    },
+    {
+      "label": "Mô hình hóa dữ liệu / pipeline",
+      "terms": [
+        "mo hinh",
+        "data model",
+        "pipeline",
+        "data warehouse",
+        "dbt"
+      ],
+      "resource_ids": [
+        "RES_DBT_TESTS",
+        "RES_MS_PBI_MODEL"
+      ]
+    },
+    {
+      "label": "Tiếng Anh",
+      "terms": [
+        "tieng anh",
+        "english",
+        "toeic",
+        "ielts"
+      ],
+      "resource_ids": [
+        "RES_X_VOA_ENGLISH"
+      ]
+    },
+    {
+      "label": "Kiến thức miền nghiệp vụ",
+      "terms": [
+        "kien thuc mien",
+        "domain",
+        "ngan hang",
+        "tai chinh",
+        "nghiep vu"
+      ],
+      "resource_ids": [
+        "RES_X_ONET_BI"
+      ]
+    }
+  ]
+}

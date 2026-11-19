@@ -1,0 +1,54 @@
+/* Motion and feedback (js/effects.js): entrance, fills, press feedback, hover lift, dialogs and scroll aids.
+   Everything here is off under prefers-reduced-motion and in print. */
+
+/* Cards rise in as they enter the view. */
+.fx-hidden { opacity: 0; transform: translateY(14px); }
+.fx-in { animation: fx-rise .55s cubic-bezier(.2, .7, .2, 1) var(--fx-delay, 0ms) both; }
+@keyframes fx-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* Meters fill to their value instead of appearing full. */
+.meter > span { transition: width .9s cubic-bezier(.2, .7, .2, 1); }
+
+/* Press feedback: a ripple where the pointer went down, and a slight push on buttons. */
+.fx-ripple-host { position: relative; }
+.fx-ripple-clip { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.fx-ripple { position: absolute; border-radius: 50%; background: currentColor; opacity: .18; transform: scale(0); animation: fx-ripple .6s ease-out forwards; pointer-events: none; }
+@keyframes fx-ripple { to { opacity: 0; transform: scale(1); } }
+.btn { transition: transform .12s, box-shadow .15s, background-color .15s, border-color .15s; }
+.btn:active:not(:disabled) { transform: scale(.97); }
+.btn-primary:hover:not(:disabled) { box-shadow: var(--btn-shadow), 0 8px 20px rgba(29, 91, 216, .25); }
+
+/* Hover lift on cards that lead somewhere or summarise one thing. */
+.link-card, .level-fact, .self-skill, .gap-stat, .rd-next, .review-topics li, .rm-stat { transition: transform .18s, box-shadow .18s, border-color .18s; }
+.link-card:hover, .self-skill:hover, .level-fact:hover, .review-topics li:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15, 30, 61, .08); }
+.link-card .go { transition: transform .18s, background-color .15s, border-color .15s, color .15s; }
+.link-card:hover .go { transform: translateX(3px); }
+.nav-link .ic { transition: transform .18s; }
+.nav-link:hover .ic { transform: translateX(2px); }
+.tab { transition: color .15s, background-color .15s; }
+
+/* Dialogs pop in; toasts slide in. */
+.modal-backdrop { animation: fx-fade .18s ease-out; }
+.modal:not(.modal-drawer) { animation: fx-pop .22s cubic-bezier(.2, .8, .2, 1.1); }
+.toast { animation: fx-toast .28s cubic-bezier(.2, .8, .2, 1); }
+@keyframes fx-fade { from { opacity: 0; } }
+@keyframes fx-pop { from { opacity: 0; transform: translateY(10px) scale(.97); } }
+@keyframes fx-toast { from { opacity: 0; transform: translateX(24px); } }
+
+/* Scroll aids: a progress line under the header and a back-to-top button above the assistant button. */
+.fx-scroll-line { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, var(--brand), #36CFFF); transform: scaleX(0); transform-origin: left center; pointer-events: none; }
+.fx-top { position: fixed; right: 22px; bottom: 84px; z-index: 45; display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--brand); box-shadow: var(--shadow); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .2s, transform .2s; }
+.fx-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
+.fx-top:hover { background: var(--brand); color: #fff; }
+.fx-top svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (prefers-reduced-motion: reduce) {
+    .fx-hidden { opacity: 1; transform: none; }
+    .fx-in, .fx-ripple, .modal-backdrop, .modal, .toast { animation: none !important; }
+    .meter > span, .btn, .link-card, .fx-top { transition: none; }
+    .btn:active:not(:disabled), .link-card:hover, .self-skill:hover, .level-fact:hover, .review-topics li:hover { transform: none; }
+}
+@media print {
+    .fx-hidden { opacity: 1; transform: none; }
+    .fx-top, .fx-scroll-line { display: none; }
+}

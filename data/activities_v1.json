@@ -1,0 +1,296 @@
+[
+  {
+    "activity_id": "ACT_SQL_01",
+    "title": "SQL nền tảng: lọc, nhóm và tổng hợp",
+    "target_skill": "SQL",
+    "target_level": 2,
+    "estimated_hours": 4.0,
+    "prerequisites": [],
+    "learning_objectives": [
+      "Dùng SELECT, WHERE, GROUP BY, HAVING",
+      "Tính SUM, COUNT, AVG theo nhóm",
+      "Viết truy vấn tái lập được"
+    ],
+    "learning_outcome": "Truy vấn đúng doanh thu theo tháng và vùng trên một bộ dữ liệu mới.",
+    "resource_ids": [
+      "RES_SQLBOLT_SELECT",
+      "RES_SQLBOLT_AGG",
+      "RES_KAGGLE_INTRO_SQL"
+    ],
+    "assessment_task_id": "DA01A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_SQL_02",
+    "title": "SQL nâng cao: CTE, JOIN và hàm cửa sổ",
+    "target_skill": "SQL",
+    "target_level": 3,
+    "estimated_hours": 5.0,
+    "prerequisites": [
+      "ACT_SQL_01"
+    ],
+    "learning_objectives": [
+      "Tách truy vấn bằng CTE",
+      "Dùng hàm cửa sổ",
+      "Đối chiếu tổng để kiểm tra kết quả"
+    ],
+    "learning_outcome": "Truy vấn có CTE hoặc hàm cửa sổ kèm phép đối chiếu tổng.",
+    "resource_ids": [
+      "RES_KAGGLE_ADV_SQL",
+      "RES_SQLBOLT_JOINS",
+      "RES_PG_WINDOW",
+      "RES_SQLITE_WINDOW",
+      "RES_SQLITE_CTE",
+      "RES_MODE_WINDOW"
+    ],
+    "assessment_task_id": "DA01A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_DQ_01",
+    "title": "Làm sạch dữ liệu và ghi nhật ký quyết định",
+    "target_skill": "DATA_QUALITY",
+    "target_level": 2,
+    "estimated_hours": 3.0,
+    "prerequisites": [
+      "ACT_SQL_01"
+    ],
+    "learning_objectives": [
+      "Phát hiện bản ghi trùng và giá trị thiếu",
+      "Xử lý giá trị không hợp lệ",
+      "Ghi số dòng sau từng bước"
+    ],
+    "learning_outcome": "Nhật ký làm sạch có số dòng sau từng bước trên dữ liệu mới.",
+    "resource_ids": [
+      "RES_KAGGLE_CLEANING",
+      "RES_COURSERA_PROCESS",
+      "RES_PANDAS_MISSING",
+      "RES_PANDAS_DROP_DUP"
+    ],
+    "assessment_task_id": "DA01A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_DQ_02",
+    "title": "Kiểm tra chất lượng dữ liệu tự động",
+    "target_skill": "DATA_QUALITY",
+    "target_level": 3,
+    "estimated_hours": 4.0,
+    "prerequisites": [
+      "ACT_DQ_01"
+    ],
+    "learning_objectives": [
+      "Viết quy tắc kiểm tra lặp lại",
+      "Phát hiện lỗi trước khi tính toán"
+    ],
+    "learning_outcome": "Bộ kiểm tra có thể chạy lại trên dữ liệu mới.",
+    "resource_ids": [
+      "RES_PANDERA",
+      "RES_GX_INTRO",
+      "RES_DBT_TESTS"
+    ],
+    "assessment_task_id": "DA01A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_PY_01",
+    "title": "Python và pandas cơ bản cho phân tích",
+    "target_skill": "PYTHON",
+    "target_level": 1,
+    "estimated_hours": 3.0,
+    "prerequisites": [],
+    "learning_objectives": [
+      "Đọc CSV bằng pandas",
+      "Lọc và tạo cột mới",
+      "Tính thống kê mô tả"
+    ],
+    "learning_outcome": "Tệp phân tích đọc CSV, làm sạch và tổng hợp theo nhóm.",
+    "resource_ids": [
+      "RES_KAGGLE_PANDAS",
+      "RES_KAGGLE_PYTHON",
+      "RES_PY_TUTORIAL",
+      "RES_PANDAS_10MIN"
+    ],
+    "assessment_task_id": "DA02A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_PY_02",
+    "title": "pandas nâng cao: groupby nhiều chiều và pivot",
+    "target_skill": "PYTHON",
+    "target_level": 2,
+    "estimated_hours": 4.0,
+    "prerequisites": [
+      "ACT_PY_01"
+    ],
+    "learning_objectives": [
+      "Dùng groupby nhiều chiều và pivot_table",
+      "Xử lý cột ngày tháng"
+    ],
+    "learning_outcome": "Bảng pivot đúng trên dữ liệu mới.",
+    "resource_ids": [
+      "RES_PANDAS_DOCS",
+      "RES_PANDAS_GROUPBY",
+      "RES_PANDAS_RESHAPE"
+    ],
+    "assessment_task_id": "DA02A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_VIZ_01",
+    "title": "Chọn và dựng biểu đồ có nhãn, đơn vị",
+    "target_skill": "DATA_VIZ",
+    "target_level": 2,
+    "estimated_hours": 4.0,
+    "prerequisites": [
+      "ACT_PY_01"
+    ],
+    "learning_objectives": [
+      "Chọn biểu đồ theo mục tiêu",
+      "Đặt nhãn trục, đơn vị và tiêu đề",
+      "Nêu lý do chọn biểu đồ"
+    ],
+    "learning_outcome": "Biểu đồ có nhãn, đơn vị và lý do chọn.",
+    "resource_ids": [
+      "RES_KAGGLE_VIZ",
+      "RES_MS_PBI_VISUALS",
+      "RES_STORYTELLING",
+      "RES_MPL_PYPLOT",
+      "RES_DATAVIZ_CATALOGUE"
+    ],
+    "assessment_task_id": "DA02A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_VIZ_02",
+    "title": "Báo cáo Power BI có chú giải insight",
+    "target_skill": "DATA_VIZ",
+    "target_level": 3,
+    "estimated_hours": 5.0,
+    "prerequisites": [
+      "ACT_VIZ_01"
+    ],
+    "learning_objectives": [
+      "Dựng báo cáo nhiều trang",
+      "Chú giải insight trực tiếp trên biểu đồ"
+    ],
+    "learning_outcome": "Báo cáo Power BI có chú giải insight.",
+    "resource_ids": [
+      "RES_MS_PBI_TRAINING",
+      "RES_MS_PBI_START",
+      "RES_MS_PBI_MODEL"
+    ],
+    "assessment_task_id": "DA02A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_COMM_01",
+    "title": "Viết nhận xét từ số liệu và nêu giới hạn",
+    "target_skill": "WRITTEN_COMM",
+    "target_level": 2,
+    "estimated_hours": 2.0,
+    "prerequisites": [
+      "ACT_DQ_01"
+    ],
+    "learning_objectives": [
+      "Viết kết luận gắn với số liệu",
+      "Đề xuất hành động",
+      "Nêu giới hạn của dữ liệu"
+    ],
+    "learning_outcome": "Báo cáo có căn cứ, khuyến nghị và giới hạn.",
+    "resource_ids": [
+      "RES_GUIDE_REPORT",
+      "RES_STORYTELLING",
+      "RES_GOOGLE_TW_ONE",
+      "RES_PLAIN_LANGUAGE"
+    ],
+    "assessment_task_id": "DA03A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_COMM_02",
+    "title": "Lập kế hoạch đo lường cho khuyến nghị",
+    "target_skill": "WRITTEN_COMM",
+    "target_level": 3,
+    "estimated_hours": 3.0,
+    "prerequisites": [
+      "ACT_COMM_01"
+    ],
+    "learning_objectives": [
+      "Đặt chỉ số và thời hạn đo lường"
+    ],
+    "learning_outcome": "Khuyến nghị có chỉ số và thời hạn.",
+    "resource_ids": [
+      "RES_GUIDE_REPORT",
+      "RES_PLAIN_LANGUAGE"
+    ],
+    "assessment_task_id": "DA03A",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_STAT_01",
+    "title": "Thống kê mô tả: số đo trung tâm và độ phân tán",
+    "target_skill": "STATISTICS",
+    "target_level": 1,
+    "estimated_hours": 3.0,
+    "prerequisites": [],
+    "learning_objectives": [
+      "Tính trung bình, trung vị, yếu vị",
+      "Tính khoảng biến thiên và độ lệch chuẩn",
+      "Nhận ra giá trị ngoại lai"
+    ],
+    "learning_outcome": "Tóm tắt đúng một cột số bằng số đếm, lớn nhất, nhỏ nhất và trung vị.",
+    "resource_ids": [
+      "RES_STAT_OPENSTAX_DESC",
+      "RES_STAT_SEEING_THEORY"
+    ],
+    "assessment_task_id": "",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_STAT_02",
+    "title": "Mô tả phân phối và so sánh nhóm bằng pandas",
+    "target_skill": "STATISTICS",
+    "target_level": 2,
+    "estimated_hours": 4.0,
+    "prerequisites": [
+      "ACT_STAT_01"
+    ],
+    "learning_objectives": [
+      "Dùng describe, mean, median trên dữ liệu đã làm sạch",
+      "Giải thích khi nào trung bình và trung vị lệch nhau",
+      "Đọc hệ số tương quan và giới hạn của nó"
+    ],
+    "learning_outcome": "In ra đúng trung bình và trung vị của một chỉ số, kèm nhận xét về độ lệch.",
+    "resource_ids": [
+      "RES_STAT_PANDAS_DESCRIBE",
+      "RES_STAT_SCIPY"
+    ],
+    "assessment_task_id": "",
+    "splittable": true
+  },
+  {
+    "activity_id": "ACT_STAT_03",
+    "title": "Kiểm định giả thuyết và thử nghiệm A/B",
+    "target_skill": "STATISTICS",
+    "target_level": 3,
+    "estimated_hours": 5.0,
+    "prerequisites": [
+      "ACT_STAT_02"
+    ],
+    "learning_objectives": [
+      "Phát biểu giả thuyết và đọc giá trị p",
+      "Thiết kế thử nghiệm có nhóm đối chứng và chia ngẫu nhiên",
+      "Ước tính cỡ mẫu trước khi chạy"
+    ],
+    "learning_outcome": "So sánh hai nhóm bằng số liệu, nêu giới hạn cỡ mẫu và đề xuất cách kiểm định phù hợp.",
+    "resource_ids": [
+      "RES_STAT_OPENSTAX_HYP",
+      "RES_STAT_OPENSTAX_TWO",
+      "RES_STAT_EVAN_AB",
+      "RES_STAT_SAMPLE_SIZE"
+    ],
+    "assessment_task_id": "",
+    "splittable": true
+  }
+]

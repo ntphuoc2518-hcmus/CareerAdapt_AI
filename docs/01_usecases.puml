@@ -1,0 +1,111 @@
+@startuml 01_usecases
+' CareerAdapt AI v5.9 - UML Use-Case diagram
+' CSC10014 Week 02, section 4 (Use-Case Diagrams) and section 5 (From Use Case to Working Assistant).
+' Goals, not screens: the assistant panel and the forms are channels, so only the goals behind them are drawn.
+' Orange ovals use AI and each one has a rule-based fallback. Misuse cases are in 01_misuse_cases.puml.
+' No content-reviewer/admin actor, as decided by the project team for the earlier diagram (docs/uml).
+left to right direction
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam defaultFontName "Segoe UI"
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #F2F7FF
+  BorderColor #315A9B
+  ArrowColor #64748B
+  BackgroundColor<<AI>> #FFF1E6
+  BorderColor<<AI>> #C2410C
+  FontColor<<AI>> #7C2D12
+}
+skinparam actor {
+  BorderColor #1E3A5F
+  BorderColor<<system>> #0F766E
+  FontColor<<system>> #0F766E
+}
+skinparam rectangle {
+  BorderColor #203B5B
+  BackgroundColor #FFFFFF
+}
+
+actor "Người học" as Learner
+actor "Gemini\n(dịch vụ LLM)" as Gemini <<system>>
+actor "Dịch vụ email\n(SMTP)" as Mail <<system>>
+
+rectangle "CareerAdapt AI - trợ lý phát triển năng lực Data Analyst" {
+  package "Tài khoản" {
+    usecase "UC-01\nĐăng nhập tài khoản" as UC01
+    usecase "UC-01.1\nKhôi phục mật khẩu" as UC011
+  }
+  package "Quy trình Career Adapt" {
+    usecase "UC-02\nKhai báo kỹ năng hiện tại" as UC02
+    usecase "UC-03\nChọn JD mục tiêu" as UC03
+    usecase "UC-03.1\nPhân tích yêu cầu JD" as UC031
+    usecase "UC-03.2\nTóm tắt JD bằng AI" as UC032 <<AI>>
+    usecase "UC-04\nLàm bài kiểm tra năng lực" as UC04
+    usecase "UC-04.1\nChấm bài theo rubric" as UC041
+    usecase "UC-05\nXem kết quả bài làm" as UC05
+    usecase "UC-06\nXem khoảng cách kỹ năng" as UC06
+    usecase "UC-07\nTạo lộ trình học tập" as UC07
+  }
+  package "Học tập và ôn tập" {
+    usecase "UC-08\nHoàn thành học phần" as UC08
+    usecase "UC-08.1\nLàm bài kiểm tra kiến thức" as UC081
+    usecase "UC-09\nÔn tập theo lịch nhắc" as UC09
+    usecase "UC-10\nLuyện tập kiểm tra kiến thức" as UC10
+    usecase "UC-AI\nViết nhận xét bằng AI" as UCAI <<AI>>
+  }
+  package "Tư vấn và báo cáo" {
+    usecase "UC-11\nNhận tư vấn học tập" as UC11 <<AI>>
+    usecase "UC-12\nXuất báo cáo năng lực" as UC12
+  }
+}
+
+' Primary actor: the learner starts every goal.
+Learner -- UC01
+Learner -- UC02
+Learner -- UC03
+Learner -- UC04
+Learner -- UC05
+Learner -- UC06
+Learner -- UC07
+Learner -- UC08
+Learner -- UC09
+Learner -- UC10
+Learner -- UC11
+Learner -- UC12
+
+' System actors: external services the system calls.
+UC011 -- Mail
+UC032 -- Gemini
+UCAI -- Gemini
+UC11 -- Gemini
+
+' <<include>>: always part of the base goal (arrow points to the included part).
+UC03 ..> UC031 : <<include>>
+UC04 ..> UC041 : <<include>>
+UC08 ..> UC081 : <<include>>
+UC09 ..> UC081 : <<include>>
+
+' <<extend>>: only on a condition (arrow points to the base use case).
+UC011 ..> UC01 : <<extend>>\n[quên mật khẩu]
+UC032 ..> UC03 : <<extend>>\n[người học bấm "AI tóm tắt"]
+UCAI ..> UC041 : <<extend>>\n[AI đang bật]
+UCAI ..> UC081 : <<extend>>\n[người học yêu cầu nhận xét]
+
+note right of UCAI
+  Dự phòng: AI lỗi hoặc nhận xét không qua
+  kiểm chứng thì hiện giải thích theo quy tắc.
+  AI không tạo và không đổi điểm số.
+end note
+
+note right of UC11
+  Kênh: khung trợ lý (không vẽ ô "Chat").
+  Mục tiêu: giải thích kết quả, khoảng cách,
+  lộ trình. Dự phòng: trả lời theo quy tắc.
+end note
+
+note bottom of UC06
+  "Chưa đánh giá" khác mức 0.
+  Mức tự khai không được tính là bằng chứng.
+end note
+@enduml

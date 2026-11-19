@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1900" viewBox="0 0 2600 1900" font-family="'Segoe UI', 'DejaVu Sans', Arial, sans-serif">
+<rect width="100%" height="100%" fill="#F8FAFD"/>
+<text x="90" y="64" font-size="20" font-weight="800" fill="#0F766E" text-anchor="start">CAREERADAPT AI</text>
+<text x="90" y="116" font-size="46" font-weight="800" fill="#0F1E3D" text-anchor="start">Sơ đồ Use-Case UML</text>
+<text x="92" y="152" font-size="19" font-weight="500" fill="#5B6B85" text-anchor="start">Phiên bản 5.9 • trợ lý phát triển năng lực Data Analyst • CSC10014 Week 02, mục 4-5</text>
+<rect x="2220" y="44" width="290" height="46" rx="23" fill="#E7EDF6" stroke="none" stroke-width="1.5"/>
+<text x="2365" y="74" font-size="16" font-weight="800" fill="#33415C" text-anchor="middle">NGƯỜI HỌC / DATA ANALYST</text>
+<line x1="90" y1="178" x2="2510" y2="178" stroke="#C9D3E3" stroke-width="1.4"/>
+<rect x="330" y="210" width="1800" height="1440" rx="18" fill="#FFFFFF" stroke="#203B5B" stroke-width="3"/>
+<text x="362" y="248" font-size="26" font-weight="800" fill="#0F1E3D" text-anchor="start">CareerAdapt AI</text>
+<text x="362" y="274" font-size="15" font-weight="500" fill="#5B6B85" text-anchor="start">Ranh giới hệ thống: các mục tiêu chức năng hệ thống thực hiện</text>
+<rect x="360" y="300" width="1740" height="130" rx="14" fill="none" stroke="#D5DEEC" stroke-width="1.4" stroke-dasharray="6 6"/>
+<rect x="926" y="286" width="121.19999999999999" height="28" rx="14" fill="#EAF1FB" stroke="#D5DEEC" stroke-width="1.5"/>
+<text x="938" y="305" font-size="13.5" font-weight="800" fill="#33507E" text-anchor="start">1. TÀI KHOẢN</text>
+<rect x="360" y="452" width="1740" height="590" rx="14" fill="none" stroke="#D5DEEC" stroke-width="1.4" stroke-dasharray="6 6"/>
+<rect x="926" y="438" width="233.0" height="28" rx="14" fill="#EAF1FB" stroke="#D5DEEC" stroke-width="1.5"/>
+<text x="938" y="457" font-size="13.5" font-weight="800" fill="#33507E" text-anchor="start">2. QUY TRÌNH CAREER ADAPT</text>
+<rect x="360" y="1066" width="1740" height="336" rx="14" fill="none" stroke="#D5DEEC" stroke-width="1.4" stroke-dasharray="6 6"/>
+<rect x="926" y="1052" width="190.0" height="28" rx="14" fill="#EAF1FB" stroke="#D5DEEC" stroke-width="1.5"/>
+<text x="938" y="1071" font-size="13.5" font-weight="800" fill="#33507E" text-anchor="start">3. HỌC TẬP VÀ ÔN TẬP</text>
+<rect x="360" y="1426" width="1740" height="196" rx="14" fill="none" stroke="#D5DEEC" stroke-width="1.4" stroke-dasharray="6 6"/>
+<rect x="926" y="1412" width="190.0" height="28" rx="14" fill="#EAF1FB" stroke="#D5DEEC" stroke-width="1.5"/>
+<text x="938" y="1431" font-size="13.5" font-weight="800" fill="#33507E" text-anchor="start">4. TƯ VẤN VÀ BÁO CÁO</text>
+<line x1="184" y1="940" x2="488" y2="365" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="512" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="600" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="735" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="826" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="917" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1000" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1126" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1226" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1342" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1486" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="184" y1="940" x2="488" y2="1576" stroke="#8A97AD" stroke-width="1.8"/>
+<line x1="1437" y1="652" x2="2351" y2="885" stroke="#0F766E" stroke-width="2"/>
+<line x1="1987" y1="1126" x2="2351" y2="895" stroke="#0F766E" stroke-width="2"/>
+<polyline points="912,1486 2500,1486 2500,887 2411,887" fill="none" stroke="#0F766E" stroke-width="2"/>
+<line x1="1437" y1="365" x2="2351" y2="345" stroke="#0F766E" stroke-width="2"/>
+<ellipse cx="700" cy="365" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="356.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-01</text>
+<text x="700" y="378.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Đăng nhập tài khoản</text>
+<ellipse cx="700" cy="512" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="503.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-02</text>
+<text x="700" y="525.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Khai báo kỹ năng hiện tại</text>
+<ellipse cx="700" cy="600" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="591.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-03</text>
+<text x="700" y="613.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Chọn JD mục tiêu</text>
+<ellipse cx="700" cy="735" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="726.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-04</text>
+<text x="700" y="748.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Làm bài kiểm tra năng lực</text>
+<ellipse cx="700" cy="826" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="817.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-05</text>
+<text x="700" y="839.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Xem kết quả bài làm</text>
+<ellipse cx="700" cy="917" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="908.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-06</text>
+<text x="700" y="930.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Xem khoảng cách kỹ năng</text>
+<ellipse cx="700" cy="1000" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="991.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-07</text>
+<text x="700" y="1013.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Tạo lộ trình học tập</text>
+<ellipse cx="700" cy="1126" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="1117.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-08</text>
+<text x="700" y="1139.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Hoàn thành học phần</text>
+<ellipse cx="700" cy="1226" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="1217.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-09</text>
+<text x="700" y="1239.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Ôn tập theo lịch nhắc</text>
+<ellipse cx="700" cy="1342" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="1333.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-10</text>
+<text x="700" y="1355.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Luyện tập kiểm tra kiến thức</text>
+<ellipse cx="700" cy="1486" rx="212" ry="38" fill="#FFF1E6" stroke="#C2410C" stroke-width="2.4"/>
+<text x="700" y="1477.5" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">UC-11 · có AI</text>
+<text x="700" y="1499.5" font-size="18" font-weight="650" fill="#7C2D12" text-anchor="middle">Nhận tư vấn học tập</text>
+<ellipse cx="700" cy="1576" rx="212" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="700" y="1567.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-12</text>
+<text x="700" y="1589.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Xuất báo cáo năng lực</text>
+<ellipse cx="1235" cy="365" rx="202" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="1235" y="356.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-01.1</text>
+<text x="1235" y="378.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Khôi phục mật khẩu</text>
+<ellipse cx="1235" cy="560" rx="202" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="1235" y="551.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-03.1</text>
+<text x="1235" y="573.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Phân tích yêu cầu JD</text>
+<ellipse cx="1235" cy="652" rx="202" ry="38" fill="#FFF1E6" stroke="#C2410C" stroke-width="2.4"/>
+<text x="1235" y="643.5" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">UC-03.2 · có AI</text>
+<text x="1235" y="665.5" font-size="18" font-weight="650" fill="#7C2D12" text-anchor="middle">Tóm tắt JD bằng AI</text>
+<ellipse cx="1235" cy="760" rx="202" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="1235" y="751.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-04.1</text>
+<text x="1235" y="773.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Chấm bài theo rubric</text>
+<ellipse cx="1235" cy="1176" rx="202" ry="38" fill="#F2F7FF" stroke="#315A9B" stroke-width="2.4"/>
+<text x="1235" y="1167.5" font-size="13" font-weight="700" fill="#315A9B" text-anchor="middle">UC-08.1</text>
+<text x="1235" y="1189.5" font-size="18" font-weight="650" fill="#0F1E3D" text-anchor="middle">Làm bài kiểm tra kiến thức</text>
+<ellipse cx="1775" cy="1126" rx="212" ry="42" fill="#FFF1E6" stroke="#C2410C" stroke-width="2.4"/>
+<text x="1775" y="1117.5" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">UC-AI · có AI</text>
+<text x="1775" y="1139.5" font-size="18" font-weight="650" fill="#7C2D12" text-anchor="middle">Viết nhận xét bằng AI</text>
+<path d="M1033 365 L912 365" fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="925.5,358.5 912.0,365.0 925.5,371.5" fill="none" stroke="#C2410C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="914" y="321" width="116" height="42" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="972" y="338" font-size="14" font-weight="700" fill="#C2410C" text-anchor="middle">«extend»</text>
+<text x="972" y="356" font-size="12.5" font-weight="500" fill="#5B6B85" text-anchor="middle" font-style="italic">[quên mật khẩu]</text>
+<path d="M910 592 L1035 562" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1023.4,571.5 1035.0,562.0 1020.3,558.8" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="960" y="545" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1018" y="562" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1035 650 L906 612" fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="920.8,609.6 906.0,612.0 917.1,622.1" fill="none" stroke="#C2410C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="904" y="651" width="116" height="42" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="962" y="668" font-size="14" font-weight="700" fill="#C2410C" text-anchor="middle">«extend»</text>
+<text x="962" y="686" font-size="12.5" font-weight="500" fill="#5B6B85" text-anchor="middle" font-style="italic">[bấm "AI tóm tắt"]</text>
+<path d="M910 740 L1035 758" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1020.7,762.5 1035.0,758.0 1022.6,749.6" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="960" y="718" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1018" y="735" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M910 1130 L1035 1168" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1020.2,1170.3 1035.0,1168.0 1024.0,1157.8" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="958" y="1113" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1016" y="1130" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M910 1222 L1035 1186" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1023.8,1196.0 1035.0,1186.0 1020.2,1183.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="958" y="1219" width="116" height="24" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1016" y="1236" font-size="14" font-weight="700" fill="#6D28D9" text-anchor="middle">«include»</text>
+<path d="M1655 1092 L1375 788" fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1388.9,793.5 1375.0,788.0 1379.4,802.4" fill="none" stroke="#C2410C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1502" y="863" width="116" height="42" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1560" y="880" font-size="14" font-weight="700" fill="#C2410C" text-anchor="middle">«extend»</text>
+<text x="1560" y="898" font-size="12.5" font-weight="500" fill="#5B6B85" text-anchor="middle" font-style="italic">[AI đang bật]</text>
+<path d="M1563 1134 L1437 1170" fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="1448.2,1160.0 1437.0,1170.0 1451.8,1172.6" fill="none" stroke="#C2410C" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1462" y="1189" width="116" height="42" rx="6" fill="#FFFFFF" opacity="0.92"/>
+<text x="1520" y="1206" font-size="14" font-weight="700" fill="#C2410C" text-anchor="middle">«extend»</text>
+<text x="1520" y="1224" font-size="12.5" font-weight="500" fill="#5B6B85" text-anchor="middle" font-style="italic">[người học yêu cầu]</text>
+<rect x="1520" y="508" width="400" height="80" rx="10" fill="#F2F7FF" stroke="#315A9B" stroke-width="1.4"/>
+<text x="1536" y="534" font-size="13.5" font-weight="800" fill="#315A9B" text-anchor="start">UC-03.1 LUÔN CHẠY</text>
+<text x="1536" y="556" font-size="13.5" font-weight="500" fill="#0F1E3D" text-anchor="start">Trích kỹ năng, mức, trọng số từ JD;</text>
+<text x="1536" y="576" font-size="13.5" font-weight="500" fill="#0F1E3D" text-anchor="start">yêu cầu chưa có bài đo được ghi riêng.</text>
+<rect x="1600" y="1210" width="470" height="100" rx="10" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.4"/>
+<text x="1616" y="1236" font-size="13.5" font-weight="800" fill="#C2410C" text-anchor="start">DỰ PHÒNG CHO AI</text>
+<text x="1616" y="1258" font-size="13.5" font-weight="500" fill="#3F2A1D" text-anchor="start">AI lỗi hoặc nhận xét không qua kiểm chứng:</text>
+<text x="1616" y="1278" font-size="13.5" font-weight="500" fill="#3F2A1D" text-anchor="start">hiện giải thích theo quy tắc.</text>
+<text x="1616" y="1298" font-size="13.5" font-weight="500" fill="#3F2A1D" text-anchor="start">AI không tạo và không đổi điểm số.</text>
+<rect x="1000" y="1530" width="600" height="80" rx="10" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.4"/>
+<text x="1016" y="1556" font-size="13.5" font-weight="800" fill="#C2410C" text-anchor="start">UC-11 · KÊNH LÀ KHUNG TRỢ LÝ, KHÔNG VẼ Ô "CHAT"</text>
+<text x="1016" y="1578" font-size="13.5" font-weight="500" fill="#3F2A1D" text-anchor="start">Giải thích kết quả, khoảng cách, lộ trình bằng dữ liệu</text>
+<text x="1016" y="1598" font-size="13.5" font-weight="500" fill="#3F2A1D" text-anchor="start">của chính người học; AI lỗi thì trả lời theo quy tắc.</text>
+<rect x="1000" y="880" width="470" height="80" rx="10" fill="#F2F7FF" stroke="#315A9B" stroke-width="1.4"/>
+<text x="1016" y="906" font-size="13.5" font-weight="800" fill="#315A9B" text-anchor="start">UC-06 · BẰNG CHỨNG</text>
+<text x="1016" y="928" font-size="13.5" font-weight="500" fill="#0F1E3D" text-anchor="start">"Chưa đánh giá" khác mức 0;</text>
+<text x="1016" y="948" font-size="13.5" font-weight="500" fill="#0F1E3D" text-anchor="start">mức tự khai không được tính là bằng chứng.</text>
+<g stroke="#1E3A5F" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="150" cy="912" r="15"/><line x1="150" y1="927" x2="150" y2="968"/><line x1="124" y1="942" x2="176" y2="942"/><line x1="150" y1="968" x2="128" y2="1000"/><line x1="150" y1="968" x2="172" y2="1000"/></g>
+<text x="150" y="884" font-size="15" font-weight="700" fill="#1E3A5F" text-anchor="middle">Tác nhân chính</text>
+<text x="150" y="1026" font-size="17" font-weight="700" fill="#1E3A5F" text-anchor="middle">Người học</text>
+<g stroke="#0F766E" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="2385" cy="857" r="15"/><line x1="2385" y1="872" x2="2385" y2="913"/><line x1="2359" y1="887" x2="2411" y2="887"/><line x1="2385" y1="913" x2="2363" y2="945"/><line x1="2385" y1="913" x2="2407" y2="945"/></g>
+<text x="2385" y="829" font-size="15" font-weight="700" fill="#0F766E" text-anchor="middle">«system»</text>
+<text x="2385" y="971" font-size="17" font-weight="700" fill="#0F766E" text-anchor="middle">Gemini</text>
+<text x="2385" y="992" font-size="17" font-weight="700" fill="#0F766E" text-anchor="middle">(dịch vụ LLM)</text>
+<g stroke="#0F766E" stroke-width="3" fill="none" stroke-linecap="round"><circle cx="2385" cy="317" r="15"/><line x1="2385" y1="332" x2="2385" y2="373"/><line x1="2359" y1="347" x2="2411" y2="347"/><line x1="2385" y1="373" x2="2363" y2="405"/><line x1="2385" y1="373" x2="2407" y2="405"/></g>
+<text x="2385" y="289" font-size="15" font-weight="700" fill="#0F766E" text-anchor="middle">«system»</text>
+<text x="2385" y="431" font-size="17" font-weight="700" fill="#0F766E" text-anchor="middle">Dịch vụ email</text>
+<text x="2385" y="452" font-size="17" font-weight="700" fill="#0F766E" text-anchor="middle">(SMTP)</text>
+<text x="90" y="1700" font-size="15" font-weight="800" fill="#0F1E3D" text-anchor="start">CHÚ GIẢI</text>
+<line x1="90" y1="1734" x2="150" y2="1734" stroke="#8A97AD" stroke-width="2"/>
+<text x="165" y="1739" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Association: tác nhân tham gia mục tiêu</text>
+<path d="M560 1734 L622 1734" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="608.5,1740.5 622.0,1734.0 608.5,1727.5" fill="none" stroke="#6D28D9" stroke-width="2.4" stroke-linejoin="round"/>
+<text x="638" y="1739" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">«include»: luôn xảy ra</text>
+<path d="M814.8 1734 L876.8 1734" fill="none" stroke="#C2410C" stroke-width="2.2" stroke-dasharray="9 7"/>
+<polyline points="863.3,1740.5 876.8,1734.0 863.3,1727.5" fill="none" stroke="#C2410C" stroke-width="2.4" stroke-linejoin="round"/>
+<text x="892.8" y="1739" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">«extend»: chỉ khi có điều kiện</text>
+<ellipse cx="1158.8" cy="1734" rx="30" ry="14" fill="#FFF1E6" stroke="#C2410C" stroke-width="2"/>
+<text x="1202.8" y="1739" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Use case có AI (có dự phòng)</text>
+<text x="90" y="1792" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Mũi tên «include» chỉ vào phần được bao gồm; mũi tên «extend» chỉ về use case gốc. Tác nhân «system» là dịch vụ bên ngoài hệ thống gọi tới.</text>
+<text x="90" y="1822" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Tình huống lạm dụng (misuse case) ở sơ đồ 01_misuse_cases. Ngoài phạm vi: quản trị nội dung (theo quyết định của nhóm), tìm việc, tạo CV, thông báo đẩy.</text>
+<text x="90" y="1852" font-size="14.5" font-weight="500" fill="#5B6B85" text-anchor="start">Nguồn PlantUML: docs/01_usecases.puml • Đặc tả, ma trận lớp và truy vết code/test: docs/01_usecases.md</text>
+</svg>

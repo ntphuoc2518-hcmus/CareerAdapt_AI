@@ -1,0 +1,87 @@
+{
+  "version": "v2.0",
+  "scale": {
+    "0": "Không có bằng chứng có thể chấm, câu trả lời sai trọng tâm hoặc lỗi nền tảng.",
+    "1": "Có bằng chứng về một phần kỹ năng cơ bản nhưng còn thiếu hoặc sai các yêu cầu quan trọng.",
+    "2": "Đạt các tiêu chí cốt lõi của bài tập với kết quả đúng và giải trình đủ.",
+    "3": "Vượt chuẩn: kết quả đúng, giải pháp vững chắc và có tối ưu hóa/insight cụ thể được chứng minh."
+  },
+  "tasks": {
+    "DA01A": {
+      "level_thresholds": {"1": 0.2, "2": 0.75},
+      "skills": {
+        "SQL": {
+          "level_2_requires": ["SQL_QUERY", "SQL_FORMULA", "SQL_COMPLETED_FILTER", "SQL_MONTHLY_RESULTS", "SQL_REGION_RESULTS"],
+          "level_3_requires": ["SQL_ADVANCED"],
+          "criteria": [
+            {"id": "SQL_QUERY", "label": "Cấu trúc truy vấn", "weight": 0.15, "skill": "SQL"},
+            {"id": "SQL_FORMULA", "label": "Công thức doanh thu ròng có chiết khấu", "weight": 0.25, "skill": "SQL"},
+            {"id": "SQL_COMPLETED_FILTER", "label": "Chỉ tính đơn hoàn tất", "weight": 0.2, "skill": "SQL"},
+            {"id": "SQL_MONTHLY_RESULTS", "label": "Doanh thu tháng 1, tháng 2 và tổng", "weight": 0.2, "skill": "SQL"},
+            {"id": "SQL_MOM", "label": "Tỷ lệ biến động tháng so với tháng trước", "weight": 0.1, "skill": "SQL"},
+            {"id": "SQL_REGION_RESULTS", "label": "Doanh thu theo vùng được gắn đúng nhãn", "weight": 0.1, "skill": "SQL"},
+            {"id": "SQL_ADVANCED", "label": "Kỹ thuật SQL nâng cao có mục đích", "weight": 0.0, "skill": "SQL"}
+          ]
+        },
+        "DATA_QUALITY": {
+          "level_2_requires": ["DQ_DEDUP", "DQ_QUANTITY", "DQ_COMPLETED_FILTER", "DQ_NULL_REGION", "DQ_ROW_STAGES"],
+          "level_3_requires": ["DQ_VALIDATION"],
+          "criteria": [
+            {"id": "DQ_DEDUP", "label": "Phát hiện và loại bản ghi trùng", "weight": 0.18, "skill": "DATA_QUALITY"},
+            {"id": "DQ_QUANTITY", "label": "Loại số lượng không hợp lệ", "weight": 0.18, "skill": "DATA_QUALITY"},
+            {"id": "DQ_COMPLETED_FILTER", "label": "Loại đơn không hoàn tất", "weight": 0.18, "skill": "DATA_QUALITY"},
+            {"id": "DQ_NULL_REGION", "label": "Xử lý Region thiếu", "weight": 0.18, "skill": "DATA_QUALITY"},
+            {"id": "DQ_ROW_STAGES", "label": "Đối chiếu số dòng sau từng bước", "weight": 0.28, "skill": "DATA_QUALITY"},
+            {"id": "DQ_VALIDATION", "label": "Kiểm tra chất lượng tự động và có thể lặp lại", "weight": 0.0, "skill": "DATA_QUALITY"}
+          ]
+        }
+      }
+    },
+    "DA01B": {"same_as": "DA01A"},
+    "DA02A": {
+      "level_thresholds": {"1": 0.25, "2": 0.7},
+      "skills": {
+        "PYTHON": {
+          "level_2_requires": ["PY_IMPORT", "PY_LOAD", "PY_AGGREGATE"],
+          "level_3_requires": ["PY_REUSABLE"],
+          "criteria": [
+            {"id": "PY_IMPORT", "label": "Nạp thư viện phân tích", "weight": 0.15, "skill": "PYTHON"},
+            {"id": "PY_LOAD", "label": "Đọc CSV và kiểm tra dữ liệu", "weight": 0.25, "skill": "PYTHON"},
+            {"id": "PY_AGGREGATE", "label": "Nhóm và tính thống kê", "weight": 0.35, "skill": "PYTHON"},
+            {"id": "PY_CLEAN", "label": "Làm sạch dữ liệu trước khi tính", "weight": 0.25, "skill": "PYTHON"},
+            {"id": "PY_REUSABLE", "label": "Hàm tái sử dụng và xử lý lỗi phù hợp", "weight": 0.0, "skill": "PYTHON"}
+          ]
+        },
+        "DATA_VIZ": {
+          "level_2_requires": ["VIZ_TYPE", "VIZ_LABELS", "VIZ_TITLE", "VIZ_UNITS"],
+          "level_3_requires": ["VIZ_ANNOTATION"],
+          "criteria": [
+            {"id": "VIZ_TYPE", "label": "Chọn biểu đồ phù hợp", "weight": 0.25, "skill": "DATA_VIZ"},
+            {"id": "VIZ_LABELS", "label": "Nhãn trục có ý nghĩa", "weight": 0.3, "skill": "DATA_VIZ"},
+            {"id": "VIZ_TITLE", "label": "Tiêu đề cụ thể", "weight": 0.15, "skill": "DATA_VIZ"},
+            {"id": "VIZ_UNITS", "label": "Đơn vị và nguồn dữ liệu rõ ràng", "weight": 0.3, "skill": "DATA_VIZ"},
+            {"id": "VIZ_ANNOTATION", "label": "Chú thích insight trực tiếp trên biểu đồ", "weight": 0.0, "skill": "DATA_VIZ"}
+          ]
+        }
+      }
+    },
+    "DA03A": {
+      "level_thresholds": {"1": 0.25, "2": 0.75},
+      "skills": {
+        "WRITTEN_COMM": {
+          "level_2_requires": ["COM_WORD_COUNT", "COM_DATA_EVIDENCE", "COM_TREND", "COM_ACTION", "COM_LIMITATION"],
+          "level_3_requires": ["COM_MEASURABLE_PLAN"],
+          "criteria": [
+            {"id": "COM_WORD_COUNT", "label": "Báo cáo trong giới hạn 100–300 từ", "weight": 0.1, "skill": "WRITTEN_COMM"},
+            {"id": "COM_DATA_EVIDENCE", "label": "Dẫn chứng số liệu cụ thể", "weight": 0.25, "skill": "WRITTEN_COMM"},
+            {"id": "COM_TREND", "label": "Diễn giải đúng xu hướng và không khẳng định quá mức", "weight": 0.2, "skill": "WRITTEN_COMM"},
+            {"id": "COM_ACTION", "label": "Đề xuất hành động gắn với dữ liệu", "weight": 0.2, "skill": "WRITTEN_COMM"},
+            {"id": "COM_LIMITATION", "label": "Nêu giới hạn mẫu và phạm vi kết luận", "weight": 0.15, "skill": "WRITTEN_COMM"},
+            {"id": "COM_STRUCTURE", "label": "Bố cục kết luận–bằng chứng–hành động", "weight": 0.1, "skill": "WRITTEN_COMM"},
+            {"id": "COM_MEASURABLE_PLAN", "label": "Kế hoạch có chỉ số và thời hạn đo lường", "weight": 0.0, "skill": "WRITTEN_COMM"}
+          ]
+        }
+      }
+    }
+  }
+}

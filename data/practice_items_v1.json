@@ -1,0 +1,720 @@
+{
+  "version": "PRACTICE-1.0",
+  "note": "Bài thực hành theo bài học. Chấm bằng test case để người học tự kiểm tra; không phải bằng chứng năng lực và không dùng câu của bài kiểm tra.",
+  "items": [
+    {
+      "exercise_id": "PR-SQL-01",
+      "activity_id": "ACT_SQL_01",
+      "skill_code": "SQL",
+      "title": "Đếm đơn theo trạng thái",
+      "prompt": "Viết truy vấn SQL trên bảng orders_raw: đếm số dòng của từng trạng thái (status) và sắp xếp theo số dòng giảm dần.",
+      "answer_type": "sql",
+      "workspace": "sql",
+      "max_chars": 3000,
+      "placeholder": "SELECT ...",
+      "cases": [
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "sql_runs",
+          "description": "Truy vấn chạy được và có kết quả"
+        },
+        {
+          "id": "group",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "group\\s+by",
+          "description": "Dùng GROUP BY để gom nhóm"
+        },
+        {
+          "id": "result",
+          "points": 70,
+          "type": "sql_result",
+          "expected_sql": "SELECT status, COUNT(*) FROM orders_raw GROUP BY status",
+          "description": "Số dòng của từng trạng thái đúng"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-SQL-02",
+      "activity_id": "ACT_SQL_02",
+      "skill_code": "SQL",
+      "title": "Đơn lớn nhất của mỗi vùng bằng hàm cửa sổ",
+      "prompt": "Bỏ dòng trùng, chỉ giữ đơn completed có quantity > 0 và có vùng. Dùng ROW_NUMBER() hoặc RANK() với PARTITION BY region để xếp các đơn trong mỗi vùng theo quantity * unit_price giảm dần, rồi trả về order_id và region của đơn đứng đầu mỗi vùng.",
+      "answer_type": "sql",
+      "workspace": "sql",
+      "max_chars": 4000,
+      "placeholder": "WITH c AS (...)",
+      "cases": [
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "sql_runs",
+          "description": "Truy vấn chạy được và có kết quả"
+        },
+        {
+          "id": "window",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "over\\s*\\(\\s*partition\\s+by",
+          "description": "Dùng hàm cửa sổ có PARTITION BY"
+        },
+        {
+          "id": "result",
+          "points": 70,
+          "type": "sql_result",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 AND TRIM(COALESCE(region, '')) <> ''), r AS (SELECT order_id, region, ROW_NUMBER() OVER (PARTITION BY region ORDER BY quantity * unit_price DESC) AS rn FROM c) SELECT order_id, region FROM r WHERE rn = 1",
+          "description": "Đúng đơn đứng đầu của từng vùng"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-DQ-01",
+      "activity_id": "ACT_DQ_01",
+      "skill_code": "DATA_QUALITY",
+      "title": "Đơn bị hủy và đơn có giảm giá",
+      "prompt": "Xem bảng dữ liệu và trả lời theo 2 dòng: (1) mã đơn có trạng thái cancelled, (2) mã đơn có giảm giá (discount lớn hơn 0). Chỉ ghi các mã đơn thỏa điều kiện.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 1500,
+      "placeholder": "1. Bị hủy: ...",
+      "cases": [
+        {
+          "id": "cancelled",
+          "points": 50,
+          "type": "text_ids",
+          "expected_sql": "SELECT order_id FROM orders_raw WHERE status = 'cancelled'",
+          "allowed_sql": "SELECT order_id FROM orders_raw WHERE status = 'cancelled' OR CAST(discount AS REAL) > 0",
+          "description": "Đúng mã đơn bị hủy"
+        },
+        {
+          "id": "discount",
+          "points": 50,
+          "type": "text_ids",
+          "expected_sql": "SELECT DISTINCT order_id FROM orders_raw WHERE CAST(discount AS REAL) > 0",
+          "allowed_sql": "SELECT order_id FROM orders_raw WHERE status = 'cancelled' OR CAST(discount AS REAL) > 0",
+          "description": "Đúng mã đơn có giảm giá"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-DQ-02",
+      "activity_id": "ACT_DQ_02",
+      "skill_code": "DATA_QUALITY",
+      "title": "Hàm kiểm tra chất lượng tự động",
+      "prompt": "Viết hàm check_quality(df) bằng pandas, trả về số dòng trùng hoàn toàn, số dòng có quantity nhỏ hơn hoặc bằng 0 và số dòng thiếu vùng. Đọc orders.csv, gọi hàm và dùng print in kết quả.",
+      "answer_type": "python",
+      "workspace": "python",
+      "max_chars": 4000,
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 15,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "function",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "def\\s+check_quality\\s*\\(",
+          "description": "Có hàm check_quality"
+        },
+        {
+          "id": "duplicates",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "duplicated"
+          ],
+          "alternatives": {
+            "duplicated": [
+              "drop_duplicates"
+            ]
+          },
+          "description": "Kiểm tra dòng trùng"
+        },
+        {
+          "id": "missing",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "isna|isnull|notna|== *['\"]['\"]|fillna",
+          "description": "Kiểm tra vùng bị thiếu"
+        },
+        {
+          "id": "quantity",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "quantity['\"]\\]\\s*<=?\\s*0|quantity\\s*<=?\\s*0",
+          "description": "Kiểm tra quantity không hợp lệ"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-PY-01",
+      "activity_id": "ACT_PY_01",
+      "skill_code": "PYTHON",
+      "title": "Đọc dữ liệu và tóm tắt nhanh",
+      "prompt": "Viết code pandas đọc orders.csv rồi dùng print in ra: số khách hàng khác nhau (customer_id) và đơn giá lớn nhất (unit_price).",
+      "answer_type": "python",
+      "workspace": "python",
+      "max_chars": 3000,
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 10,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "read",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "read_csv"
+          ],
+          "description": "Đọc dữ liệu bằng read_csv"
+        },
+        {
+          "id": "customers",
+          "points": 30,
+          "type": "text_number",
+          "section": "output",
+          "exact": true,
+          "expected_sql": "SELECT COUNT(DISTINCT customer_id) FROM orders_raw",
+          "description": "In đúng số khách hàng khác nhau"
+        },
+        {
+          "id": "max_price",
+          "points": 30,
+          "type": "text_number",
+          "section": "output",
+          "expected_sql": "SELECT MAX(CAST(unit_price AS REAL)) FROM orders_raw",
+          "description": "In đúng đơn giá lớn nhất"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-PY-02",
+      "activity_id": "ACT_PY_02",
+      "skill_code": "PYTHON",
+      "title": "Bảng số lượng theo vùng và tháng",
+      "prompt": "Bỏ dòng trùng, giữ đơn completed có quantity > 0, ghi vùng trống là Unknown. Dùng pivot_table hoặc groupby để tính tổng quantity theo vùng và tháng (YYYY-MM của order_date), rồi print bảng kết quả.",
+      "answer_type": "python",
+      "workspace": "python",
+      "max_chars": 4000,
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "dedup",
+          "points": 15,
+          "type": "py_calls",
+          "all": [
+            "drop_duplicates"
+          ],
+          "description": "Bỏ dòng trùng bằng drop_duplicates"
+        },
+        {
+          "id": "reshape",
+          "points": 30,
+          "type": "py_calls",
+          "all": [],
+          "any": [
+            "pivot_table",
+            "groupby",
+            "crosstab"
+          ],
+          "description": "Tổng hợp bằng pivot_table hoặc groupby"
+        },
+        {
+          "id": "values",
+          "points": 40,
+          "type": "text_numbers_all",
+          "section": "output",
+          "expected_sql": "SELECT SUM(CAST(quantity AS REAL)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY COALESCE(NULLIF(TRIM(region), ''), 'Unknown'), substr(order_date, 1, 7)",
+          "description": "In đủ tổng số lượng của từng vùng và tháng"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-VIZ-01",
+      "activity_id": "ACT_VIZ_01",
+      "skill_code": "DATA_VIZ",
+      "title": "Biểu đồ cột có tiêu đề và nhãn trục",
+      "prompt": "Viết code matplotlib vẽ biểu đồ cột tổng quantity theo trạng thái (status). Biểu đồ phải có tiêu đề, nhãn trục ngang và nhãn trục dọc.",
+      "answer_type": "python",
+      "workspace": "python",
+      "max_chars": 4000,
+      "placeholder": "import matplotlib.pyplot as plt",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 15,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "bar",
+          "points": 25,
+          "type": "py_calls",
+          "all": [
+            "bar"
+          ],
+          "alternatives": {
+            "bar": [
+              "barh",
+              "plot"
+            ]
+          },
+          "description": "Vẽ biểu đồ cột"
+        },
+        {
+          "id": "title",
+          "points": 15,
+          "type": "py_calls",
+          "all": [
+            "title"
+          ],
+          "alternatives": {
+            "title": [
+              "set_title",
+              "suptitle"
+            ]
+          },
+          "description": "Có tiêu đề"
+        },
+        {
+          "id": "labels",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "xlabel",
+            "ylabel"
+          ],
+          "alternatives": {
+            "xlabel": [
+              "set_xlabel"
+            ],
+            "ylabel": [
+              "set_ylabel"
+            ]
+          },
+          "description": "Có nhãn hai trục"
+        },
+        {
+          "id": "group",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "groupby"
+          ],
+          "alternatives": {
+            "groupby": [
+              "pivot_table",
+              "value_counts"
+            ]
+          },
+          "description": "Tổng hợp số lượng theo trạng thái"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-VIZ-02",
+      "activity_id": "ACT_VIZ_02",
+      "skill_code": "DATA_VIZ",
+      "title": "Trang báo cáo cho trưởng nhóm bán hàng",
+      "prompt": "Thiết kế một trang báo cáo cho trưởng nhóm bán hàng. Nêu 3 KPI kèm giá trị thật: số khách hàng khác nhau, tổng số lượng bán (bỏ trùng, đơn completed có quantity > 0) và tỷ lệ đơn bị hủy trên số mã đơn. Với mỗi KPI, nêu cách trình bày (thẻ KPI, cột, đường...) và viết một chú giải insight.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 3000,
+      "placeholder": "KPI 1: ...",
+      "cases": [
+        {
+          "id": "customers",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "khach hang",
+            "customer"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(DISTINCT customer_id) FROM orders_raw",
+          "description": "Số khách hàng đúng"
+        },
+        {
+          "id": "quantity",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "so luong",
+            "quantity",
+            "san pham"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT SUM(CAST(quantity AS REAL)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Tổng số lượng bán đúng"
+        },
+        {
+          "id": "cancel_rate",
+          "points": 20,
+          "type": "text_percent",
+          "expected_sql": "SELECT 100.0 * (SELECT COUNT(DISTINCT order_id) FROM orders_raw WHERE status = 'cancelled') / (SELECT COUNT(DISTINCT order_id) FROM orders_raw)",
+          "description": "Tỷ lệ hủy đúng"
+        },
+        {
+          "id": "charts",
+          "points": 15,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "the kpi|kpi card|cot|bar|duong|line|tron|pie"
+          ],
+          "description": "Nêu cách trình bày cho KPI"
+        },
+        {
+          "id": "insight",
+          "points": 15,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "insight|chu giai|cho thay|nhan xet|annotation|shows"
+          ],
+          "description": "Có chú giải insight"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-COMM-01",
+      "activity_id": "ACT_COMM_01",
+      "skill_code": "WRITTEN_COMM",
+      "title": "Nhận xét về đơn bị hủy và giảm giá",
+      "prompt": "Viết 3 đến 4 câu nhận xét về đơn bị hủy và đơn có giảm giá trong bảng dữ liệu. Nêu số đơn bị hủy, số mã đơn có giảm giá và một giới hạn của dữ liệu.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 2000,
+      "placeholder": "Trong dữ liệu ...",
+      "cases": [
+        {
+          "id": "cancelled",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "huy",
+            "cancel"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(DISTINCT order_id) FROM orders_raw WHERE status = 'cancelled'",
+          "description": "Nêu đúng số đơn bị hủy"
+        },
+        {
+          "id": "discount",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "giam gia",
+            "discount"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(DISTINCT order_id) FROM orders_raw WHERE CAST(discount AS REAL) > 0",
+          "description": "Nêu đúng số mã đơn có giảm giá"
+        },
+        {
+          "id": "limit",
+          "points": 25,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "mau nho|it du lieu|chua du|gioi han|khong the ket luan|chua the ket luan|chi co|small sample|limited|not enough|cannot conclude"
+          ],
+          "description": "Nêu giới hạn của dữ liệu"
+        },
+        {
+          "id": "sentences",
+          "points": 25,
+          "type": "text_sentences",
+          "min": 3,
+          "description": "Có ít nhất 3 câu"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-COMM-02",
+      "activity_id": "ACT_COMM_02",
+      "skill_code": "WRITTEN_COMM",
+      "title": "Kế hoạch đo lường cho khuyến nghị",
+      "prompt": "Đề xuất kế hoạch đo lường cho khuyến nghị “giảm tỷ lệ đơn bị hủy”. Nêu: chỉ số theo dõi, giá trị hiện tại tính từ dữ liệu (tỷ lệ mã đơn bị hủy), mục tiêu, thời hạn và người hoặc nhóm phụ trách.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 3000,
+      "placeholder": "Chỉ số: ...",
+      "report_sections": [
+        "Chỉ số",
+        "Hiện tại",
+        "Mục tiêu",
+        "Thời hạn và phụ trách"
+      ],
+      "cases": [
+        {
+          "id": "current",
+          "points": 30,
+          "type": "text_percent",
+          "expected_sql": "SELECT 100.0 * (SELECT COUNT(DISTINCT order_id) FROM orders_raw WHERE status = 'cancelled') / (SELECT COUNT(DISTINCT order_id) FROM orders_raw)",
+          "description": "Giá trị hiện tại đúng"
+        },
+        {
+          "id": "metric",
+          "points": 15,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "ty le huy|cancel"
+          ],
+          "description": "Nêu chỉ số theo dõi"
+        },
+        {
+          "id": "target",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "muc tieu|target|giam xuong|duoi \\d"
+          ],
+          "description": "Có mục tiêu"
+        },
+        {
+          "id": "deadline",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "tuan|thang|ngay|quy |deadline|week|month|quarter"
+          ],
+          "description": "Có thời hạn"
+        },
+        {
+          "id": "owner",
+          "points": 15,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "phu trach|chiu trach nhiem|owner|nhom|team|bo phan"
+          ],
+          "description": "Có người hoặc nhóm phụ trách"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-STAT-01",
+      "activity_id": "ACT_STAT_01",
+      "skill_code": "STATISTICS",
+      "title": "Trung bình và trung vị của đơn giá",
+      "prompt": "Xét các đơn hợp lệ (bỏ dòng trùng, đơn completed có quantity > 0). Tính trung bình và trung vị của unit_price, ghi mỗi số đo trên một dòng.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 1500,
+      "placeholder": "Trung bình: ...",
+      "cases": [
+        {
+          "id": "mean",
+          "points": 50,
+          "type": "text_number_near",
+          "labels": [
+            "trung binh",
+            "mean",
+            "average"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT AVG(CAST(unit_price AS REAL)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Trung bình đúng"
+        },
+        {
+          "id": "median",
+          "points": 50,
+          "type": "text_number_near",
+          "labels": [
+            "trung vi",
+            "median"
+          ],
+          "exact": true,
+          "expected_sql": "WITH v AS (SELECT CAST(unit_price AS REAL) AS p FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0), r AS (SELECT p, ROW_NUMBER() OVER (ORDER BY p) AS rn, COUNT(*) OVER () AS n FROM v) SELECT AVG(p) FROM r WHERE rn IN ((n + 1) / 2, (n + 2) / 2)",
+          "description": "Trung vị đúng"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-STAT-02",
+      "activity_id": "ACT_STAT_02",
+      "skill_code": "STATISTICS",
+      "title": "Mô tả đơn giá theo trạng thái",
+      "prompt": "Viết code pandas bỏ dòng trùng rồi dùng groupby('status') với agg hoặc describe để in giá trị nhỏ nhất, lớn nhất và trung bình của unit_price theo từng trạng thái.",
+      "answer_type": "python",
+      "workspace": "python",
+      "max_chars": 4000,
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "dedup",
+          "points": 15,
+          "type": "py_calls",
+          "all": [
+            "drop_duplicates"
+          ],
+          "description": "Bỏ dòng trùng bằng drop_duplicates"
+        },
+        {
+          "id": "describe",
+          "points": 30,
+          "type": "py_calls",
+          "all": [
+            "groupby"
+          ],
+          "any": [
+            "agg",
+            "describe",
+            "aggregate",
+            "mean"
+          ],
+          "description": "Mô tả theo nhóm bằng groupby"
+        },
+        {
+          "id": "means",
+          "points": 40,
+          "type": "text_numbers_all",
+          "section": "output",
+          "expected_sql": "SELECT AVG(CAST(unit_price AS REAL)) FROM (SELECT DISTINCT * FROM orders_raw) GROUP BY status",
+          "description": "In đúng trung bình của từng trạng thái"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    },
+    {
+      "exercise_id": "PR-STAT-03",
+      "activity_id": "ACT_STAT_03",
+      "skill_code": "STATISTICS",
+      "title": "Thiết kế thử nghiệm A/B giảm tỷ lệ hủy",
+      "prompt": "Thiết kế một thử nghiệm A/B để kiểm tra một thay đổi có làm giảm tỷ lệ hủy đơn hay không. Nêu: giả thuyết, chỉ số chính và giá trị hiện tại (tỷ lệ mã đơn bị hủy trong dữ liệu), cách chia nhóm, cỡ mẫu hoặc thời gian chạy, và cách kết luận.",
+      "answer_type": "text",
+      "workspace": "report",
+      "max_chars": 3000,
+      "placeholder": "Giả thuyết: ...",
+      "cases": [
+        {
+          "id": "current",
+          "points": 25,
+          "type": "text_percent",
+          "expected_sql": "SELECT 100.0 * (SELECT COUNT(DISTINCT order_id) FROM orders_raw WHERE status = 'cancelled') / (SELECT COUNT(DISTINCT order_id) FROM orders_raw)",
+          "description": "Giá trị hiện tại đúng"
+        },
+        {
+          "id": "hypothesis",
+          "points": 15,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "gia thuyet|hypothes"
+          ],
+          "description": "Có giả thuyết"
+        },
+        {
+          "id": "groups",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "ngau nhien|random|doi chung|control"
+          ],
+          "description": "Chia nhóm ngẫu nhiên, có nhóm đối chứng"
+        },
+        {
+          "id": "sample",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "co mau|sample|so don|thoi gian|tuan|week"
+          ],
+          "description": "Nêu cỡ mẫu hoặc thời gian chạy"
+        },
+        {
+          "id": "decide",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "p-value|p value|gia tri p|y nghia|significan|khoang tin cay|confidence|kiem dinh"
+          ],
+          "description": "Nêu cách kết luận bằng kiểm định"
+        }
+      ],
+      "dataset": "A",
+      "minutes": 15
+    }
+  ]
+}

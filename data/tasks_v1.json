@@ -1,0 +1,136 @@
+[
+  {
+    "task_id": "DA01A",
+    "base_id": "DA01",
+    "variant": "A",
+    "title": "Phân tích Doanh thu & Làm sạch Đơn hàng Chuỗi Bán lẻ (DA01A)",
+    "description": "Bạn nhận được tập dữ liệu gồm 10 đơn hàng của chuỗi bán lẻ thời trang trong 2 tháng đầu năm 2026. Hãy làm sạch dữ liệu và tính toán doanh thu thực tế theo yêu cầu nghiệp vụ.",
+    "skills_evaluated": [
+      {"skill_code": "SQL", "target_level": 2, "weight": 0.30},
+      {"skill_code": "DATA_QUALITY", "target_level": 2, "weight": 0.20}
+    ],
+    "estimated_duration_minutes": 35,
+    "status": "PUBLISHED",
+    "dataset_preview": "orders_da01a.csv",
+    "business_rules": {
+      "net_revenue_formula": "Doanh thu ròng = Quantity * Unit_Price * (1 - Discount), chỉ tính đơn hàng có status = 'completed'",
+      "cleaning_rules": [
+        "1. Loại bỏ bản ghi trùng lặp hoàn toàn (deduplication)",
+        "2. Loại bỏ bản ghi có Quantity <= 0 (đơn bất thường)",
+        "3. Điền giá trị 'Unknown' cho cột Region bị thiếu (NULL)",
+        "4. Chỉ tổng hợp các đơn có trạng thái completed"
+      ]
+    },
+    "reference_values": {
+      "row_progression": {
+        "initial": 10,
+        "after_dedup": 9,
+        "after_nonzero": 8,
+        "valid_completed": 7
+      },
+      "net_revenue_monthly": {
+        "month_1": 630000,
+        "month_2": 540000,
+        "total": 1170000,
+        "mom_growth_percent": -14.29
+      },
+      "net_revenue_by_region": {
+        "Nam": 700000,
+        "Bac": 370000,
+        "Unknown": 100000
+      }
+    }
+  },
+  {
+    "task_id": "DA01B",
+    "base_id": "DA01",
+    "variant": "B",
+    "is_reassessment_variant": true,
+    "comparable_to": "DA01A",
+    "comparability_status": "NOT_REVIEWED",
+    "title": "Phân tích Doanh thu & Kiểm soát Chất lượng Giao dịch - Đề Tương đương A/B (DA01B)",
+    "description": "Biến thể của DA01A với bộ dữ liệu 10 dòng khác (tháng 3-4/2026, vùng Trung và Tây). Chỉ dùng để luyện tập cho đến khi người duyệt xác nhận độ tương đương; khi đó mới được dùng so sánh tiến bộ.",
+    "skills_evaluated": [
+      {"skill_code": "SQL", "target_level": 2, "weight": 0.30},
+      {"skill_code": "DATA_QUALITY", "target_level": 2, "weight": 0.20}
+    ],
+    "estimated_duration_minutes": 35,
+    "status": "PUBLISHED",
+    "dataset_preview": "orders_da01b.csv",
+    "business_rules": {
+      "net_revenue_formula": "Doanh thu ròng = Quantity * Unit_Price * (1 - Discount), chỉ tính đơn hàng có status = 'completed'",
+      "cleaning_rules": [
+        "1. Loại bỏ bản ghi trùng lặp hoàn toàn (deduplication)",
+        "2. Loại bỏ đơn có Quantity <= 0",
+        "3. Chuẩn hóa Region NULL -> 'Unknown'",
+        "4. Lọc đơn có status = 'completed'"
+      ]
+    },
+    "reference_values": {
+      "row_progression": {
+        "initial": 10,
+        "after_dedup": 9,
+        "after_nonzero": 8,
+        "valid_completed": 7
+      },
+      "net_revenue_monthly": {
+        "month_1": 720000,
+        "month_2": 558000,
+        "total": 1278000,
+        "mom_growth_percent": -22.5
+      },
+      "net_revenue_by_region": {
+        "Trung": 618000,
+        "Tay": 540000,
+        "Unknown": 120000
+      }
+    }
+  },
+  {
+    "task_id": "DA02A",
+    "base_id": "DA02",
+    "variant": "A",
+    "title": "Thống kê Mô tả & Biểu đồ Trực quan Doanh thu Bằng Python (DA02A)",
+    "description": "Sử dụng Python và Pandas để đọc tập dữ liệu, tính toán các chỉ số thống kê mô tả (Mean, Median, Min, Max), đồng thời lựa chọn dạng biểu đồ thích hợp để trình bày doanh thu theo vùng miền.",
+    "skills_evaluated": [
+      {"skill_code": "PYTHON", "target_level": 1, "weight": 0.15},
+      {"skill_code": "DATA_VIZ", "target_level": 2, "weight": 0.20}
+    ],
+    "estimated_duration_minutes": 40,
+    "status": "PUBLISHED",
+    "dataset_preview": "orders_da01a.csv",
+    "business_rules": {
+      "chart_type": "Bar Chart hoặc Column Chart",
+      "mandatory_labels": ["Trục X: Khu vực", "Trục Y: Doanh thu (VNĐ)", "Tiêu đề: Phân bổ Doanh thu theo Khu vực"]
+    },
+    "reference_values": {
+      "python_functions_required": ["read_csv", "groupby", "plot", "describe"],
+      "regional_revenue": {"Nam": 700000, "Bac": 370000, "Unknown": 100000}
+    }
+  },
+  {
+    "task_id": "DA03A",
+    "base_id": "DA03",
+    "variant": "A",
+    "title": "Báo cáo Phân tích Kinh doanh & Giải trình Giới hạn Mẫu (DA03A)",
+    "description": "Viết báo cáo phân tích 100–300 từ gửi Ban Giám đốc. Nêu kết luận chính, đối chiếu doanh thu tháng 1 (630.000 VNĐ), tháng 2 (540.000 VNĐ), tổng (1.170.000 VNĐ) và mức biến động (-14,29%); đưa ra hành động gắn với dữ liệu; nêu giới hạn mẫu chỉ có 10 dòng và 2 tháng. Không suy diễn quan hệ nhân quả mà dữ liệu không chứng minh.",
+    "skills_evaluated": [
+      {"skill_code": "WRITTEN_COMM", "target_level": 2, "weight": 0.15}
+    ],
+    "estimated_duration_minutes": 25,
+    "status": "PUBLISHED",
+    "dataset_preview": "orders_da01a.csv",
+    "business_rules": {
+      "min_words": 100,
+      "max_words": 300,
+      "required_elements": [
+        "1. Dẫn chứng số liệu cụ thể (1.170.000 VNĐ, 630.000 VNĐ, 540.000 VNĐ, -14.29%)",
+        "2. Đề xuất hành động kinh doanh thực tế",
+        "3. Nhận định giới hạn dữ liệu (tập mẫu nhỏ 10 dòng, chỉ có 2 tháng; không kết luận nhân quả)"
+      ]
+    },
+    "reference_values": {
+      "keywords": ["1.170.000", "540.000", "630.000", "-14.29%", "giảm", "khuyến nghị", "giới hạn", "mẫu nhỏ"]
+    }
+  }
+]

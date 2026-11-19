@@ -1,0 +1,11 @@
+order_id,customer_id,order_date,region,quantity,unit_price,discount,status
+ORD001,CUST101,2026-01-05,Nam,2,100000,0.0,completed
+ORD002,CUST102,2026-01-12,Bac,3,50000,0.0,completed
+ORD003,CUST103,2026-01-20,Nam,3,80000,0.25,completed
+ORD004,CUST104,2026-01-25,,1,100000,0.0,completed
+ORD005,CUST105,2026-02-02,Nam,4,80000,0.0,completed
+ORD006,CUST106,2026-02-10,Bac,1,170000,0.0,completed
+ORD006,CUST106,2026-02-10,Bac,1,170000,0.0,completed
+ORD007,CUST107,2026-02-15,Nam,0,200000,0.0,completed
+ORD008,CUST108,2026-02-20,Bac,1,80000,0.1,cancelled
+ORD009,CUST109,2026-02-28,Bac,1,50000,0.0,completed

@@ -1,0 +1,37 @@
+# --- Secrets: never commit (copy .env.example to .env instead) ---
+.env
+.env.*
+!.env.example
+
+# --- Real user data created while the app runs (accounts, learner records, backups) ---
+data/*.sqlite3
+data/*.sqlite3-*
+data/*.sqlite3.*
+data/*.bak
+data/*.bak-*
+data/*.lock
+data/learner_state_v1.json
+data/learner_state_v1.json.*.tmp
+data/question_bank_overrides_v1.json
+data/i18n/
+data/knowledge/
+*.sqlite3
+*.db
+
+# --- Python environments and caches ---
+.venv/
+.venv-*/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Editors, OS and local tool settings ---
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

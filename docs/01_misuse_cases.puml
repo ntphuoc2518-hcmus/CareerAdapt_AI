@@ -1,0 +1,77 @@
+@startuml 01_misuse_cases
+' CareerAdapt AI v5.9 - misuse cases (CSC10014 Week 02, slide "Security Awareness").
+' The bad actor is drawn next to the goals it threatens; each mitigation is a check the system
+' always performs (<<include>>) and is backed by an automated test listed in 01_usecases.md.
+left to right direction
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam defaultFontName "Segoe UI"
+skinparam usecase {
+  BackgroundColor #F2F7FF
+  BorderColor #315A9B
+  ArrowColor #64748B
+  BackgroundColor<<misuse>> #1F2937
+  BorderColor<<misuse>> #111827
+  FontColor<<misuse>> #FFFFFF
+  BackgroundColor<<mitigation>> #ECFDF5
+  BorderColor<<mitigation>> #047857
+  FontColor<<mitigation>> #064E3B
+}
+skinparam actor {
+  BorderColor #1E3A5F
+  BorderColor<<attacker>> #B91C1C
+  FontColor<<attacker>> #B91C1C
+}
+
+actor "Người học" as Learner
+actor "Kẻ tấn công" as Attacker <<attacker>>
+
+rectangle "CareerAdapt AI" {
+  usecase "UC-01\nĐăng nhập tài khoản" as UC01
+  usecase "UC-04\nLàm bài kiểm tra năng lực" as UC04
+  usecase "UC-04.1\nChấm bài theo rubric" as UC041
+  usecase "UC-05\nXem kết quả bài làm" as UC05
+  usecase "UC-11\nNhận tư vấn học tập" as UC11
+
+  usecase "S1\nGiới hạn đăng nhập sai" as S1 <<mitigation>>
+  usecase "S2\nChạy mã trong sandbox" as S2 <<mitigation>>
+  usecase "S3\nKiểm chứng nhận xét AI" as S3 <<mitigation>>
+  usecase "S4\nKiểm tra quyền truy cập" as S4 <<mitigation>>
+}
+
+usecase "M1\nDò mật khẩu" as M1 <<misuse>>
+usecase "M2\nChạy mã độc trong bài làm" as M2 <<misuse>>
+usecase "M3\nChèn lệnh vào bài làm\nđể lái AI chấm" as M3 <<misuse>>
+usecase "M4\nXem kết quả của người khác" as M4 <<misuse>>
+usecase "M5\nHỏi trợ lý dữ liệu\ncủa người khác" as M5 <<misuse>>
+
+Learner -- UC01
+Learner -- UC04
+Learner -- UC05
+Learner -- UC11
+UC04 ..> UC041 : <<include>>
+
+Attacker -- M1
+Attacker -- M2
+Attacker -- M3
+Attacker -- M4
+Attacker -- M5
+
+M1 ..> UC01 : <<threatens>>
+M2 ..> UC04 : <<threatens>>
+M3 ..> UC041 : <<threatens>>
+M4 ..> UC05 : <<threatens>>
+M5 ..> UC11 : <<threatens>>
+
+UC01 ..> S1 : <<include>>
+UC04 ..> S2 : <<include>>
+UC041 ..> S3 : <<include>>
+UC05 ..> S4 : <<include>>
+UC11 ..> S4 : <<include>>
+
+S1 ..> M1 : <<mitigates>>
+S2 ..> M2 : <<mitigates>>
+S3 ..> M3 : <<mitigates>>
+S4 ..> M4 : <<mitigates>>
+S4 ..> M5 : <<mitigates>>
+@enduml

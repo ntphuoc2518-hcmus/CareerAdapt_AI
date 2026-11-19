@@ -1,0 +1,11 @@
+order_id,customer_id,order_date,region,quantity,unit_price,discount,status
+ORC01,CUST301,2026-05-03,Dong,3,90000,0.0,completed
+ORC02,CUST302,2026-05-10,Bac,2,120000,0.1,completed
+ORC03,CUST303,2026-05-18,Dong,1,300000,0.2,completed
+ORC04,CUST304,2026-05-27,,2,70000,0.0,completed
+ORC05,CUST305,2026-06-02,Bac,1,150000,0.0,completed
+ORC06,CUST306,2026-06-09,Dong,2,100000,0.0,completed
+ORC06,CUST306,2026-06-09,Dong,2,100000,0.0,completed
+ORC07,CUST307,2026-06-16,Bac,0,250000,0.0,completed
+ORC08,CUST308,2026-06-21,Dong,3,60000,0.0,cancelled
+ORC09,CUST309,2026-06-28,Bac,2,85000,0.2,completed

@@ -1,0 +1,11 @@
+order_id,customer_id,order_date,region,quantity,unit_price,discount,status
+ORE01,CUST401,2026-07-02,Nam,1,210000,0.0,completed
+ORE02,CUST402,2026-07-08,Dong,4,45000,0.0,completed
+ORE03,CUST403,2026-07-15,Nam,2,130000,0.1,completed
+ORE04,CUST404,2026-07-23,,3,40000,0.0,completed
+ORE05,CUST405,2026-08-01,Dong,2,95000,0.0,completed
+ORE06,CUST406,2026-08-07,Nam,1,160000,0.0,completed
+ORE06,CUST406,2026-08-07,Nam,1,160000,0.0,completed
+ORE07,CUST407,2026-08-13,Dong,0,180000,0.0,completed
+ORE08,CUST408,2026-08-19,Nam,2,90000,0.0,cancelled
+ORE09,CUST409,2026-08-26,Dong,1,200000,0.2,completed

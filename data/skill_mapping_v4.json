@@ -1,0 +1,543 @@
+{
+  "mapping_version": "MAP-4.1",
+  "low_confidence_threshold": 0.7,
+  "preferred_weight_factor": 0.5,
+  "target_configs": {
+    "INTERN": {
+      "label": "Thực tập / mới bắt đầu",
+      "description": "Cấu hình khởi tạo của prototype cho cấp thực tập, chưa phải chuẩn tuyển dụng đã kiểm định.",
+      "skills": {
+        "SQL": {
+          "target_level": 2,
+          "base_weight": 0.3
+        },
+        "DATA_QUALITY": {
+          "target_level": 2,
+          "base_weight": 0.2
+        },
+        "PYTHON": {
+          "target_level": 1,
+          "base_weight": 0.15
+        },
+        "DATA_VIZ": {
+          "target_level": 2,
+          "base_weight": 0.2
+        },
+        "WRITTEN_COMM": {
+          "target_level": 2,
+          "base_weight": 0.15
+        },
+        "STATISTICS": {
+          "target_level": 1,
+          "base_weight": 0.1
+        }
+      }
+    },
+    "JUNIOR": {
+      "label": "Junior / đầu nghề",
+      "description": "Cao hơn cấu hình thực tập ở Python; các mức khác giữ nguyên vì bộ bài hiện tại đo trong phạm vi này.",
+      "skills": {
+        "SQL": {
+          "target_level": 2,
+          "base_weight": 0.3
+        },
+        "DATA_QUALITY": {
+          "target_level": 2,
+          "base_weight": 0.2
+        },
+        "PYTHON": {
+          "target_level": 2,
+          "base_weight": 0.15
+        },
+        "DATA_VIZ": {
+          "target_level": 2,
+          "base_weight": 0.2
+        },
+        "WRITTEN_COMM": {
+          "target_level": 2,
+          "base_weight": 0.15
+        },
+        "STATISTICS": {
+          "target_level": 2,
+          "base_weight": 0.15
+        }
+      }
+    }
+  },
+  "skills": {
+    "SQL": [
+      {
+        "term": "sql",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "truy van sql",
+        "rule": "SYNONYM",
+        "confidence": 0.95
+      },
+      {
+        "term": "sql queries",
+        "rule": "SYNONYM",
+        "confidence": 0.95
+      },
+      {
+        "term": "querying sql",
+        "rule": "SYNONYM",
+        "confidence": 0.95
+      },
+      {
+        "term": "structured query language",
+        "rule": "SYNONYM",
+        "confidence": 0.95
+      },
+      {
+        "term": "truy van du lieu",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "mysql",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "postgresql",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "postgres",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "sql server",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.9
+      },
+      {
+        "term": "t-sql",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.9
+      },
+      {
+        "term": "bigquery",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.75
+      },
+      {
+        "term": "database",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.55
+      },
+      {
+        "term": "co so du lieu",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.55
+      }
+    ],
+    "DATA_QUALITY": [
+      {
+        "term": "data quality",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "chat luong du lieu",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "data cleaning",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "data cleansing",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "lam sach du lieu",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "data validation",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "kiem tra du lieu",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "data integrity",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "toan ven du lieu",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "data preparation",
+        "rule": "SYNONYM",
+        "confidence": 0.8
+      },
+      {
+        "term": "chuan bi du lieu",
+        "rule": "SYNONYM",
+        "confidence": 0.8
+      },
+      {
+        "term": "xu ly du lieu",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      },
+      {
+        "term": "data processing",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      },
+      {
+        "term": "etl",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      }
+    ],
+    "PYTHON": [
+      {
+        "term": "python",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "pandas",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.9
+      },
+      {
+        "term": "numpy",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "jupyter",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.75
+      }
+    ],
+    "DATA_VIZ": [
+      {
+        "term": "data visualization",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "data visualisation",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "truc quan hoa du lieu",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.95
+      },
+      {
+        "term": "truc quan hoa",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "power bi",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "powerbi",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "tableau",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.85
+      },
+      {
+        "term": "looker",
+        "rule": "TOOL_MAPPING",
+        "confidence": 0.8
+      },
+      {
+        "term": "dashboard",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.65
+      },
+      {
+        "term": "dashboards",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.65
+      },
+      {
+        "term": "bieu do",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.65
+      },
+      {
+        "term": "charts",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.65
+      }
+    ],
+    "WRITTEN_COMM": [
+      {
+        "term": "report writing",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.9
+      },
+      {
+        "term": "viet bao cao",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.9
+      },
+      {
+        "term": "business reporting",
+        "rule": "SYNONYM",
+        "confidence": 0.8
+      },
+      {
+        "term": "business recommendations",
+        "rule": "SYNONYM",
+        "confidence": 0.8
+      },
+      {
+        "term": "data storytelling",
+        "rule": "SYNONYM",
+        "confidence": 0.75
+      },
+      {
+        "term": "trinh bay ket qua",
+        "rule": "SYNONYM",
+        "confidence": 0.75
+      },
+      {
+        "term": "bao cao",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      },
+      {
+        "term": "reporting",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      },
+      {
+        "term": "reports",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      },
+      {
+        "term": "communication",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.5
+      },
+      {
+        "term": "giao tiep",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.5
+      },
+      {
+        "term": "stakeholder",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.5
+      },
+      {
+        "term": "stakeholders",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.5
+      }
+    ],
+    "STATISTICS": [
+      {
+        "term": "statistics",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.9
+      },
+      {
+        "term": "statistical analysis",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "thong ke",
+        "rule": "EXACT_SKILL",
+        "confidence": 0.9
+      },
+      {
+        "term": "a/b testing",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "a/b test",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "ab testing",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "thu nghiem a/b",
+        "rule": "SYNONYM",
+        "confidence": 0.85
+      },
+      {
+        "term": "hypothesis testing",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "kiem dinh gia thuyet",
+        "rule": "SYNONYM",
+        "confidence": 0.9
+      },
+      {
+        "term": "experimentation",
+        "rule": "SYNONYM",
+        "confidence": 0.75
+      },
+      {
+        "term": "xac suat",
+        "rule": "WEAK_SIGNAL",
+        "confidence": 0.6
+      }
+    ]
+  },
+  "unmeasured": [
+    {
+      "label": "Excel / Google Sheets",
+      "terms": [
+        "excel",
+        "google sheets",
+        "spreadsheet",
+        "spreadsheets",
+        "bang tinh"
+      ]
+    },
+    {
+      "label": "Nền tảng dữ liệu đám mây",
+      "terms": [
+        "snowflake",
+        "databricks",
+        "aws",
+        "azure",
+        "spark",
+        "gcp"
+      ]
+    },
+    {
+      "label": "Mô hình hóa dữ liệu / pipeline",
+      "terms": [
+        "data modeling",
+        "data modelling",
+        "data pipeline",
+        "data pipelines",
+        "dbt",
+        "data warehouse"
+      ]
+    },
+    {
+      "label": "Power Query / DAX",
+      "terms": [
+        "power query",
+        "dax",
+        "semantic model"
+      ]
+    },
+    {
+      "label": "Ngôn ngữ R",
+      "terms": [
+        "r programming",
+        "r language",
+        "ngon ngu r"
+      ]
+    },
+    {
+      "label": "Tiếng Anh",
+      "terms": [
+        "english",
+        "tieng anh",
+        "toeic",
+        "ielts"
+      ]
+    },
+    {
+      "label": "Kiến thức miền nghiệp vụ",
+      "terms": [
+        "domain knowledge",
+        "business domain",
+        "financial services",
+        "e-commerce",
+        "ngan hang",
+        "tai chinh"
+      ]
+    }
+  ],
+  "scope": {
+    "in_scope_terms": [
+      "data analyst",
+      "data analysis",
+      "data analytics",
+      "analytics intern",
+      "phan tich du lieu",
+      "chuyen vien phan tich du lieu",
+      "bi analyst",
+      "business intelligence analyst",
+      "business data analyst",
+      "reporting analyst",
+      "insight analyst"
+    ],
+    "other_role_terms": [
+      "backend",
+      "back-end",
+      "frontend",
+      "front-end",
+      "full stack",
+      "fullstack",
+      "full-stack",
+      "mobile developer",
+      "devops",
+      "qa engineer",
+      "qa tester",
+      "tester",
+      "kiem thu",
+      "ke toan",
+      "accountant",
+      "marketing",
+      "sales",
+      "nhan vien kinh doanh",
+      "nhan su",
+      "human resources",
+      "recruiter",
+      "designer",
+      "thiet ke",
+      "data engineer",
+      "machine learning engineer",
+      "software engineer",
+      "lap trinh vien",
+      "giao vien",
+      "teacher",
+      "lai xe",
+      "driver",
+      "dau bep",
+      "chef",
+      "bao ve",
+      "phuc vu"
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+[
+  {
+    "profile_id": "VN_ENTRY_ANALYST",
+    "name": "Data Analyst thực tập / đầu nghề tại Việt Nam",
+    "market": "Việt Nam · Intern / Junior",
+    "description": "Tổng hợp các tín hiệu tuyển dụng đầu nghề công khai: SQL và bảng tính, làm sạch dữ liệu, báo cáo BI; Python thường là lợi thế tùy doanh nghiệp.",
+    "scope_note": "Hồ sơ tham khảo từ một số tin tuyển dụng công khai, không đại diện cho toàn bộ thị trường Việt Nam.",
+    "requirements_by_skill": {
+      "SQL": {"target_level": 2, "weight": 0.30, "rationale": "Truy vấn, tổng hợp và kết nối dữ liệu là yêu cầu thường gặp."},
+      "DATA_QUALITY": {"target_level": 2, "weight": 0.20, "rationale": "Kiểm tra dữ liệu đầu vào và xử lý trường hợp thiếu hoặc bất thường."},
+      "PYTHON": {"target_level": 1, "weight": 0.15, "rationale": "Có ích cho phân tích và tự động hóa; mức độ bắt buộc tùy nơi tuyển dụng."},
+      "DATA_VIZ": {"target_level": 2, "weight": 0.20, "rationale": "Tạo báo cáo, dashboard và trình bày insight bằng công cụ BI."},
+      "WRITTEN_COMM": {"target_level": 2, "weight": 0.15, "rationale": "Giải thích kết quả và truyền đạt khuyến nghị kinh doanh."}
+    },
+    "additional_requirements": [
+      "Excel hoặc Google Sheets",
+      "Power BI hoặc Tableau tùy doanh nghiệp",
+      "Tiếng Anh đọc hiểu tài liệu là lợi thế"
+    ],
+    "sources": [
+      {"label": "Kyanon Digital — Data Analyst Intern / K-Fresh Trainee (2026)", "url": "https://kyanon.digital/wp-content/uploads/2026/02/202602-Intern-Data-Analyst-K-Fresh-Trainee.pdf", "checked_at": "2026-10-28"},
+      {"label": "TC Data Vietnam — Intern/Trainee Power BI", "url": "https://tcdata.vn/career/intern-trainee-power-bi/", "checked_at": "2026-10-28"}
+    ]
+  },
+  {
+    "profile_id": "VN_BANKING_ANALYST",
+    "name": "Data Analyst trong ngân hàng tại Việt Nam",
+    "market": "Việt Nam · Ngân hàng",
+    "description": "Mẫu yêu cầu thiên về dữ liệu khách hàng/tài chính, chất lượng và quản trị dữ liệu, SQL và dashboard phục vụ quyết định nghiệp vụ.",
+    "scope_note": "Tham chiếu một tin tuyển dụng ngân hàng; yêu cầu kinh nghiệm và cấp bậc thay đổi theo vị trí.",
+    "requirements_by_skill": {
+      "SQL": {"target_level": 2, "weight": 0.25, "rationale": "Truy vấn dữ liệu nghiệp vụ và phân tích tập dữ liệu lớn."},
+      "DATA_QUALITY": {"target_level": 3, "weight": 0.24, "rationale": "Chú trọng chất lượng, chuẩn hóa và quản trị dữ liệu."},
+      "PYTHON": {"target_level": 2, "weight": 0.18, "rationale": "Phân tích và tự động hóa các quy trình dữ liệu."},
+      "DATA_VIZ": {"target_level": 2, "weight": 0.18, "rationale": "Báo cáo và trực quan hóa bằng Power BI/Tableau."},
+      "WRITTEN_COMM": {"target_level": 2, "weight": 0.15, "rationale": "Trao đổi kết quả với các đơn vị kinh doanh và bên liên quan."}
+    },
+    "additional_requirements": [
+      "Kiến thức miền ngân hàng, khách hàng hoặc tài chính",
+      "Data governance, data warehouse và kiểm soát chất lượng dữ liệu",
+      "Một số vị trí yêu cầu kinh nghiệm nhiều năm"
+    ],
+    "sources": [
+      {"label": "VIB Careers — Data Analyst", "url": "https://careers.vib.com.vn/careers/job/32828", "checked_at": "2026-10-28"}
+    ]
+  },
+  {
+    "profile_id": "MICROSOFT_PL300_ANALYST",
+    "name": "Data Analyst theo chuẩn Microsoft PL-300",
+    "market": "Microsoft · Chuẩn vai trò / chứng chỉ",
+    "description": "Chuẩn vai trò Power BI Data Analyst tập trung chuẩn bị, mô hình hóa, trực quan hóa, phân tích, quản lý và bảo mật dữ liệu.",
+    "scope_note": "Đây là chuẩn chứng chỉ Microsoft PL-300, không phải mô tả một vị trí tuyển dụng cụ thể.",
+    "requirements_by_skill": {
+      "SQL": {"target_level": 2, "weight": 0.22, "rationale": "Nền tảng truy xuất, biến đổi và chuẩn bị dữ liệu."},
+      "DATA_QUALITY": {"target_level": 2, "weight": 0.18, "rationale": "Chuẩn bị dữ liệu, kiểm tra và mô hình hóa dữ liệu."},
+      "PYTHON": {"target_level": 1, "weight": 0.12, "rationale": "Kỹ năng bổ trợ; chuẩn PL-300 tập trung vào hệ sinh thái Power BI."},
+      "DATA_VIZ": {"target_level": 3, "weight": 0.32, "rationale": "Trọng tâm: Power BI reports, dashboards, DAX và thiết kế cho người dùng."},
+      "WRITTEN_COMM": {"target_level": 2, "weight": 0.16, "rationale": "Trình bày insight rõ ràng và thiết kế báo cáo theo nhu cầu người dùng."}
+    },
+    "additional_requirements": [
+      "Power Query để chuẩn bị và biến đổi dữ liệu",
+      "Mô hình dữ liệu, DAX và quản trị/bảo mật Power BI",
+      "Các kỹ năng chuyên biệt này chưa được chấm trực tiếp bởi bộ bài test hiện tại"
+    ],
+    "sources": [
+      {"label": "Microsoft Learn — Microsoft Certified: Power BI Data Analyst Associate", "url": "https://learn.microsoft.com/en-us/credentials/certifications/data-analyst-associate/", "checked_at": "2026-10-28"},
+      {"label": "Microsoft Learn — Build Power BI visuals and reports", "url": "https://learn.microsoft.com/en-us/training/paths/build-power-bi-visuals-reports", "checked_at": "2026-10-28"}
+    ]
+  },
+  {
+    "profile_id": "GOOGLE_BI_ANALYST",
+    "name": "Business Intelligence / Data Analyst theo JD Google",
+    "market": "Google · Ví dụ JD BI / Data Analyst",
+    "description": "Đại diện cho các tín hiệu trong JD BI/Data Analyst của Google: SQL mạnh, trực quan hóa, phân tích dữ liệu và chuyển kết quả thành khuyến nghị.",
+    "scope_note": "Các JD được tham chiếu có thể yêu cầu nhiều năm kinh nghiệm; đây là ví dụ về mức chuẩn ngành, không phải vị trí đầu vào.",
+    "requirements_by_skill": {
+      "SQL": {"target_level": 3, "weight": 0.30, "rationale": "Một số JD BI yêu cầu kinh nghiệm SQL chuyên sâu và xây hệ thống BI đầu-cuối."},
+      "DATA_QUALITY": {"target_level": 2, "weight": 0.14, "rationale": "Đảm bảo dữ liệu phân tích đáng tin cậy và có thể sử dụng."},
+      "PYTHON": {"target_level": 2, "weight": 0.18, "rationale": "Lập trình/phân tích là lợi thế trong một số vai trò dữ liệu."},
+      "DATA_VIZ": {"target_level": 3, "weight": 0.20, "rationale": "Trực quan hóa và hệ thống báo cáo hỗ trợ quyết định."},
+      "WRITTEN_COMM": {"target_level": 3, "weight": 0.18, "rationale": "Diễn giải insight và tư vấn chiến lược cho các bên liên quan."}
+    },
+    "additional_requirements": [
+      "Thống kê, thiết kế phân tích và giải quyết vấn đề sản phẩm/kinh doanh",
+      "Xây dựng pipeline hoặc hệ thống BI có thể mở rộng",
+      "Yêu cầu kinh nghiệm trong JD thay đổi theo nhóm và cấp bậc"
+    ],
+    "sources": [
+      {"label": "Google Careers — Business Intelligence Analyst, Product Data Warehouse", "url": "https://www.google.com/about/careers/applications/jobs/results/131995992474952390-business-intelligence-analyst/", "checked_at": "2026-10-28"},
+      {"label": "Google Careers — Business Data Analyst II, Global Infrastructure Strategy and Operations", "url": "https://www.google.com/about/careers/applications/jobs/results/123209569571611334-business-data-analyst-ii-google-global-infrastructure-strategy-and-operations", "checked_at": "2026-10-28"}
+    ]
+  }
+]

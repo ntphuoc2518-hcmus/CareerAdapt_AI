@@ -1,0 +1,1025 @@
+{
+  "bank_version": "EX-DA-1.3",
+  "pass_threshold": 70,
+  "datasets": {
+    "A": "orders_da01a.csv",
+    "B": "orders_da01b.csv",
+    "C": "orders_da01c.csv",
+    "D": "orders_da01d.csv"
+  },
+  "note": "Mỗi kỹ năng có 3 độ khó, mỗi độ khó có 4 biến thể (cùng dạng, khác bộ dữ liệu A-D). Đáp án được tính từ bộ dữ liệu bằng expected_sql nên không ghi cứng trong tệp này. Case 'points' của một câu luôn cộng đủ 100.",
+  "items": [
+    {
+      "item_id": "SQL-1",
+      "skill_code": "SQL",
+      "tier": 1,
+      "topic": "Truy vấn lọc dữ liệu",
+      "answer_type": "sql",
+      "minutes": 6,
+      "max_chars": 3000,
+      "prompt": "Bảng orders_raw là dữ liệu đơn hàng ở bên dưới. Viết một câu SELECT liệt kê order_id, region, quantity của các đơn có status = 'completed' và quantity lớn hơn 0.",
+      "placeholder": "SELECT ...",
+      "cases": [
+        {
+          "id": "runs",
+          "points": 20,
+          "type": "sql_runs",
+          "description": "Câu truy vấn chạy được và trả về dữ liệu"
+        },
+        {
+          "id": "filter",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "where",
+          "description": "Có điều kiện lọc bằng WHERE"
+        },
+        {
+          "id": "result",
+          "points": 60,
+          "type": "sql_result",
+          "expected_sql": "SELECT order_id, region, quantity FROM orders_raw WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Kết quả đúng các dòng cần lấy"
+        }
+      ],
+      "workspace": "sql"
+    },
+    {
+      "item_id": "SQL-2",
+      "skill_code": "SQL",
+      "tier": 2,
+      "topic": "Tổng hợp doanh thu theo nhóm",
+      "answer_type": "sql",
+      "minutes": 10,
+      "max_chars": 4000,
+      "prompt": "Từ bảng orders_raw, viết truy vấn tính doanh thu ròng theo từng vùng. Doanh thu ròng = quantity * unit_price * (1 - discount). Yêu cầu: bỏ dòng trùng hoàn toàn, chỉ tính đơn status = 'completed' có quantity > 0, vùng bỏ trống ghi là 'Unknown'.",
+      "placeholder": "SELECT ...",
+      "cases": [
+        {
+          "id": "runs",
+          "points": 15,
+          "type": "sql_runs",
+          "description": "Câu truy vấn chạy được và trả về dữ liệu"
+        },
+        {
+          "id": "group",
+          "points": 15,
+          "type": "sql_row_count",
+          "expected_sql": "SELECT DISTINCT COALESCE(NULLIF(TRIM(region), ''), 'Unknown') FROM orders_raw WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Mỗi vùng là một dòng kết quả"
+        },
+        {
+          "id": "result",
+          "points": 70,
+          "type": "sql_result",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown') AS region, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1",
+          "description": "Doanh thu ròng từng vùng đúng"
+        }
+      ],
+      "gates": [
+        {
+          "gate_id": "CG_CANCELLED_INCLUDED",
+          "label": "Tính cả đơn đã hủy vào doanh thu",
+          "type": "sql_equals",
+          "wrong_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown') AS region, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE CAST(quantity AS REAL) > 0 GROUP BY 1"
+        },
+        {
+          "gate_id": "CG_DUPLICATE_KEPT",
+          "label": "Giữ dòng trùng khiến doanh thu bị đếm hai lần",
+          "type": "sql_equals",
+          "wrong_sql": "SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown') AS region, SUM(quantity * unit_price * (1 - discount)) AS net FROM orders_raw WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1"
+        }
+      ],
+      "workspace": "sql"
+    },
+    {
+      "item_id": "SQL-3",
+      "skill_code": "SQL",
+      "tier": 3,
+      "topic": "Hàm cửa sổ và so sánh theo kỳ",
+      "answer_type": "sql",
+      "minutes": 15,
+      "max_chars": 5000,
+      "prompt": "Từ bảng orders_raw, sau khi bỏ dòng trùng và chỉ giữ đơn status = 'completed' có quantity > 0, viết một truy vấn trả về: tháng (YYYY-MM), doanh thu ròng của tháng, và phần trăm thay đổi so với tháng trước (làm tròn 2 chữ số). Tháng đầu tiên để NULL. Bắt buộc dùng hàm cửa sổ.",
+      "placeholder": "WITH ...",
+      "cases": [
+        {
+          "id": "runs",
+          "points": 10,
+          "type": "sql_runs",
+          "description": "Câu truy vấn chạy được và trả về dữ liệu"
+        },
+        {
+          "id": "window",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "\\b(lag|lead|first_value)\\s*\\(.*over\\s*\\(",
+          "description": "Dùng hàm cửa sổ để lấy tháng trước"
+        },
+        {
+          "id": "monthly",
+          "points": 35,
+          "type": "sql_result",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1",
+          "description": "Doanh thu ròng từng tháng đúng"
+        },
+        {
+          "id": "change",
+          "points": 35,
+          "type": "sql_contains",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw), n AS (SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1) SELECT ROUND((net - LAG(net) OVER (ORDER BY m)) * 100.0 / LAG(net) OVER (ORDER BY m), 2) FROM n",
+          "description": "Phần trăm thay đổi so với tháng trước đúng"
+        }
+      ],
+      "gates": [
+        {
+          "gate_id": "CG_CANCELLED_INCLUDED",
+          "label": "Tính cả đơn đã hủy vào doanh thu",
+          "type": "sql_contains_all",
+          "wrong_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE CAST(quantity AS REAL) > 0 GROUP BY 1",
+          "right_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1"
+        }
+      ],
+      "workspace": "sql"
+    },
+    {
+      "item_id": "DQ-1",
+      "skill_code": "DATA_QUALITY",
+      "tier": 1,
+      "topic": "Nhận diện lỗi dữ liệu",
+      "answer_type": "text",
+      "minutes": 6,
+      "max_chars": 2000,
+      "prompt": "Xem bảng dữ liệu bên dưới và trả lời theo 3 dòng: (1) mã đơn bị trùng, (2) mã đơn có số lượng bằng 0, (3) mã đơn thiếu vùng. Chỉ ghi các mã đơn có lỗi.",
+      "placeholder": "1. Trùng: ...",
+      "cases": [
+        {
+          "id": "dup",
+          "points": 40,
+          "type": "text_ids",
+          "expected_sql": "SELECT order_id FROM orders_raw GROUP BY order_id HAVING COUNT(*) > 1",
+          "allowed_sql": "SELECT order_id FROM orders_raw WHERE order_id IN (SELECT order_id FROM orders_raw GROUP BY order_id HAVING COUNT(*) > 1) OR CAST(quantity AS REAL) = 0 OR TRIM(COALESCE(region, '')) = ''",
+          "description": "Chỉ đúng mã đơn bị trùng"
+        },
+        {
+          "id": "zero",
+          "points": 30,
+          "type": "text_ids",
+          "expected_sql": "SELECT order_id FROM orders_raw WHERE CAST(quantity AS REAL) = 0",
+          "allowed_sql": "SELECT order_id FROM orders_raw WHERE order_id IN (SELECT order_id FROM orders_raw GROUP BY order_id HAVING COUNT(*) > 1) OR CAST(quantity AS REAL) = 0 OR TRIM(COALESCE(region, '')) = ''",
+          "description": "Chỉ đúng mã đơn có số lượng bằng 0"
+        },
+        {
+          "id": "region",
+          "points": 30,
+          "type": "text_ids",
+          "expected_sql": "SELECT order_id FROM orders_raw WHERE TRIM(COALESCE(region, '')) = ''",
+          "allowed_sql": "SELECT order_id FROM orders_raw WHERE order_id IN (SELECT order_id FROM orders_raw GROUP BY order_id HAVING COUNT(*) > 1) OR CAST(quantity AS REAL) = 0 OR TRIM(COALESCE(region, '')) = ''",
+          "description": "Chỉ đúng mã đơn thiếu vùng"
+        }
+      ],
+      "workspace": "data_quality"
+    },
+    {
+      "item_id": "DQ-2",
+      "skill_code": "DATA_QUALITY",
+      "tier": 2,
+      "topic": "Quy trình làm sạch và đối soát số dòng",
+      "answer_type": "text",
+      "minutes": 10,
+      "max_chars": 2500,
+      "prompt": "Làm sạch bảng dữ liệu theo thứ tự: bỏ dòng trùng hoàn toàn, loại dòng có số lượng bằng 0, chỉ giữ đơn completed. Ghi số dòng ban đầu và số dòng còn lại sau từng bước, mỗi bước một dòng, kèm lý do ngắn.",
+      "placeholder": "Ban đầu: ... dòng",
+      "cases": [
+        {
+          "id": "initial",
+          "points": 20,
+          "type": "text_number_near",
+          "labels": [
+            "ban dau",
+            "goc",
+            "tong",
+            "initial",
+            "original",
+            "start",
+            "total"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM orders_raw",
+          "description": "Số dòng ban đầu đúng"
+        },
+        {
+          "id": "dedup",
+          "points": 30,
+          "type": "text_number_near",
+          "labels": [
+            "trung",
+            "duplicate",
+            "dedup"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM orders_raw)",
+          "description": "Số dòng sau khi bỏ trùng đúng"
+        },
+        {
+          "id": "zero",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "so luong",
+            "quantity",
+            "zero"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM orders_raw) WHERE CAST(quantity AS REAL) > 0",
+          "description": "Số dòng sau khi loại số lượng bằng 0 đúng"
+        },
+        {
+          "id": "completed",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "completed",
+            "hoan tat",
+            "hoan thanh",
+            "huy",
+            "keep",
+            "cancel"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM orders_raw) WHERE CAST(quantity AS REAL) > 0 AND status = 'completed'",
+          "description": "Số dòng sau khi chỉ giữ đơn hoàn tất đúng"
+        }
+      ],
+      "workspace": "data_quality"
+    },
+    {
+      "item_id": "DQ-3",
+      "skill_code": "DATA_QUALITY",
+      "tier": 3,
+      "topic": "Đánh giá tác động của dữ liệu lỗi",
+      "answer_type": "text",
+      "minutes": 15,
+      "max_chars": 3000,
+      "prompt": "Tính doanh thu nếu cộng thẳng toàn bộ dòng trong bảng (quantity * unit_price * (1 - discount), không làm sạch) và doanh thu sau làm sạch (bỏ trùng, chỉ đơn completed có quantity > 0). Nêu phần chênh lệch. Sau đó đề xuất ít nhất 2 quy tắc kiểm tra để ngăn lỗi này ở đầu vào.",
+      "placeholder": "Chưa làm sạch: ...",
+      "cases": [
+        {
+          "id": "raw",
+          "points": 25,
+          "type": "text_number",
+          "expected_sql": "SELECT SUM(quantity * unit_price * (1 - discount)) FROM orders_raw",
+          "description": "Doanh thu chưa làm sạch đúng"
+        },
+        {
+          "id": "clean",
+          "points": 25,
+          "type": "text_number",
+          "expected_sql": "SELECT SUM(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Doanh thu sau làm sạch đúng"
+        },
+        {
+          "id": "diff",
+          "points": 25,
+          "type": "text_number",
+          "expected_sql": "SELECT (SELECT SUM(quantity * unit_price * (1 - discount)) FROM orders_raw) - (SELECT SUM(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0)",
+          "description": "Phần chênh lệch đúng"
+        },
+        {
+          "id": "rules",
+          "points": 25,
+          "type": "text_regex",
+          "min_matches": 2,
+          "patterns": [
+            "unique|khoa chinh|primary key|khong trung|duy nhat|no duplicate",
+            "not null|bat buoc|khong de trong|khong duoc trong|required|must not be (blank|empty|null)",
+            "check|lon hon 0|> ?0|rang buoc|greater than 0|constraint",
+            "validation|kiem tra (dau vao|tu dong)|canh bao|input check|automatic check|alert"
+          ],
+          "description": "Có ít nhất 2 quy tắc kiểm tra đầu vào"
+        }
+      ],
+      "workspace": "data_quality"
+    },
+    {
+      "item_id": "PY-1",
+      "skill_code": "PYTHON",
+      "tier": 1,
+      "topic": "Đọc và lọc dữ liệu bằng Pandas",
+      "answer_type": "python",
+      "minutes": 6,
+      "max_chars": 3000,
+      "prompt": "Viết code Python dùng Pandas đọc tệp orders.csv (dữ liệu bên dưới), lọc các dòng có status bằng 'completed', rồi dùng print in số dòng còn lại. Hệ thống sẽ chạy code của bạn và chấm theo kết quả in ra.",
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 10,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "type": "py_runs",
+          "points": 10,
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "read",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "read_csv"
+          ],
+          "description": "Đọc tệp bằng read_csv"
+        },
+        {
+          "id": "filter",
+          "points": 30,
+          "type": "code_regex",
+          "pattern": "status.*(==|isin|query).*completed|completed.*status",
+          "description": "Lọc theo status completed"
+        },
+        {
+          "id": "result",
+          "points": 30,
+          "type": "text_number",
+          "section": "output",
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM orders_raw WHERE status = 'completed'",
+          "description": "Kết quả in ra đúng"
+        }
+      ],
+      "workspace": "python"
+    },
+    {
+      "item_id": "PY-2",
+      "skill_code": "PYTHON",
+      "tier": 2,
+      "topic": "Làm sạch và tổng hợp bằng Pandas",
+      "answer_type": "python",
+      "minutes": 10,
+      "max_chars": 4000,
+      "prompt": "Viết code Pandas đọc orders.csv, bỏ dòng trùng, giữ đơn completed có quantity > 0, tính cột net = quantity * unit_price * (1 - discount), rồi tính tổng net theo region. Vùng bỏ trống ghi là Unknown. Dùng print in kết quả từng vùng. Hệ thống sẽ chạy code của bạn và chấm theo kết quả in ra.",
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "type": "py_runs",
+          "points": 5,
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "dedup",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "drop_duplicates"
+          ],
+          "description": "Bỏ dòng trùng bằng drop_duplicates"
+        },
+        {
+          "id": "filter",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "quantity.*>\\s*0|completed",
+          "description": "Có lọc đơn hợp lệ"
+        },
+        {
+          "id": "group",
+          "points": 20,
+          "type": "py_calls",
+          "all": [
+            "groupby"
+          ],
+          "any": [
+            "sum",
+            "agg"
+          ],
+          "description": "Tổng hợp bằng groupby"
+        },
+        {
+          "id": "result",
+          "points": 30,
+          "type": "text_pairs",
+          "section": "output",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown'), SUM(quantity * unit_price * (1 - discount)) FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1",
+          "description": "Kết quả in ra của từng vùng đúng"
+        }
+      ],
+      "workspace": "python"
+    },
+    {
+      "item_id": "PY-3",
+      "skill_code": "PYTHON",
+      "tier": 3,
+      "topic": "Viết hàm phân tích theo thời gian",
+      "answer_type": "python",
+      "minutes": 15,
+      "max_chars": 5000,
+      "prompt": "Viết hàm monthly_change(df) nhận DataFrame đơn hàng đã làm sạch, trả về doanh thu ròng theo tháng và phần trăm thay đổi so với tháng trước. Hàm phải xử lý được trường hợp tháng trước bằng 0 mà không sinh giá trị vô cực. Đọc orders.csv, làm sạch (bỏ trùng, đơn completed, quantity > 0), gọi hàm và dùng print in phần trăm thay đổi. Hệ thống sẽ chạy code của bạn và chấm theo kết quả in ra.",
+      "placeholder": "def monthly_change(df):",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "type": "py_runs",
+          "points": 5,
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "func",
+          "points": 15,
+          "type": "code_regex",
+          "pattern": "def\\s+monthly_change\\s*\\(",
+          "description": "Có hàm monthly_change"
+        },
+        {
+          "id": "month",
+          "points": 15,
+          "type": "code_regex",
+          "pattern": "to_datetime|to_period|str\\[:7\\]|\\.dt\\.|strftime",
+          "description": "Tách được tháng từ ngày"
+        },
+        {
+          "id": "change",
+          "points": 20,
+          "type": "code_regex",
+          "pattern": "pct_change|shift\\s*\\(",
+          "description": "So sánh với tháng trước"
+        },
+        {
+          "id": "zero",
+          "points": 15,
+          "type": "code_regex",
+          "pattern": "replace\\(.*(inf|0)|==\\s*0|!=\\s*0|>\\s*0|np\\.where|isinf|fillna|nan",
+          "description": "Có xử lý tháng trước bằng 0"
+        },
+        {
+          "id": "result",
+          "points": 25,
+          "type": "text_percent",
+          "section": "output",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw), n AS (SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1), d AS (SELECT (net - LAG(net) OVER (ORDER BY m)) * 100.0 / LAG(net) OVER (ORDER BY m) AS p FROM n) SELECT p FROM d WHERE p IS NOT NULL",
+          "description": "Phần trăm thay đổi in ra đúng"
+        }
+      ],
+      "workspace": "python"
+    },
+    {
+      "item_id": "VIZ-1",
+      "skill_code": "DATA_VIZ",
+      "tier": 1,
+      "topic": "Chọn loại biểu đồ",
+      "answer_type": "text",
+      "minutes": 6,
+      "max_chars": 2000,
+      "prompt": "Bạn cần cho quản lý thấy vùng nào có doanh thu cao nhất từ bảng dữ liệu bên dưới. Hãy chọn một loại biểu đồ, giải thích vì sao chọn, và nêu trục ngang, trục dọc thể hiện gì.",
+      "placeholder": "Tôi chọn biểu đồ ...",
+      "cases": [
+        {
+          "id": "chart",
+          "points": 40,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "bieu do cot|bar chart|cot ngang|cot doc|\\bbar\\b|column chart"
+          ],
+          "forbid": [
+            "bieu do tron",
+            "pie chart"
+          ],
+          "description": "Chọn biểu đồ cột phù hợp để so sánh các nhóm"
+        },
+        {
+          "id": "reason",
+          "points": 30,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "so sanh|cao nhat|xep hang|chenh lech|compare|highest|rank|difference"
+          ],
+          "description": "Giải thích bằng mục đích so sánh"
+        },
+        {
+          "id": "axes",
+          "points": 30,
+          "type": "text_regex",
+          "min_matches": 2,
+          "patterns": [
+            "vung|region|khu vuc",
+            "doanh thu|revenue"
+          ],
+          "description": "Nêu đúng trục vùng và trục doanh thu"
+        }
+      ],
+      "workspace": "visualization"
+    },
+    {
+      "item_id": "VIZ-2",
+      "skill_code": "DATA_VIZ",
+      "tier": 2,
+      "topic": "Vẽ biểu đồ có chú thích đầy đủ",
+      "answer_type": "python",
+      "minutes": 10,
+      "max_chars": 4000,
+      "prompt": "Đọc orders.csv, làm sạch (bỏ trùng, đơn completed, quantity > 0), tính net = quantity * unit_price * (1 - discount), rồi viết code Matplotlib vẽ biểu đồ cột doanh thu ròng theo vùng. Biểu đồ phải có tiêu đề và tên hai trục. Dùng print in vùng cao nhất và doanh thu của vùng đó. Hệ thống sẽ chạy code của bạn và chấm theo kết quả in ra.",
+      "placeholder": "import matplotlib.pyplot as plt",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 8,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "type": "py_runs",
+          "points": 7,
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "bar",
+          "points": 25,
+          "type": "code_regex",
+          "pattern": "\\.bar\\(|\\.barh\\(|kind\\s*=\\s*['\"]bar|barplot",
+          "description": "Vẽ biểu đồ cột"
+        },
+        {
+          "id": "labels",
+          "points": 30,
+          "type": "py_calls",
+          "all": [
+            "title",
+            "xlabel",
+            "ylabel"
+          ],
+          "alternatives": {
+            "title": [
+              "set_title",
+              "suptitle"
+            ],
+            "xlabel": [
+              "set_xlabel"
+            ],
+            "ylabel": [
+              "set_ylabel"
+            ]
+          },
+          "description": "Có tiêu đề và tên hai trục"
+        },
+        {
+          "id": "insight",
+          "points": 30,
+          "type": "text_pairs",
+          "section": "output",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown'), SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1 ORDER BY net DESC LIMIT 1",
+          "description": "Vùng cao nhất và doanh thu in ra đúng"
+        }
+      ],
+      "workspace": "python"
+    },
+    {
+      "item_id": "VIZ-3",
+      "skill_code": "DATA_VIZ",
+      "tier": 3,
+      "topic": "Thiết kế dashboard cho quản lý",
+      "answer_type": "text",
+      "minutes": 15,
+      "max_chars": 3500,
+      "prompt": "Thiết kế dashboard một trang cho ban quản lý từ bảng dữ liệu bên dưới (dữ liệu đã bỏ trùng, chỉ đơn completed có quantity > 0). Nêu: (1) các chỉ số chính kèm giá trị thật gồm tổng doanh thu ròng, số đơn hợp lệ, vùng cao nhất và doanh thu của vùng đó; (2) biểu đồ nào cho xu hướng theo tháng, biểu đồ nào so sánh vùng; (3) một lỗi trình bày cần tránh để biểu đồ không gây hiểu sai.",
+      "placeholder": "Chỉ số chính: ...",
+      "cases": [
+        {
+          "id": "total",
+          "points": 25,
+          "type": "text_number",
+          "expected_sql": "SELECT SUM(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Tổng doanh thu ròng đúng"
+        },
+        {
+          "id": "orders",
+          "points": 20,
+          "type": "text_number_near",
+          "labels": [
+            "so don",
+            "don hop le",
+            "don hang",
+            "orders",
+            "valid order",
+            "order count"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Số đơn hợp lệ đúng"
+        },
+        {
+          "id": "top",
+          "points": 15,
+          "type": "text_pairs",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown'), SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1 ORDER BY net DESC LIMIT 1",
+          "description": "Vùng cao nhất và doanh thu đúng"
+        },
+        {
+          "id": "charts",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 2,
+          "patterns": [
+            "duong|line",
+            "cot|bar|column"
+          ],
+          "description": "Dùng đường cho xu hướng và cột để so sánh"
+        },
+        {
+          "id": "pitfall",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "truc.{0,30}(0|khong)|cat truc|truncat|ti le truc|nhieu mau|3d|hai truc|gay hieu sai|axis.{0,30}(0|zero)|cut.{0,10}axis|too many colou?rs|dual axis|two axes|mislead"
+          ],
+          "description": "Nêu lỗi trình bày cần tránh"
+        }
+      ],
+      "workspace": "visualization"
+    },
+    {
+      "item_id": "WC-1",
+      "skill_code": "WRITTEN_COMM",
+      "tier": 1,
+      "topic": "Tóm tắt số liệu ngắn",
+      "answer_type": "text",
+      "minutes": 6,
+      "max_chars": 2000,
+      "prompt": "Viết 3 đến 5 câu tóm tắt doanh thu ròng của hai tháng trong bảng dữ liệu (bỏ trùng, đơn completed, quantity > 0) cho người không chuyên. Phải có số liệu từng tháng và nói rõ doanh thu tăng hay giảm.",
+      "placeholder": "Tháng ... doanh thu đạt ...",
+      "cases": [
+        {
+          "id": "figures",
+          "points": 50,
+          "type": "text_numbers_all",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT SUM(quantity * unit_price * (1 - discount)) FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY substr(order_date, 1, 7)",
+          "description": "Có đúng doanh thu cả hai tháng"
+        },
+        {
+          "id": "trend",
+          "points": 25,
+          "type": "text_trend",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw), n AS (SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1) SELECT MAX(CASE WHEN m = (SELECT MAX(m) FROM n) THEN net END) - MAX(CASE WHEN m = (SELECT MIN(m) FROM n) THEN net END) FROM n",
+          "description": "Nói đúng xu hướng tăng hoặc giảm"
+        },
+        {
+          "id": "format",
+          "points": 25,
+          "type": "text_sentences",
+          "min": 3,
+          "description": "Viết thành ít nhất 3 câu rõ ràng"
+        }
+      ],
+      "gates": [
+        {
+          "gate_id": "CG_WRONG_TREND",
+          "label": "Nói ngược xu hướng doanh thu",
+          "type": "trend_opposite",
+          "case_id": "trend"
+        }
+      ],
+      "workspace": "report"
+    },
+    {
+      "item_id": "WC-2",
+      "skill_code": "WRITTEN_COMM",
+      "tier": 2,
+      "topic": "Viết email báo cáo cho quản lý",
+      "answer_type": "text",
+      "minutes": 10,
+      "max_chars": 3000,
+      "prompt": "Viết email ngắn gửi quản lý về kết quả doanh thu ròng hai tháng trong bảng dữ liệu (bỏ trùng, đơn completed, quantity > 0). Email cần có số liệu, xu hướng, một khuyến nghị hành động, và một giới hạn của dữ liệu khiến chưa thể kết luận nguyên nhân.",
+      "placeholder": "Kính gửi anh/chị ...",
+      "cases": [
+        {
+          "id": "figures",
+          "points": 30,
+          "type": "text_numbers_all",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT SUM(quantity * unit_price * (1 - discount)) FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY substr(order_date, 1, 7)",
+          "description": "Có đúng doanh thu cả hai tháng"
+        },
+        {
+          "id": "trend",
+          "points": 15,
+          "type": "text_trend",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw), n AS (SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1) SELECT MAX(CASE WHEN m = (SELECT MAX(m) FROM n) THEN net END) - MAX(CASE WHEN m = (SELECT MIN(m) FROM n) THEN net END) FROM n",
+          "description": "Nói đúng xu hướng tăng hoặc giảm"
+        },
+        {
+          "id": "action",
+          "points": 25,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "de xuat|khuyen nghi|kien nghi|nen |recommend|should|suggest|propose"
+          ],
+          "description": "Có khuyến nghị hành động"
+        },
+        {
+          "id": "limit",
+          "points": 30,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "mau nho|it du lieu|du lieu (con )?(it|han che)|chua du|chi co hai thang|chi co 2 thang|hai thang chua|gioi han|khong the ket luan|chua the ket luan|small sample|limited data|only two months|only 2 months|not enough data|insufficient|limitation|cannot conclude|can not conclude"
+          ],
+          "description": "Nêu giới hạn của dữ liệu"
+        }
+      ],
+      "gates": [
+        {
+          "gate_id": "CG_WRONG_TREND",
+          "label": "Nói ngược xu hướng doanh thu",
+          "type": "trend_opposite",
+          "case_id": "trend"
+        }
+      ],
+      "workspace": "report"
+    },
+    {
+      "item_id": "WC-3",
+      "skill_code": "WRITTEN_COMM",
+      "tier": 3,
+      "topic": "Báo cáo điều hành có khuyến nghị",
+      "answer_type": "text",
+      "minutes": 15,
+      "max_chars": 4000,
+      "prompt": "Viết báo cáo điều hành cho ban giám đốc từ bảng dữ liệu (bỏ trùng, đơn completed, quantity > 0), gồm 4 phần có tiêu đề: Tóm tắt, Phát hiện, Khuyến nghị, Giới hạn. Phải nêu phần trăm thay đổi doanh thu giữa hai tháng, vùng cao nhất kèm doanh thu, và khuyến nghị có người phụ trách cùng thời hạn.",
+      "placeholder": "Tóm tắt: ...",
+      "cases": [
+        {
+          "id": "structure",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 4,
+          "patterns": [
+            "tom tat|summary",
+            "phat hien|finding",
+            "khuyen nghi|recommendation",
+            "gioi han|limitation"
+          ],
+          "description": "Có đủ 4 phần",
+          "anywhere": true
+        },
+        {
+          "id": "change",
+          "points": 20,
+          "type": "text_percent",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw), n AS (SELECT substr(order_date, 1, 7) AS m, SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1), d AS (SELECT (net - LAG(net) OVER (ORDER BY m)) * 100.0 / LAG(net) OVER (ORDER BY m) AS p FROM n) SELECT p FROM d WHERE p IS NOT NULL",
+          "description": "Phần trăm thay đổi doanh thu đúng"
+        },
+        {
+          "id": "top",
+          "points": 20,
+          "type": "text_pairs",
+          "expected_sql": "WITH c AS (SELECT DISTINCT * FROM orders_raw) SELECT COALESCE(NULLIF(TRIM(region), ''), 'Unknown'), SUM(quantity * unit_price * (1 - discount)) AS net FROM c WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY 1 ORDER BY net DESC LIMIT 1",
+          "description": "Vùng cao nhất và doanh thu đúng"
+        },
+        {
+          "id": "action",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 2,
+          "patterns": [
+            "phu trach|bo phan|nhom|phong|truong|owner|team|department|manager|responsible|lead",
+            "tuan|thang toi|truoc ngay|han|quy|week|month|deadline|by |quarter"
+          ],
+          "description": "Khuyến nghị có người phụ trách và thời hạn"
+        },
+        {
+          "id": "limit",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "mau nho|it du lieu|du lieu (con )?(it|han che)|chua du|chi co hai thang|chi co 2 thang|khong the ket luan|chua the ket luan|small sample|limited data|only two months|only 2 months|not enough data|insufficient|cannot conclude|can not conclude"
+          ],
+          "description": "Nêu giới hạn của dữ liệu"
+        }
+      ],
+      "workspace": "report",
+      "report_sections": [
+        "Tóm tắt",
+        "Phát hiện",
+        "Khuyến nghị",
+        "Giới hạn"
+      ]
+    },
+    {
+      "item_id": "STAT-1",
+      "skill_code": "STATISTICS",
+      "tier": 1,
+      "topic": "Số đo mô tả cơ bản",
+      "answer_type": "text",
+      "minutes": 6,
+      "max_chars": 2000,
+      "prompt": "Xét các đơn hợp lệ trong bảng dữ liệu bên dưới (bỏ dòng trùng, chỉ đơn completed có quantity > 0). Giá trị ròng của một đơn = quantity × unit_price × (1 − discount). Trả lời theo 4 dòng: (1) số đơn hợp lệ, (2) giá trị ròng lớn nhất, (3) giá trị ròng nhỏ nhất, (4) trung vị của giá trị ròng.",
+      "placeholder": "1. Số đơn hợp lệ: ...",
+      "cases": [
+        {
+          "id": "count",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "so don",
+            "don hop le",
+            "don hang",
+            "orders",
+            "valid order",
+            "order count"
+          ],
+          "exact": true,
+          "expected_sql": "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Số đơn hợp lệ đúng"
+        },
+        {
+          "id": "max",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "lon nhat",
+            "cao nhat",
+            "max",
+            "largest",
+            "highest"
+          ],
+          "expected_sql": "SELECT MAX(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Giá trị ròng lớn nhất đúng"
+        },
+        {
+          "id": "min",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "nho nhat",
+            "thap nhat",
+            "min",
+            "smallest",
+            "lowest"
+          ],
+          "expected_sql": "SELECT MIN(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Giá trị ròng nhỏ nhất đúng"
+        },
+        {
+          "id": "median",
+          "points": 25,
+          "type": "text_number_near",
+          "labels": [
+            "trung vi",
+            "median"
+          ],
+          "expected_sql": "WITH v AS (SELECT quantity * unit_price * (1 - discount) AS net FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0), r AS (SELECT net, ROW_NUMBER() OVER (ORDER BY net) AS rn, COUNT(*) OVER () AS n FROM v) SELECT AVG(net) FROM r WHERE rn IN ((n + 1) / 2, (n + 2) / 2)",
+          "description": "Trung vị đúng"
+        }
+      ],
+      "workspace": "report"
+    },
+    {
+      "item_id": "STAT-2",
+      "skill_code": "STATISTICS",
+      "tier": 2,
+      "topic": "Trung bình và trung vị bằng Pandas",
+      "answer_type": "python",
+      "minutes": 10,
+      "max_chars": 4000,
+      "prompt": "Viết code Pandas đọc orders.csv, bỏ dòng trùng, giữ đơn completed có quantity > 0, tính cột net = quantity * unit_price * (1 - discount). Dùng print in ra giá trị trung bình (mean) và trung vị (median) của net. Hệ thống sẽ chạy code của bạn và chấm theo kết quả in ra.",
+      "placeholder": "import pandas as pd",
+      "cases": [
+        {
+          "id": "parse",
+          "points": 5,
+          "type": "py_parses",
+          "description": "Code đúng cú pháp Python"
+        },
+        {
+          "id": "runs",
+          "points": 5,
+          "type": "py_runs",
+          "description": "Code chạy xong không lỗi"
+        },
+        {
+          "id": "dedup",
+          "points": 15,
+          "type": "py_calls",
+          "all": [
+            "drop_duplicates"
+          ],
+          "description": "Bỏ dòng trùng bằng drop_duplicates"
+        },
+        {
+          "id": "filter",
+          "points": 15,
+          "type": "code_regex",
+          "pattern": "quantity.*>\\s*0|completed",
+          "description": "Có lọc đơn hợp lệ"
+        },
+        {
+          "id": "calls",
+          "points": 10,
+          "type": "py_calls",
+          "all": [
+            "mean",
+            "median"
+          ],
+          "alternatives": {
+            "mean": [
+              "describe",
+              "agg"
+            ],
+            "median": [
+              "describe",
+              "agg",
+              "quantile"
+            ]
+          },
+          "description": "Dùng hàm tính trung bình và trung vị"
+        },
+        {
+          "id": "mean",
+          "points": 25,
+          "type": "text_number",
+          "section": "output",
+          "expected_sql": "SELECT AVG(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0",
+          "description": "Giá trị trung bình in ra đúng"
+        },
+        {
+          "id": "median",
+          "points": 25,
+          "type": "text_number",
+          "section": "output",
+          "expected_sql": "WITH v AS (SELECT quantity * unit_price * (1 - discount) AS net FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0), r AS (SELECT net, ROW_NUMBER() OVER (ORDER BY net) AS rn, COUNT(*) OVER () AS n FROM v) SELECT AVG(net) FROM r WHERE rn IN ((n + 1) / 2, (n + 2) / 2)",
+          "description": "Trung vị in ra đúng"
+        }
+      ],
+      "workspace": "python"
+    },
+    {
+      "item_id": "STAT-3",
+      "skill_code": "STATISTICS",
+      "tier": 3,
+      "topic": "So sánh hai nhóm và thiết kế thử nghiệm",
+      "answer_type": "text",
+      "minutes": 15,
+      "max_chars": 3500,
+      "prompt": "Từ bảng dữ liệu bên dưới (bỏ dòng trùng, chỉ đơn completed có quantity > 0), hãy: (1) nêu giá trị ròng trung bình mỗi đơn của từng tháng; (2) giải thích vì sao với dữ liệu này chưa thể kết luận hai tháng khác nhau có ý nghĩa thống kê; (3) đề xuất cách kiểm định hoặc một thử nghiệm A/B để kiểm tra một thay đổi có làm tăng giá trị đơn hay không, nêu rõ cách chia nhóm.",
+      "placeholder": "Trung bình mỗi tháng: ...",
+      "cases": [
+        {
+          "id": "figures",
+          "points": 30,
+          "type": "text_numbers_all",
+          "expected_sql": "SELECT AVG(quantity * unit_price * (1 - discount)) FROM (SELECT DISTINCT * FROM orders_raw) WHERE status = 'completed' AND CAST(quantity AS REAL) > 0 GROUP BY substr(order_date, 1, 7)",
+          "description": "Giá trị trung bình của cả hai tháng đúng"
+        },
+        {
+          "id": "sample",
+          "points": 25,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "co mau|mau (qua )?nho|qua it|it don|it du lieu|chi co \\d+ don|chi co (vai|ba|bon) don|sample size|small sample|too few|few orders|not enough data"
+          ],
+          "description": "Nêu giới hạn về cỡ mẫu"
+        },
+        {
+          "id": "method",
+          "points": 25,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "kiem dinh|p-value|p value|gia tri p|muc y nghia|t-test|t test|khoang tin cay|hypothesis|significance level|confidence interval|z-test|z test"
+          ],
+          "description": "Nêu phương pháp kiểm định"
+        },
+        {
+          "id": "design",
+          "points": 20,
+          "type": "text_regex",
+          "min_matches": 1,
+          "patterns": [
+            "ngau nhien|random|nhom doi chung|control group|nhom kiem soat"
+          ],
+          "description": "Chia nhóm ngẫu nhiên hoặc có nhóm đối chứng"
+        }
+      ],
+      "workspace": "report"
+    }
+  ]
+}

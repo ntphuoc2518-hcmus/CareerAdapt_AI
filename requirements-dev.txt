@@ -1,0 +1,6 @@
+# Development and test tools on top of requirements.txt (the server itself does not need these).
+-r requirements.txt
+
+# Browser tests in tests/test_ui_e2e.py. They use the installed Microsoft Edge or Google Chrome,
+# so no extra browser download is needed. Without Playwright those tests are skipped.
+playwright==1.55.0

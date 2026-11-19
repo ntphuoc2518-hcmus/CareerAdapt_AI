@@ -1,0 +1,129 @@
+{
+  "blueprint_version": "BP-4.0",
+  "rule_version": "RULE-4.0",
+  "default_pass_threshold": 70,
+  "note": "Điểm và ngưỡng là cấu hình khởi tạo để thử nghiệm, cần hiệu chỉnh bằng tập bài tham chiếu; không phải chuẩn nghề đã kiểm định.",
+  "tasks": {
+    "DA01A": {
+      "rubric_version": "RUB-DA01-4.0",
+      "pass_threshold": 70,
+      "scope_note": "Đo SQL tổng hợp một bảng và xử lý chất lượng dữ liệu theo quy tắc. Không xác nhận Python, trực quan hóa hoặc JOIN.",
+      "support_policy": {
+        "ASSESSMENT": "Không có gợi ý trong lúc làm. Hãy khai báo công cụ đã dùng.",
+        "PRACTICE": "Được dùng tài liệu và AI hỗ trợ; hãy khai báo nếu có. Kết quả chỉ lưu vào lịch sử luyện tập, không tính là bằng chứng."
+      },
+      "required_outputs": ["Q2_SQL"],
+      "questions": [
+        {"question_id": "Q1_CLEANING", "label": "Câu 1. Làm sạch dữ liệu", "prompt": "Nêu các lỗi dữ liệu bạn phát hiện và số dòng còn lại sau từng bước (ban đầu, sau bỏ trùng, sau loại số lượng không hợp lệ, sau khi chỉ giữ đơn hoàn tất).", "answer_type": "text", "max_chars": 4000, "placeholder": "Ban đầu: ... dòng\nSau bỏ trùng: ... dòng\n..."},
+        {"question_id": "Q2_SQL", "label": "Câu 2. Truy vấn SQL", "prompt": "Viết SQL (cú pháp SQLite, bảng orders_raw) tính doanh thu thuần theo tháng và theo vùng, áp dụng đủ các quy tắc nghiệp vụ. Mỗi kết quả là một câu lệnh SELECT, kết thúc bằng dấu chấm phẩy.", "answer_type": "sql", "max_chars": 8000, "placeholder": "SELECT ..."},
+        {"question_id": "Q3_CHANGE", "label": "Câu 3. Tỷ lệ thay đổi", "prompt": "Tính phần trăm thay đổi doanh thu tháng sau so với tháng trước. Giải thích cách xử lý nếu doanh thu tháng trước bằng 0.", "answer_type": "text", "max_chars": 2000, "placeholder": "Tỷ lệ thay đổi = ...%. Nếu tháng trước bằng 0 thì ..."},
+        {"question_id": "Q4_LIMITS", "label": "Câu 4. Kết luận và giới hạn", "prompt": "Viết ghi chú ngắn: nêu kết luận kèm số liệu và chỉ ra điều dữ liệu chưa đủ để kết luận về nguyên nhân thay đổi.", "answer_type": "text", "max_chars": 3000, "placeholder": "Doanh thu ... Tuy nhiên dữ liệu chưa đủ để kết luận ..."}
+      ],
+      "criteria": [
+        {"criterion_id": "DA01_CLEAN", "label": "Làm sạch dữ liệu", "max_points": 25, "skill_code": "DATA_QUALITY", "question_ids": ["Q1_CLEANING", "Q2_SQL"]},
+        {"criterion_id": "DA01_MONTHLY", "label": "Doanh thu theo tháng", "max_points": 25, "skill_code": "SQL", "question_ids": ["Q2_SQL"]},
+        {"criterion_id": "DA01_REGION", "label": "Doanh thu theo vùng", "max_points": 20, "skill_code": "SQL", "question_ids": ["Q2_SQL"]},
+        {"criterion_id": "DA01_CHANGE", "label": "Tỷ lệ thay đổi", "max_points": 15, "skill_code": "SQL", "question_ids": ["Q3_CHANGE"]},
+        {"criterion_id": "DA01_LIMITS", "label": "Giải thích giới hạn", "max_points": 15, "skill_code": null, "question_ids": ["Q4_LIMITS"]}
+      ],
+      "test_cases": [
+        {"test_case_id": "TC_ROW_INITIAL", "criterion_id": "DA01_CLEAN", "question_id": "Q1_CLEANING", "points": 4, "description": "Ghi nhận số dòng ban đầu"},
+        {"test_case_id": "TC_ROW_DEDUP", "criterion_id": "DA01_CLEAN", "question_id": "Q1_CLEANING", "points": 6, "description": "Ghi nhận số dòng sau bỏ trùng"},
+        {"test_case_id": "TC_ROW_QUANTITY", "criterion_id": "DA01_CLEAN", "question_id": "Q1_CLEANING", "points": 6, "description": "Ghi nhận số dòng sau loại số lượng không hợp lệ"},
+        {"test_case_id": "TC_ROW_COMPLETED", "criterion_id": "DA01_CLEAN", "question_id": "Q1_CLEANING", "points": 4, "description": "Ghi nhận số dòng hoàn tất hợp lệ"},
+        {"test_case_id": "TC_NULL_REGION", "criterion_id": "DA01_CLEAN", "question_id": "Q2_SQL", "points": 5, "description": "Chuẩn hóa vùng thiếu thành Unknown trong truy vấn"},
+        {"test_case_id": "TC_MONTH_1", "criterion_id": "DA01_MONTHLY", "question_id": "Q2_SQL", "points": 10, "description": "Kết quả SQL: doanh thu tháng đầu"},
+        {"test_case_id": "TC_MONTH_2", "criterion_id": "DA01_MONTHLY", "question_id": "Q2_SQL", "points": 10, "description": "Kết quả SQL: doanh thu tháng sau"},
+        {"test_case_id": "TC_TOTAL", "criterion_id": "DA01_MONTHLY", "question_id": "Q2_SQL", "points": 5, "description": "Tổng doanh thu khớp"},
+        {"test_case_id": "TC_REGION_A", "criterion_id": "DA01_REGION", "question_id": "Q2_SQL", "points": 7, "description": "Kết quả SQL: vùng thứ nhất"},
+        {"test_case_id": "TC_REGION_B", "criterion_id": "DA01_REGION", "question_id": "Q2_SQL", "points": 7, "description": "Kết quả SQL: vùng thứ hai"},
+        {"test_case_id": "TC_REGION_UNKNOWN", "criterion_id": "DA01_REGION", "question_id": "Q2_SQL", "points": 6, "description": "Kết quả SQL: vùng Unknown"},
+        {"test_case_id": "TC_CHANGE_VALUE", "criterion_id": "DA01_CHANGE", "question_id": "Q3_CHANGE", "points": 10, "description": "Tỷ lệ thay đổi đúng dấu và giá trị"},
+        {"test_case_id": "TC_ZERO_BASE", "criterion_id": "DA01_CHANGE", "question_id": "Q3_CHANGE", "points": 5, "description": "Nêu cách xử lý mẫu số bằng 0"},
+        {"test_case_id": "TC_CONCLUSION_FIGURES", "criterion_id": "DA01_LIMITS", "question_id": "Q4_LIMITS", "points": 7, "description": "Kết luận gắn với số liệu"},
+        {"test_case_id": "TC_LIMITATION", "criterion_id": "DA01_LIMITS", "question_id": "Q4_LIMITS", "points": 8, "description": "Nêu dữ liệu chưa đủ để kết luận nguyên nhân"}
+      ],
+      "critical_gates": [
+        {"gate_id": "CG_CANCELLED_INCLUDED", "label": "Cộng cả đơn bị hủy vào doanh thu"},
+        {"gate_id": "CG_DUPLICATE_KEPT", "label": "Không loại bản ghi trùng"},
+        {"gate_id": "CG_FORMULA_WRONG", "label": "Sai công thức doanh thu thuần hoặc giảm giá"},
+        {"gate_id": "CG_CHANGE_SIGN", "label": "Đổi dấu hoặc chia sai tháng gốc khi tính tỷ lệ thay đổi"},
+        {"gate_id": "CG_REGION_WRONG", "label": "Thiếu, bỏ mất vùng NULL hoặc cộng sai doanh thu theo vùng"}
+      ]
+    },
+    "DA01B": {"same_as": "DA01A"},
+    "DA02A": {
+      "rubric_version": "RUB-DA02-4.0",
+      "pass_threshold": 70,
+      "scope_note": "Đo đọc hiểu mã Python/pandas và cách trình bày biểu đồ. Mã được phân tích tĩnh, không chạy trên máy chủ; không xác nhận SQL.",
+      "support_policy": {
+        "ASSESSMENT": "Không có gợi ý trong lúc làm. Hãy khai báo công cụ đã dùng.",
+        "PRACTICE": "Được dùng tài liệu và AI hỗ trợ; hãy khai báo nếu có. Kết quả chỉ lưu vào lịch sử luyện tập, không tính là bằng chứng."
+      },
+      "required_outputs": ["Q1_CODE"],
+      "questions": [
+        {"question_id": "Q1_CODE", "label": "Câu 1. Mã Python", "prompt": "Viết mã Python dùng pandas đọc tệp orders_da01a.csv, làm sạch theo quy tắc của đề, tính doanh thu thuần theo vùng và vẽ biểu đồ cột có nhãn trục, tiêu đề, đơn vị.", "answer_type": "python", "max_chars": 8000, "placeholder": "import pandas as pd\n..."},
+        {"question_id": "Q2_OUTPUT", "label": "Câu 2. Kết quả theo vùng", "prompt": "Dán bảng kết quả doanh thu theo từng vùng mà mã của bạn in ra.", "answer_type": "text", "max_chars": 2000, "placeholder": "Nam: ...\nBac: ...\nUnknown: ..."},
+        {"question_id": "Q3_EXPLAIN", "label": "Câu 3. Giải thích biểu đồ", "prompt": "Giải thích vì sao chọn loại biểu đồ này và nêu một nhận xét có số liệu từ biểu đồ.", "answer_type": "text", "max_chars": 2000, "placeholder": "Tôi chọn biểu đồ cột vì ..."}
+      ],
+      "criteria": [
+        {"criterion_id": "DA02_CODE", "label": "Xử lý dữ liệu bằng Python", "max_points": 30, "skill_code": "PYTHON", "question_ids": ["Q1_CODE"]},
+        {"criterion_id": "DA02_OUTPUT", "label": "Kết quả theo vùng", "max_points": 20, "skill_code": "PYTHON", "question_ids": ["Q2_OUTPUT"]},
+        {"criterion_id": "DA02_CHART", "label": "Biểu đồ đúng loại, có nhãn và đơn vị", "max_points": 35, "skill_code": "DATA_VIZ", "question_ids": ["Q1_CODE"]},
+        {"criterion_id": "DA02_EXPLAIN", "label": "Giải thích lựa chọn biểu đồ", "max_points": 15, "skill_code": "DATA_VIZ", "question_ids": ["Q3_EXPLAIN"]}
+      ],
+      "test_cases": [
+        {"test_case_id": "TC_PY_PARSE", "criterion_id": "DA02_CODE", "question_id": "Q1_CODE", "points": 5, "description": "Mã hợp cú pháp và import pandas"},
+        {"test_case_id": "TC_PY_READ", "criterion_id": "DA02_CODE", "question_id": "Q1_CODE", "points": 8, "description": "Đọc CSV bằng read_csv"},
+        {"test_case_id": "TC_PY_CLEAN", "criterion_id": "DA02_CODE", "question_id": "Q1_CODE", "points": 8, "description": "Có bước làm sạch dữ liệu"},
+        {"test_case_id": "TC_PY_GROUP", "criterion_id": "DA02_CODE", "question_id": "Q1_CODE", "points": 9, "description": "Nhóm và tổng hợp theo vùng"},
+        {"test_case_id": "TC_OUT_REGION_A", "criterion_id": "DA02_OUTPUT", "question_id": "Q2_OUTPUT", "points": 7, "description": "Giá trị vùng thứ nhất"},
+        {"test_case_id": "TC_OUT_REGION_B", "criterion_id": "DA02_OUTPUT", "question_id": "Q2_OUTPUT", "points": 7, "description": "Giá trị vùng thứ hai"},
+        {"test_case_id": "TC_OUT_REGION_UNKNOWN", "criterion_id": "DA02_OUTPUT", "question_id": "Q2_OUTPUT", "points": 6, "description": "Giá trị vùng Unknown"},
+        {"test_case_id": "TC_VIZ_TYPE", "criterion_id": "DA02_CHART", "question_id": "Q1_CODE", "points": 10, "description": "Dùng biểu đồ cột"},
+        {"test_case_id": "TC_VIZ_LABELS", "criterion_id": "DA02_CHART", "question_id": "Q1_CODE", "points": 12, "description": "Có nhãn trục vùng và doanh thu"},
+        {"test_case_id": "TC_VIZ_TITLE", "criterion_id": "DA02_CHART", "question_id": "Q1_CODE", "points": 5, "description": "Có tiêu đề có ý nghĩa"},
+        {"test_case_id": "TC_VIZ_UNITS", "criterion_id": "DA02_CHART", "question_id": "Q1_CODE", "points": 8, "description": "Nêu đơn vị tiền tệ"},
+        {"test_case_id": "TC_EXPLAIN_CHOICE", "criterion_id": "DA02_EXPLAIN", "question_id": "Q3_EXPLAIN", "points": 7, "description": "Giải thích lý do chọn biểu đồ"},
+        {"test_case_id": "TC_EXPLAIN_INSIGHT", "criterion_id": "DA02_EXPLAIN", "question_id": "Q3_EXPLAIN", "points": 8, "description": "Nhận xét có số liệu"}
+      ],
+      "critical_gates": [
+        {"gate_id": "CG_CODE_NOT_PARSED", "label": "Mã không phải Python hợp lệ"}
+      ]
+    },
+    "DA03A": {
+      "rubric_version": "RUB-DA03-4.0",
+      "pass_threshold": 70,
+      "scope_note": "Đo cách trình bày bằng văn bản: kết luận có số liệu và nêu giới hạn. Không suy luận teamwork, tính cách hay giao tiếp trực tiếp.",
+      "support_policy": {
+        "ASSESSMENT": "Không có gợi ý trong lúc làm. Hãy khai báo công cụ đã dùng.",
+        "PRACTICE": "Được dùng tài liệu và AI hỗ trợ; hãy khai báo nếu có. Kết quả chỉ lưu vào lịch sử luyện tập, không tính là bằng chứng."
+      },
+      "required_outputs": ["Q1_REPORT"],
+      "questions": [
+        {"question_id": "Q1_REPORT", "label": "Báo cáo gửi Ban Giám đốc", "prompt": "Viết báo cáo 100–300 từ: kết luận chính, đối chiếu số liệu doanh thu, đề xuất hành động gắn với dữ liệu và nêu giới hạn của mẫu.", "answer_type": "text", "max_chars": 6000, "placeholder": "Kính gửi Ban Giám đốc, ..."}
+      ],
+      "criteria": [
+        {"criterion_id": "DA03_FIGURES", "label": "Dẫn chứng số liệu đúng", "max_points": 30, "skill_code": "WRITTEN_COMM", "question_ids": ["Q1_REPORT"]},
+        {"criterion_id": "DA03_TREND", "label": "Diễn giải đúng xu hướng", "max_points": 15, "skill_code": "WRITTEN_COMM", "question_ids": ["Q1_REPORT"]},
+        {"criterion_id": "DA03_ACTION", "label": "Khuyến nghị hành động", "max_points": 20, "skill_code": "WRITTEN_COMM", "question_ids": ["Q1_REPORT"]},
+        {"criterion_id": "DA03_LIMIT", "label": "Nêu giới hạn của dữ liệu", "max_points": 20, "skill_code": "WRITTEN_COMM", "question_ids": ["Q1_REPORT"]},
+        {"criterion_id": "DA03_FORMAT", "label": "Độ dài và bố cục", "max_points": 15, "skill_code": "WRITTEN_COMM", "question_ids": ["Q1_REPORT"]}
+      ],
+      "test_cases": [
+        {"test_case_id": "TC_FIG_TOTAL", "criterion_id": "DA03_FIGURES", "question_id": "Q1_REPORT", "points": 8, "description": "Tổng doanh thu đúng"},
+        {"test_case_id": "TC_FIG_M1", "criterion_id": "DA03_FIGURES", "question_id": "Q1_REPORT", "points": 7, "description": "Doanh thu tháng 1 đúng"},
+        {"test_case_id": "TC_FIG_M2", "criterion_id": "DA03_FIGURES", "question_id": "Q1_REPORT", "points": 7, "description": "Doanh thu tháng 2 đúng"},
+        {"test_case_id": "TC_FIG_CHANGE", "criterion_id": "DA03_FIGURES", "question_id": "Q1_REPORT", "points": 8, "description": "Tỷ lệ thay đổi đúng"},
+        {"test_case_id": "TC_TREND", "criterion_id": "DA03_TREND", "question_id": "Q1_REPORT", "points": 15, "description": "Nêu đúng xu hướng giảm"},
+        {"test_case_id": "TC_ACTION", "criterion_id": "DA03_ACTION", "question_id": "Q1_REPORT", "points": 20, "description": "Có khuyến nghị hành động"},
+        {"test_case_id": "TC_LIMIT", "criterion_id": "DA03_LIMIT", "question_id": "Q1_REPORT", "points": 20, "description": "Nêu giới hạn mẫu và phạm vi kết luận"},
+        {"test_case_id": "TC_WORDS", "criterion_id": "DA03_FORMAT", "question_id": "Q1_REPORT", "points": 8, "description": "Độ dài 100–300 từ"},
+        {"test_case_id": "TC_STRUCTURE", "criterion_id": "DA03_FORMAT", "question_id": "Q1_REPORT", "points": 7, "description": "Bố cục kết luận, bằng chứng, hành động"}
+      ],
+      "critical_gates": [
+        {"gate_id": "CG_WRONG_TREND", "label": "Kết luận sai chiều xu hướng doanh thu"}
+      ]
+    }
+  }
+}

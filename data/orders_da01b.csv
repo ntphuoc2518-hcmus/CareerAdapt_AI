@@ -1,0 +1,11 @@
+order_id,customer_id,order_date,region,quantity,unit_price,discount,status
+ORB01,CUST201,2026-03-04,Trung,2,150000,0.0,completed
+ORB02,CUST202,2026-03-09,Tay,4,50000,0.1,completed
+ORB03,CUST203,2026-03-15,Trung,1,240000,0.5,completed
+ORB04,CUST204,2026-03-22,,2,60000,0.0,completed
+ORB05,CUST205,2026-04-03,Tay,3,90000,0.0,completed
+ORB06,CUST206,2026-04-08,Trung,2,110000,0.1,completed
+ORB06,CUST206,2026-04-08,Trung,2,110000,0.1,completed
+ORB07,CUST207,2026-04-14,Tay,0,300000,0.0,completed
+ORB08,CUST208,2026-04-21,Trung,2,75000,0.0,cancelled
+ORB09,CUST209,2026-04-27,Tay,1,120000,0.25,completed

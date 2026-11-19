@@ -1,0 +1,74 @@
+/* Ambient blue background shared by the app shell and the login page.
+   Layers are pseudo-elements painted once; the full-screen ones move with transform and fade with opacity only,
+   so the browser composites them instead of repainting gradients on every frame. */
+:root {
+    --amb-navy: 11, 31, 69; --amb-royal: 29, 78, 216; --amb-electric: 47, 107, 255; --amb-sky: 75, 155, 247; --amb-cyan: 34, 195, 238; --amb-light: 191, 219, 254;
+    --amb-cycle: 18s;
+    --amb-base: linear-gradient(155deg, #F6FAFF 0%, #EAF2FE 42%, #F1F7FF 70%, #E7F0FD 100%);
+    --amb-glow-a: radial-gradient(34% 38% at 16% 18%, rgba(var(--amb-electric), .26), transparent 70%), radial-gradient(30% 36% at 86% 10%, rgba(var(--amb-cyan), .24), transparent 70%), radial-gradient(40% 42% at 72% 86%, rgba(var(--amb-sky), .26), transparent 72%);
+    --amb-glow-b: radial-gradient(32% 36% at 32% 78%, rgba(var(--amb-cyan), .22), transparent 70%), radial-gradient(36% 40% at 92% 52%, rgba(var(--amb-royal), .18), transparent 72%), radial-gradient(28% 32% at 52% 28%, rgba(var(--amb-light), .6), transparent 70%);
+    --amb-side-glow: radial-gradient(120% 45% at 0% 0%, rgba(var(--amb-electric), .30), transparent 65%), radial-gradient(110% 40% at 100% 62%, rgba(var(--amb-cyan), .16), transparent 70%), radial-gradient(130% 45% at 30% 100%, rgba(var(--amb-royal), .35), transparent 70%);
+    --amb-hero: radial-gradient(60% 90% at 88% 20%, rgba(var(--amb-cyan), .45), transparent 60%), radial-gradient(55% 80% at 10% 110%, rgba(var(--amb-navy), .55), transparent 65%), linear-gradient(115deg, #1745B8 0%, #1D5BD8 38%, #2F6BFF 68%, #4B9BF7 100%);
+    --amb-hero-glow: radial-gradient(28% 55% at 22% 30%, rgba(255,255,255,.20), transparent 70%), radial-gradient(30% 60% at 70% 80%, rgba(var(--amb-cyan), .35), transparent 70%), radial-gradient(22% 45% at 95% 10%, rgba(var(--amb-light), .40), transparent 70%);
+    --amb-sweep: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.0) 35%, rgba(255,255,255,.16) 50%, rgba(255,255,255,0) 65%, transparent 100%);
+    --amb-waves: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 600' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.2'%3E%3Cpath d='M-20 420C80 360 160 470 260 410S380 330 430 360' stroke-opacity='.24'/%3E%3Cpath d='M-20 455C90 395 170 505 270 445S385 365 430 395' stroke-opacity='.16'/%3E%3Cpath d='M-20 490C100 430 180 540 280 480S390 400 430 430' stroke-opacity='.1'/%3E%3Cpath d='M-20 140C70 100 150 180 250 130S370 70 430 95' stroke-opacity='.06'/%3E%3C/g%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] {
+    --amb-base: linear-gradient(155deg, #050C1C 0%, #091631 45%, #060F22 75%, #0A1937 100%);
+    --amb-glow-a: radial-gradient(34% 38% at 16% 18%, rgba(var(--amb-electric), .22), transparent 70%), radial-gradient(30% 36% at 86% 10%, rgba(var(--amb-cyan), .12), transparent 70%), radial-gradient(40% 42% at 72% 86%, rgba(var(--amb-royal), .26), transparent 72%);
+    --amb-glow-b: radial-gradient(32% 36% at 32% 78%, rgba(var(--amb-cyan), .11), transparent 70%), radial-gradient(36% 40% at 92% 52%, rgba(var(--amb-electric), .16), transparent 72%), radial-gradient(28% 32% at 52% 28%, rgba(var(--amb-sky), .10), transparent 70%);
+    --amb-side-glow: radial-gradient(120% 45% at 0% 0%, rgba(var(--amb-electric), .22), transparent 65%), radial-gradient(110% 40% at 100% 62%, rgba(var(--amb-cyan), .10), transparent 70%), radial-gradient(130% 45% at 30% 100%, rgba(var(--amb-royal), .28), transparent 70%);
+    --amb-hero: radial-gradient(60% 90% at 88% 20%, rgba(var(--amb-cyan), .30), transparent 60%), radial-gradient(55% 80% at 10% 110%, rgba(3,9,22,.65), transparent 65%), linear-gradient(115deg, #0F2C7A 0%, #163FA6 40%, #1D5BD8 72%, #2F7BE8 100%);
+}
+
+@keyframes amb-drift-a {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(4%, -3%, 0) scale(1.08); }
+    100% { transform: translate3d(-3%, 4%, 0) scale(1.03); }
+}
+@keyframes amb-drift-b {
+    0% { transform: translate3d(0, 0, 0) scale(1.06); opacity: .45; }
+    50% { transform: translate3d(-5%, 3%, 0) scale(1); opacity: 1; }
+    100% { transform: translate3d(3%, -4%, 0) scale(1.1); opacity: .65; }
+}
+@keyframes amb-pan { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+@keyframes amb-breathe { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes amb-sweep { 0% { transform: translateX(-60%); opacity: 0; } 20%, 80% { opacity: 1; } 100% { transform: translateX(60%); opacity: 0; } }
+
+/* Page background: a pale (light) or deep navy (dark) base with two drifting glow layers in different blues. */
+body::before, body::after { content: ""; position: fixed; inset: -15%; z-index: -1; pointer-events: none; will-change: transform; }
+body::before { background: var(--amb-glow-a), var(--amb-base); animation: amb-drift-a var(--amb-cycle) ease-in-out infinite alternate; }
+body::after { background: var(--amb-glow-b); animation: amb-drift-b calc(var(--amb-cycle) * .8) ease-in-out infinite alternate; }
+
+/* Sidebar: navy gradient, a slowly panning glow and faint wave lines. Background-position keeps the layer inside the
+   rail, so it never adds scroll overflow; the rail is narrow, so the repaint is small. */
+.sidebar { isolation: isolate; }
+.sidebar::before, .sidebar::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.sidebar::before { background: var(--amb-side-glow); background-size: 160% 160%; animation: amb-pan 20s ease-in-out infinite alternate; }
+.sidebar::after { background: var(--amb-waves) center bottom / 100% 100% no-repeat; animation: amb-breathe 14s ease-in-out infinite; }
+.ai-card { backdrop-filter: blur(6px); }
+
+/* Dashboard hero: layered blues, drifting light and a soft sweep. Content stays above the light layers. */
+.hero { isolation: isolate; }
+.hero::before, .hero::after { content: ""; position: absolute; pointer-events: none; z-index: -1; }
+.hero::before { inset: -30%; background: var(--amb-hero-glow); animation: amb-drift-a 16s ease-in-out infinite alternate; will-change: transform; }
+.hero::after { inset: 0; background: var(--amb-sweep); animation: amb-sweep 14s ease-in-out infinite; will-change: transform, opacity; }
+
+/* Cards stay solid for reading; only a light blue edge and a soft glow on hover. */
+.card { border-color: color-mix(in srgb, var(--brand) 9%, var(--border)); transition: box-shadow .2s, border-color .2s; }
+.card:hover { border-color: color-mix(in srgb, var(--brand) 22%, var(--border)); box-shadow: var(--shadow), 0 8px 26px rgba(var(--amb-royal), .09); }
+:root[data-theme="dark"] .card:hover { box-shadow: var(--shadow), 0 8px 26px rgba(var(--amb-electric), .14); }
+
+/* Login: the same page layers behind the card, plus moving light in the navy intro panel. */
+.login-intro::before { content: ""; position: absolute; inset: -25%; pointer-events: none; background: radial-gradient(30% 35% at 25% 75%, rgba(var(--amb-electric), .40), transparent 70%), radial-gradient(28% 32% at 80% 25%, rgba(var(--amb-cyan), .22), transparent 70%); animation: amb-drift-b var(--amb-cycle) ease-in-out infinite alternate; will-change: transform, opacity; }
+
+@media (prefers-reduced-motion: reduce) {
+    body::before, body::after, .sidebar::before, .sidebar::after, .hero::before, .hero::after, .login-intro::before { animation: none !important; }
+    .card { transition: none; }
+}
+@media (forced-colors: active) {
+    body::before, body::after, .sidebar::before, .sidebar::after, .hero::before, .hero::after, .login-intro::before { display: none; }
+}
+@media print {
+    body::before, body::after, .sidebar::before, .sidebar::after, .hero::before, .hero::after { display: none; }
+}

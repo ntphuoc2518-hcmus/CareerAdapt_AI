@@ -1,0 +1,106 @@
+{
+  "career_code": "DATA_ANALYST",
+  "career_title": "Data Analyst (Chuyên viên Phân tích Dữ liệu)",
+  "version_tag": "v1.0",
+  "target_stage": "Chuẩn bị thực tập (Internship Preparation)",
+  "total_weight": 1.0,
+  "skills": [
+    {
+      "skill_code": "SQL",
+      "skill_name": "Truy vấn & Trích xuất Dữ liệu (SQL)",
+      "category": "Kỹ thuật dữ liệu",
+      "target_level": 2,
+      "weight": 0.3,
+      "is_core": true,
+      "source_reference": "ACM/IEEE Data Science Curricula 2021 & O*NET 15-2051.01",
+      "description": "Lọc, kết nối bảng (JOIN), nhóm và tính toán tổng hợp dữ liệu giao dịch kinh doanh.",
+      "rubric_summary": {
+        "0": "Không viết được câu lệnh SQL hoặc cú pháp lỗi hoàn toàn.",
+        "1": "Viết được SELECT, WHERE cơ bản nhưng sai GROUP BY hoặc chưa lọc trạng thái đơn hàng.",
+        "2": "Viết đúng GROUP BY, SUM, JOIN, lọc chính xác đơn hoàn thành và tính đúng công thức doanh thu ròng.",
+        "3": "Tối ưu hóa truy vấn bằng Window Functions, CTE và xử lý phân vùng thời gian xuất sắc."
+      }
+    },
+    {
+      "skill_code": "DATA_QUALITY",
+      "skill_name": "Kiểm tra & Làm sạch Dữ liệu (Data Quality)",
+      "category": "Kỹ thuật dữ liệu",
+      "target_level": 2,
+      "weight": 0.2,
+      "is_core": true,
+      "source_reference": "DAMA-DMBOK2 Data Quality Dimensions",
+      "description": "Phát hiện và xử lý trùng lặp, giá trị thiếu (NULL), giá trị bất thường (Quantity <= 0) và ghi log giải trình.",
+      "rubric_summary": {
+        "0": "Không kiểm tra dữ liệu rác, để nguyên trùng lặp và giá trị bất thường tính toán.",
+        "1": "Phát hiện được trùng lặp nhưng bỏ qua giá trị thiếu NULL hoặc không ghi nhận nhật ký làm sạch.",
+        "2": "Xử lý chuẩn xác cả 3 lỗi (deduplicate, map NULL -> 'Unknown', lọc Quantity > 0), đối chiếu đủ số dòng 10 -> 9 -> 8 -> 7.",
+        "3": "Xây dựng pipeline kiểm tra tính toàn vẹn tự động kèm quy tắc validation phòng ngừa lỗi tương lai."
+      }
+    },
+    {
+      "skill_code": "PYTHON",
+      "skill_name": "Phân tích Dữ liệu Căn bản với Python",
+      "category": "Kỹ thuật nâng cao",
+      "target_level": 1,
+      "weight": 0.15,
+      "is_core": false,
+      "source_reference": "Python for Data Analysis (McKinney, O'Reilly)",
+      "description": "Sử dụng Pandas để nạp dữ liệu CSV, kiểm tra thông tin cấu trúc, xử lý chuỗi và tính toán thống kê mô tả.",
+      "rubric_summary": {
+        "0": "Không nạp được file CSV hoặc lỗi cú pháp khi gọi hàm Pandas.",
+        "1": "Nạp file thành công, dùng được hàm .info(), .describe(), groupby() để tính tổng doanh thu theo tháng.",
+        "2": "Xử lý thành thạo groupby đa chiều, pivot table, làm sạch cột kiểu ngày tháng datetime.",
+        "3": "Tối ưu hóa hiệu năng vectorization, viết hàm tái sử dụng module hóa và xử lý ngoại lệ trơn tru."
+      }
+    },
+    {
+      "skill_code": "DATA_VIZ",
+      "skill_name": "Trực quan hóa Dữ liệu (Data Visualization)",
+      "category": "Trực quan & Trình diễn",
+      "target_level": 2,
+      "weight": 0.2,
+      "is_core": false,
+      "source_reference": "Storytelling with Data (Knaflic, 2015)",
+      "description": "Lựa chọn dạng biểu đồ thích hợp (cột/đường), đặt tên trục, tiêu đề, đơn vị tiền tệ và làm nổi bật xu hướng.",
+      "rubric_summary": {
+        "0": "Không vẽ được biểu đồ hoặc chọn sai dạng biểu đồ nghiêm trọng (ví dụ pie chart cho chuỗi thời gian 20 điểm).",
+        "1": "Vẽ được biểu đồ nhưng thiếu nhãn trục, thiếu đơn vị tiền tệ (VNĐ), hoặc chưa có tiêu đề rõ ràng.",
+        "2": "Chọn đúng biểu đồ cột/đường, đầy đủ nhãn trục, đơn vị VNĐ, chú thích rõ ràng xu hướng tăng giảm.",
+        "3": "Biểu đồ chuẩn xuất bản, tối ưu tỷ lệ dữ liệu/mực in (Data-Ink Ratio), thêm chú giải insight trực tiếp trên điểm dữ liệu."
+      }
+    },
+    {
+      "skill_code": "WRITTEN_COMM",
+      "skill_name": "Giao tiếp Viết & Giải trình Dữ liệu (Written Communication)",
+      "category": "Giao tiếp & Báo cáo",
+      "target_level": 2,
+      "weight": 0.15,
+      "is_core": false,
+      "source_reference": "Minto Pyramid Principle (Barbara Minto)",
+      "description": "Viết báo cáo súc tích, đưa ra kết luận kèm số liệu chứng minh (data-backed), nêu rõ khuyến nghị và giới hạn dữ liệu.",
+      "rubric_summary": {
+        "0": "Viết quá ngắn (dưới 15 từ), không có số liệu chứng minh hoặc nhận xét sai lệch hoàn toàn.",
+        "1": "Có nhận xét xu hướng nhưng nêu chung chung không có con số cụ thể hoặc không đề xuất hành động.",
+        "2": "Báo cáo có cấu trúc, dẫn chứng đầy đủ số liệu (1.170.000đ, -14.29%), nêu đề xuất kinh doanh và giới hạn mẫu nhỏ.",
+        "3": "Giải trình thuyết phục theo mô hình kim tự tháp Minto, phân tích nguyên nhân gốc rễ và kế hoạch hành động chia theo giai đoạn."
+      }
+    },
+    {
+      "skill_code": "STATISTICS",
+      "skill_name": "Thống kê & Thử nghiệm A/B (Statistics)",
+      "category": "Phân tích định lượng",
+      "target_level": 2,
+      "weight": 0.0,
+      "is_core": false,
+      "source_reference": "OpenStax Introductory Statistics 2e; Kohavi, Tang & Xu - Trustworthy Online Controlled Experiments (2020)",
+      "description": "Mô tả dữ liệu bằng số đo trung tâm và độ phân tán, so sánh hai nhóm và đánh giá một kết quả đã đủ bằng chứng thống kê hay chưa. Chỉ được đo khi JD yêu cầu.",
+      "rubric_summary": {
+        "0": "Không tính được số đo mô tả cơ bản hoặc bỏ trống.",
+        "1": "Tính đúng số đếm, giá trị lớn nhất, nhỏ nhất và trung vị của một tập dữ liệu nhỏ.",
+        "2": "Tính đúng trung bình và trung vị bằng code, giải thích được khi nào hai số đo này lệch nhau.",
+        "3": "So sánh hai nhóm bằng số liệu, chỉ ra giới hạn cỡ mẫu và đề xuất cách kiểm định hoặc thử nghiệm A/B có nhóm đối chứng."
+      },
+      "assessed_by": "EXAM"
+    }
+  ]
+}

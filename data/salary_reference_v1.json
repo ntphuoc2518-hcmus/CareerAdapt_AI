@@ -1,0 +1,21 @@
+{
+  "version": "SALARY-1.0",
+  "career_code": "DATA_ANALYST",
+  "role_label": "Data Analyst / Data Scientist / Business Intelligence Analyst",
+  "statistic": "Lương trung vị",
+  "unit": "triệu đồng/tháng",
+  "bands": [
+    {"label": "1-2 năm kinh nghiệm", "value": 23.8},
+    {"label": "5-8 năm kinh nghiệm", "value": 42.5}
+  ],
+  "overall": {"label": "Mọi mức kinh nghiệm", "value": 40.65},
+  "missing_note": "Báo cáo không công bố số liệu cho nhóm dưới 1 năm, 3-4 năm và trên 8 năm của vị trí này.",
+  "scope_note": "Số liệu thị trường để tham khảo, gộp cả nhóm vị trí phân tích dữ liệu. Đây không phải mức lương gắn với kết quả của bạn và không phải cam kết thu nhập.",
+  "source": {
+    "label": "ITviec - Báo cáo Lương và Thị trường tuyển dụng IT Việt Nam 2025-2026",
+    "url": "https://itviec.com/bao-cao/luong-it-va-thi-truong-tuyen-dung-it-vietnam",
+    "survey_period": "27/05-31/07 và 21/10-11/11/2025",
+    "sample_size": 1839,
+    "checked_at": "2026-11-11"
+  }
+}

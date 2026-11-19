@@ -1,0 +1,70 @@
+@startuml
+' CareerAdapt AI - UML Use-Case diagram
+' Scope: MVP for Data Analyst internship preparation.
+' No content-reviewer actor is included, by project-team requirement.
+left to right direction
+skinparam shadowing false
+skinparam actorStyle stickman
+skinparam linetype ortho
+skinparam defaultFontName "DejaVu Sans"
+skinparam usecase {
+  BackgroundColor #F2F7FF
+  BorderColor #315A9B
+  ArrowColor #64748B
+}
+skinparam rectangle {
+  BorderColor #203B5B
+  BackgroundColor #FFFFFF
+}
+
+actor "Người học /\nSinh viên" as Learner
+actor "Dịch vụ AI bên ngoài\n(LLM)" as AIService
+
+rectangle "CareerAdapt AI\nMVP: phát triển năng lực Data Analyst" {
+  package "1. Hồ sơ & đánh giá" {
+    usecase "UC-01\nQuản lý hồ sơ và mục tiêu học tập" as UC01
+    usecase "UC-02\nXem khung kỹ năng và chọn bài thử" as UC02
+    usecase "UC-03\nLàm và nộp bài thực hành" as UC03
+    usecase "UC-04\nĐánh giá bài nộp theo rubric" as UC04
+    usecase "UC-05\nNhận xét định tính có dẫn bằng chứng" as UC05
+    usecase "UC-06\nXem kết quả đánh giá và bằng chứng" as UC06
+  }
+  package "2. Khoảng cách kỹ năng & lộ trình" {
+    usecase "UC-07\nXem khoảng cách kỹ năng (gap, coverage)" as UC07
+    usecase "UC-08\nTạo lộ trình học cá nhân" as UC08
+  }
+  package "3. Theo dõi tiến độ & đánh giá lại" {
+    usecase "UC-09\nTheo dõi tiến độ học" as UC09
+    usecase "UC-10\nĐánh giá lại năng lực" as UC10
+    usecase "UC-11\nXem lịch sử đánh giá và lộ trình" as UC11
+    usecase "UC-12\nNhận nhắc nhở trong ứng dụng" as UC12
+  }
+}
+
+Learner -- UC01
+Learner -- UC02
+Learner -- UC03
+Learner -- UC06
+Learner -- UC07
+Learner -- UC08
+Learner -- UC09
+Learner -- UC10
+Learner -- UC11
+AIService -- UC05
+
+UC03 ..> UC04 : <<include>>
+UC04 ..> UC05 : <<include>>
+UC12 ..> UC09 : <<extend>>
+
+note right of UC05
+  AI chỉ đề xuất nhận xét định tính
+  và dẫn bằng chứng. Quy tắc hệ thống
+  kiểm tra và quản lý kết quả cuối.
+end note
+
+note bottom of UC07
+  “Chưa đánh giá” khác mức 0.
+  Chỉ công bố điểm tổng khi đủ điều kiện
+  về coverage và kỹ năng cốt lõi.
+end note
+@enduml
