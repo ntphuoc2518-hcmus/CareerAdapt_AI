@@ -2217,3 +2217,59 @@ Nút cao 56px (trước là 42px), nên mọi thứ nằm phía trên nút đư�
   - `test_the_assistant_button_shows_only_the_face_until_pointed_at`;
   - `test_the_robot_comes_out_of_the_assistant_button_and_leaves_it_clickable`. Kiểm thử này đã được chứng minh là bắt được lỗi cũ: khi trả lại CSS cũ, nó thất bại vì hết 3 giây chờ bấm.
 - **Toàn bộ bộ test:** **1320 passed, 10 skipped (10 test gọi Gemini thật, bỏ qua theo mặc định)**.
+
+## Bổ sung 20/11/2026 · Phiên bản 5.65.0: Nâng cấp bong bóng AI xuất hiện
+
+Yêu cầu: nâng cấp "chế độ bong bóng AI xuất hiện" cả về chức năng lẫn giao diện. Mã ở `frontend/js/companion.js`, khối CSS của `.ai-moment` trong `frontend/css/app.css`, công tắc trong `frontend/js/pages/profile.js` và hai biểu tượng mới trong `frontend/js/icons.js` (`minimize`, `eye-off`).
+
+### 1. Chức năng mới
+
+- **Thanh thời gian còn lại:** một đường mảnh ở đáy bong bóng ngắn dần, cho người học biết robot sắp lui đi.
+  - Thanh dừng lại khi rê chuột hay focus vào bong bóng, và robot không tự rời trong lúc đó.
+  - Khi rời chuột, robot ở lại ít nhất 6 giây nữa, để người đang đọc dở không bị cắt ngang.
+  - Đồng hồ chỉ bắt đầu sau khi câu nói đã hiện xong.
+- **Thu gọn (nút ⌄ trên đầu bong bóng):** bong bóng gập thành một viên thuốc nhỏ "Gợi ý · <tên phần trang>" cạnh robot.
+  - Khi thu gọn, robot không tự rời, kể cả khi cuộn khỏi phần đó. Robot chỉ đi khi đổi trang.
+  - Bấm viên thuốc (hoặc Enter) thì bong bóng mở lại, viền sáng của phần trang hiện lại và focus về nút hỏi đầu tiên.
+- **Ẩn riêng một gợi ý:** "Không hiện gợi ý này nữa" chỉ tắt gợi ý đó, các gợi ý khác vẫn hiện. Lựa chọn lưu trên trình duyệt (`careeradapt_ai_moments_muted`).
+  - "Tắt tất cả gợi ý" vẫn tắt toàn bộ như trước.
+  - Trong Hồ sơ > Nhắc nhở có thêm nút "Hiện lại các gợi ý đã ẩn" kèm số lượng. Nút chỉ xuất hiện khi có gợi ý bị ẩn.
+
+### 2. Giao diện mới
+
+- **Chữ được gõ ra từng ký tự,** kèm con trỏ nhấp nháy. Câu được dịch trọn trước khi gõ, nên tiếng Anh cũng gõ đúng.
+  - Trình đọc màn hình nhận cả câu một lần qua vùng `aria-live` riêng, không đọc từng chữ.
+  - Ở chế độ giảm chuyển động, câu hiện ngay và không có thanh thời gian.
+- **Màu theo loại hỗ trợ:** mỗi gợi ý có một nhãn và một màu nhấn (viền sáng, biểu tượng, thanh thời gian):
+  - xanh dương "Gợi ý";
+  - cam "Hỗ trợ" (kỹ năng còn thiếu, lỗi đã mắc);
+  - xanh lá "Tổng kết" (báo cáo).
+  Nhãn chỉ mô tả loại hỗ trợ, không khen hay chê kết quả.
+- **Nút hỏi:**
+  - xếp dọc cho dễ đọc;
+  - nút đầu tiên là nút chính, nền màu thương hiệu;
+  - mỗi nút có mũi tên trượt nhẹ khi rê chuột.
+- **Chân bong bóng** gọn lại thành một hàng chữ nhỏ: "Không hiện gợi ý này nữa · Tắt tất cả gợi ý".
+- **Hiệu ứng:**
+  - bong bóng mở lại có hiệu ứng nảy;
+  - robot thu nhỏ nhẹ khi bong bóng gập lại;
+  - trên màn hình cảm ứng, các nút có vùng chạm 44px.
+
+### 3. Ranh giới giữ nguyên
+
+- Robot chỉ đọc chữ đang có trên trang và chuyển câu hỏi cho Trợ lý.
+- Robot không chấm điểm, không quyết định mức đạt và không viết câu hỏi.
+- Không có dữ liệu giả. Mọi chuỗi mới đều có bản tiếng Anh (10 mục trong `en.json`).
+
+### Kiểm chứng
+
+- Trên Edge (dữ liệu tạm):
+  - **Gõ chữ:** giữa chừng hiện "Muốn mình tóm tắt tiến độ và chỉ ra vi…", trong khi vùng đọc cho trình đọc màn hình đã có đủ câu.
+  - **Thanh thời gian:** giảm từ 0,919 xuống 0,855 sau 1 giây; giữ nguyên 0,845 khi rê chuột.
+  - **Thu gọn:** bong bóng ẩn, focus về viên thuốc, viền sáng tắt. Cuộn đi vẫn còn. Mở lại thì focus vào nút hỏi chính.
+  - **Ẩn riêng một gợi ý:** lưu `["dashboard-progress"]`. Tải lại trang (đã xóa dấu "đã xem" của phiên) thì gợi ý đó không đến nữa. Nút trong Hồ sơ hiện số 1, bấm thì xóa danh sách ẩn.
+  - **Giao diện tối, tiếng Anh, khổ 1440 và 390:** nhãn "Support" màu cam, chân bong bóng đúng tiếng Anh, không tràn ngang.
+  - **Giảm chuyển động:** câu hiện ngay, không có con trỏ, không có thanh thời gian.
+  - **Console:** không có lỗi.
+- **Kiểm thử giao diện mới:** `test_the_ai_bubble_types_waits_folds_and_hides_one_suggestion`.
+- **Toàn bộ bộ test:** **1320 passed, 11 skipped. Các test bị bỏ qua gồm 10 test gọi Gemini thật (mặc định không chạy) và 1 test hộp cát Docker, vì Docker không chạy trên máy lúc kiểm thử. Test giao diện mới đạt**.

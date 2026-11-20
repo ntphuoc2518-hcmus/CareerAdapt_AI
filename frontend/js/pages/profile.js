@@ -2,7 +2,7 @@
  *  side menu. Every form, field and request is the same as before; only the layout changed. */
 import { api, avatarMarkup, confirmDialog, esc, fmtDate, fmtDateTime, formData, getLang, refreshAvatar, register, setView, toast, withBusy } from "../core.js";
 import { icon, tile } from "../icons.js";
-import { aiMomentsEnabled, setAiMoments } from "../companion.js";
+import { aiMomentsEnabled, clearMutedMoments, mutedMomentCount, setAiMoments } from "../companion.js";
 
 const KIND_LABELS = { MINI_TEST: "Mini-test đến hạn", ACTIVITY_DUE: "Hoạt động sắp đến hạn hoặc quá hạn", SCHEDULE: "Lịch không còn phù hợp" };
 const TABS = [["account", "Thông tin", "user"], ["goals", "Mục tiêu", "target"], ["preferences", "Nhắc nhở", "bell"], ["password", "Bảo mật", "lock"], ["data", "Dữ liệu", "shield"]];
@@ -53,7 +53,7 @@ function preferencesPanel(preferences) {
         <div class="pf-toggles">${preferences.kinds.map(kind => `<label class="pf-toggle"><input type="checkbox" name="kind_${kind}" ${preferences.enabled_kinds[kind] ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>${esc(KIND_LABELS[kind] || kind)}</span></label>`).join("")}</div>
         ${saveButton()}</form>
         <div class="pf-form pf-ai-moments">${heading("sparkles", "Gợi ý của Trợ lý AI", "Robot AI ghé vào đúng phần trang có thể giúp, rồi tự lui đi. Lưu trên trình duyệt này.")}
-            <div class="pf-toggles"><label class="pf-toggle"><input type="checkbox" id="pf-ai-moments" ${aiMomentsEnabled() ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>Hiện gợi ý của Trợ lý AI trên các trang</span></label></div></div>`;
+            <div class="pf-toggles"><label class="pf-toggle"><input type="checkbox" id="pf-ai-moments" ${aiMomentsEnabled() ? "checked" : ""}><span class="pf-switch" aria-hidden="true"></span><span>Hiện gợi ý của Trợ lý AI trên các trang</span></label></div>${mutedMomentCount() ? `<button type="button" class="btn btn-ghost btn-sm pf-ai-unmute" id="pf-ai-unmute">${icon("refresh")}<span>Hiện lại các gợi ý đã ẩn</span><span class="badge">${mutedMomentCount()}</span></button>` : ""}</div>`;
 }
 
 function passwordPanel(user) {
@@ -108,6 +108,12 @@ export async function renderProfile() {
     document.getElementById("pf-ai-moments")?.addEventListener("change", event => {
         setAiMoments(event.target.checked);
         toast(event.target.checked ? "Đã bật gợi ý của Trợ lý AI." : "Đã tắt gợi ý của Trợ lý AI.", "good");
+    });
+    // 5.65: suggestions hidden one by one come back together.
+    document.getElementById("pf-ai-unmute")?.addEventListener("click", event => {
+        clearMutedMoments();
+        event.currentTarget.remove();
+        toast("Đã hiện lại các gợi ý đã ẩn.", "good");
     });
     document.getElementById("avatar-file").addEventListener("change", async event => {
         const file = event.target.files?.[0];

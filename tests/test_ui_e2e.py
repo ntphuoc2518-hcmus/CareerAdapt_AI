@@ -514,6 +514,46 @@ def test_the_robot_comes_out_of_the_assistant_button_and_leaves_it_clickable(app
     assert app.errors == []
 
 
+def test_the_ai_bubble_types_waits_folds_and_hides_one_suggestion(app):
+    """5.65: the words are typed out (screen readers get the whole sentence once), a line shows the time left and stops
+    while the learner reads, the bubble folds into a pill and opens again, and one suggestion can be hidden for good
+    without turning the others off; Hồ sơ brings hidden ones back."""
+    page = app.open("/app#/resources")
+    wait_ready(page)
+    page.locator("#view .grid-2 > .card").first.scroll_into_view_if_needed()
+    moment = page.locator(".ai-moment")
+    expect(moment).to_have_count(1, timeout=8000)
+    expect(moment.locator(".ai-moment-said")).to_contain_text("học liệu")
+    expect(moment).to_have_class(re.compile(r"\bis-said\b"), timeout=6000)
+    expect(moment.locator(".ai-moment-text")).to_have_text(moment.locator(".ai-moment-said").inner_text())
+    moment.locator(".ai-moment-bubble").hover()
+    expect(moment).to_have_class(re.compile(r"\bis-held\b"))
+    moment.locator(".ai-moment-min").click()
+    expect(moment.locator(".ai-moment-bubble")).to_be_hidden()
+    expect(moment.locator(".ai-moment-dock")).to_be_focused()
+    expect(page.locator(".ai-spotlight")).to_have_count(0)
+    page.keyboard.press("Enter")
+    expect(moment.locator(".ai-moment-bubble")).to_be_visible()
+    expect(page.locator("#view .grid-2 > .card.ai-spotlight")).to_have_count(1)
+    moment.locator(".ai-moment-mute").click()
+    expect(moment).to_have_count(0)
+    assert page.evaluate("JSON.parse(localStorage.getItem('careeradapt_ai_moments_muted'))") == ["resources"]
+    assert page.evaluate("localStorage.getItem('careeradapt_ai_moments')") != "off"  # the others stay on
+    page.evaluate("sessionStorage.removeItem('careeradapt_ai_moments_seen')")
+    page.reload()
+    wait_ready(page)
+    page.locator("#view .grid-2 > .card").first.scroll_into_view_if_needed()
+    page.wait_for_timeout(3000)
+    expect(page.locator(".ai-moment")).to_have_count(0)
+    page.click("#nav a[href='#/profile']")
+    wait_ready(page)
+    page.click("#pf-tab-preferences")
+    page.click("#pf-ai-unmute")
+    expect(page.locator("#pf-ai-unmute")).to_have_count(0)
+    assert page.evaluate("localStorage.getItem('careeradapt_ai_moments_muted')") is None
+    assert app.errors == []
+
+
 def test_no_ai_moment_comes_while_a_test_is_on_screen(app):
     page = app.open("/app#/tests")
     wait_ready(page)

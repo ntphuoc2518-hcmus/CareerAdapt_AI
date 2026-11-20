@@ -5,7 +5,9 @@
  * talks about gets a soft glowing outline instead, and the bubble names it (a click on the name scrolls there).
  * It arrives in steps (the face in the button squashes and a ring bursts from it, the robot rises out of it and lands
  * with sparks, the bubble unfolds from the robot, the words appear as if typed, the questions slide in) and leaves the
- * opposite way, back into the button, whose face then pops back. Each moment shows at most once per session
+ * opposite way, back into the button, whose face then pops back. 5.65: the bubble names the kind of help (and takes its
+ * colour), types its words out, shows the time left as a line that stops while the learner reads, folds into a pill
+ * that stays until the page changes, and lets one suggestion be hidden for good. Each moment shows at most once per session
  * and once per page visit, never during a test (the Assistant is closed or locked there), over a dialog, or while the
  * Assistant panel is open. Learners can turn the moments off here and on again in Hồ sơ.
  *
@@ -21,6 +23,7 @@ import { askAssistant, assistantReady } from "./assistant.js";
 
 const OFF_KEY = "careeradapt_ai_moments";
 const SEEN_KEY = "careeradapt_ai_moments_seen";
+const MUTED_KEY = "careeradapt_ai_moments_muted";
 const DWELL_MS = 900; // how long the part must stay on screen before the robot comes
 const STAY_MS = 16000; // how long it waits for the learner before leaving
 const AWAY_MS = 1500; // how long its part may be off screen before it leaves
@@ -113,6 +116,21 @@ function markSeen(id) {
     storage("sessionStorage", s => s.setItem(SEEN_KEY, JSON.stringify([...ids])));
 }
 
+/* 5.65: one suggestion can be hidden for good (kept in this browser) without turning all of them off. */
+function readMuted() {
+    try {
+        const ids = JSON.parse(storage("localStorage", s => s.getItem(MUTED_KEY)) || "[]");
+        return new Set(Array.isArray(ids) ? ids : []);
+    } catch { return new Set(); }
+}
+function muteMoment(id) {
+    const ids = readMuted();
+    ids.add(id);
+    storage("localStorage", s => s.setItem(MUTED_KEY, JSON.stringify([...ids])));
+}
+export const mutedMomentCount = () => MOMENTS.filter(moment => readMuted().has(moment.id)).length;
+export function clearMutedMoments() { storage("localStorage", s => s.removeItem(MUTED_KEY)); }
+
 /* --- One visit to one page --- */
 let visit = null;
 
@@ -131,7 +149,8 @@ export function companionRoute(path) {
     stopVisit();
     if (!aiMomentsEnabled()) return;
     const done = seen();
-    const candidates = MOMENTS.filter(moment => moment.route.test(path) && !done.has(moment.id));
+    const muted = readMuted();
+    const candidates = MOMENTS.filter(moment => moment.route.test(path) && !done.has(moment.id) && !muted.has(moment.id));
     if (!candidates.length) return;
     const view = document.getElementById("view");
     visit = { candidates, watched: new Map(), shown: false };
@@ -208,6 +227,10 @@ function launchFrom(element) {
     element.style.setProperty("--from-y", `${Math.round(from.top + from.height / 2 - bot.top - bot.height / 2)}px`);
 }
 
+/* 5.65: the kind of help the bubble offers, shown as a small tag. Plain words, no praise the page cannot back up. */
+const MOODS = { happy: "Gợi ý", encouraging: "Hỗ trợ", proud: "Tổng kết" };
+const MIN_RESUME_MS = 6000; // after the learner reads or hovers, at least this long is left before it goes
+
 function arrive(moment, target) {
     if (!moment || !visit || blocked()) return;
     const value = moment.read ? moment.read(target) : "";
@@ -215,43 +238,109 @@ function arrive(moment, target) {
     visit.shown = true;
     markSeen(moment.id);
     const about = moment.about ? moment.about(target, value) : "";
+    const mood = MOODS[moment.mood] ? moment.mood : "happy";
     const element = document.createElement("aside");
     element.className = "ai-moment";
+    element.dataset.mood = mood;
     element.setAttribute("aria-label", "Gợi ý của Trợ lý AI");
-    const asks = moment.asks.map((ask, index) => `<button type="button" class="ai-moment-ask" data-index="${index}" style="--i:${index}">${icon(ask.icon || "sparkles")}<span>${ask.label}</span></button>`).join("");
+    const asks = moment.asks.map((ask, index) => `<button type="button" class="ai-moment-ask${index === 0 ? " is-primary" : ""}" data-index="${index}" style="--i:${index}">${icon(ask.icon || "sparkles")}<span>${ask.label}</span>${icon("arrow", "ai-moment-go")}</button>`).join("");
     element.innerHTML = `<span class="ai-moment-bot" aria-hidden="true"><span class="ai-moment-burst"></span><span class="ai-moment-halo"></span>${expressiveHead(moment.mood || "happy", "ai-moment-head")}<span class="ai-moment-sparks"><i></i><i></i><i></i><i></i><i></i></span></span>
-        <div class="ai-moment-bubble"><div class="ai-moment-meta">${icon("sparkles")}<strong>Trợ lý AI</strong><button type="button" class="ai-moment-close" aria-label="Đóng gợi ý">${icon("close")}</button></div>
+        <div class="ai-moment-bubble"><div class="ai-moment-meta">${icon("sparkles")}<strong>Trợ lý AI</strong><span class="ai-moment-mood">${MOODS[mood]}</span>
+                <button type="button" class="ai-moment-min" aria-label="Thu gọn gợi ý" title="Thu gọn">${icon("minimize")}</button><button type="button" class="ai-moment-close" aria-label="Đóng gợi ý" title="Đóng">${icon("close")}</button></div>
             ${about ? `<button type="button" class="ai-moment-about" title="Xem phần này">${icon("target")}<span>Về:</span><span class="ai-moment-about-name"></span></button>` : ""}
-            <p class="ai-moment-text" aria-live="polite"><span class="ai-moment-typing" aria-hidden="true"><i></i><i></i><i></i></span></p>
+            <p class="ai-moment-text" aria-hidden="true"><span class="ai-moment-typing"><i></i><i></i><i></i></span></p>
+            <p class="ai-moment-said sr-only" aria-live="polite"></p>
             <div class="ai-moment-asks">${asks}</div>
-            <button type="button" class="ai-moment-off">Tắt gợi ý trên các trang</button></div>`;
-    if (about) element.querySelector(".ai-moment-about-name").textContent = about;
+            <div class="ai-moment-foot"><button type="button" class="ai-moment-mute">${icon("eye-off")}<span>Không hiện gợi ý này nữa</span></button><button type="button" class="ai-moment-off">Tắt tất cả gợi ý</button></div>
+            <span class="ai-moment-timer" aria-hidden="true"><i></i></span></div>
+        <button type="button" class="ai-moment-dock" hidden aria-label="Mở lại gợi ý của Trợ lý AI">${icon("sparkles")}<span>Gợi ý</span><span class="ai-moment-dock-name"></span></button>`;
+    if (about) {
+        element.querySelector(".ai-moment-about-name").textContent = about;
+        element.querySelector(".ai-moment-dock-name").textContent = about;
+    }
     document.body.append(element);
     document.body.classList.add("has-ai-moment");
     launchFrom(element);
-    shown = { element, target, moment, value, timer: null, away: null };
+    shown = { element, target, moment, value, timer: null, away: null, typer: null, left: STAY_MS, deadline: 0, minimized: false, said: false };
     const current = shown;
+    const bar = element.querySelector(".ai-moment-timer i");
+    const dock = element.querySelector(".ai-moment-dock");
+
+    /* The time left before it goes is drawn as a thin line that empties; it stops while the learner reads or types. */
+    const drawTimer = running => {
+        bar.style.transition = "none";
+        bar.style.transform = `scaleX(${current.left / STAY_MS})`;
+        if (!running || reducedMotion()) return;
+        void bar.offsetWidth;
+        bar.style.transition = `transform ${current.left}ms linear`;
+        bar.style.transform = "scaleX(0)";
+    };
+    const hold = () => {
+        if (!current.said || current.minimized) return;
+        clearTimeout(current.timer);
+        if (current.deadline) current.left = Math.max(0, current.deadline - Date.now());
+        current.deadline = 0;
+        element.classList.add("is-held");
+        drawTimer(false);
+    };
+    const wait = () => {
+        if (shown !== current || !current.said || current.minimized) return;
+        clearTimeout(current.timer);
+        current.left = Math.max(current.left, MIN_RESUME_MS);
+        current.deadline = Date.now() + current.left;
+        current.timer = setTimeout(() => leave(), current.left);
+        element.classList.remove("is-held");
+        drawTimer(true);
+    };
+    const minimize = on => {
+        hold();
+        current.minimized = on;
+        element.classList.toggle("is-min", on);
+        dock.hidden = !on;
+        if (on) { target.classList.remove("ai-spotlight"); return; }
+        element.classList.add("is-back");
+        spotlight(target);
+        current.left = STAY_MS;
+        wait();
+    };
+
     // In steps: the face in the Assistant button squashes and the robot flies up out of it with a light burst,
-    // the bubble unfolds from the robot, then the words and the questions.
+    // the bubble unfolds from the robot, then the words are typed out and the questions slide in.
     fabState("launch");
     requestAnimationFrame(() => { element.classList.add("is-in"); spotlight(target); });
     later(520, () => { if (shown === current) element.classList.add("is-open"); });
     later(1150, () => {
         if (shown !== current) return;
-        element.querySelector(".ai-moment-text").textContent = moment.text(value);
-        element.classList.add("is-said");
+        const text = moment.text(value);
+        element.querySelector(".ai-moment-said").textContent = text; // read once, whole, by screen readers
+        typeOut(current, element.querySelector(".ai-moment-text"), text, () => {
+            current.said = true;
+            element.classList.add("is-said");
+            if (element.matches(":hover, :focus-within")) { element.classList.add("is-held"); drawTimer(false); } else wait();
+        });
     });
-    const wait = () => { clearTimeout(current.timer); current.timer = setTimeout(() => leave(), STAY_MS); };
-    element.addEventListener("pointerenter", () => clearTimeout(current.timer));
-    element.addEventListener("pointerleave", wait);
-    element.addEventListener("focusin", () => clearTimeout(current.timer));
+    element.addEventListener("pointerenter", hold);
+    element.addEventListener("pointerleave", () => { if (!element.contains(document.activeElement)) wait(); });
+    element.addEventListener("focusin", hold);
     element.addEventListener("focusout", event => { if (!element.contains(event.relatedTarget)) wait(); });
     element.addEventListener("keydown", event => { if (event.key === "Escape") leave(); });
     element.addEventListener("click", event => {
         if (event.target.closest(".ai-moment-close")) { leave(); return; }
+        if (event.target.closest(".ai-moment-min")) { minimize(true); dock.focus(); return; }
+        if (event.target.closest(".ai-moment-dock")) {
+            minimize(false);
+            element.querySelector(".ai-moment-ask")?.focus({ preventScroll: true });
+            return;
+        }
         if (event.target.closest(".ai-moment-about")) {
             target.scrollIntoView({ block: "center", behavior: reducedMotion() ? "auto" : "smooth" });
             spotlight(target);
+            return;
+        }
+        if (event.target.closest(".ai-moment-mute")) {
+            muteMoment(moment.id);
+            leave();
+            toast("Đã ẩn gợi ý này. Hiện lại trong Hồ sơ, mục Nhắc nhở.");
             return;
         }
         if (event.target.closest(".ai-moment-off")) {
@@ -268,14 +357,34 @@ function arrive(moment, target) {
         else askAssistant(translateText(ask.question(value)));
     });
     window.addEventListener("scroll", watchPart, { passive: true, capture: true });
-    wait();
 }
 
-/** The robot stays while its part is on screen; once the part has been gone a moment, it leaves. */
+/** Types the sentence out letter by letter (all at once when motion is reduced), in the language on screen. */
+function typeOut(current, box, text, done) {
+    const letters = Array.from(translateText(text));
+    if (reducedMotion()) { box.textContent = letters.join(""); done(); return; }
+    const step = Math.min(28, Math.max(12, 900 / letters.length));
+    box.innerHTML = `<span class="ai-moment-typed"></span><span class="ai-moment-caret"></span>`;
+    const typed = box.firstElementChild;
+    let count = 0;
+    const tick = () => {
+        if (shown !== current) return;
+        count = Math.min(letters.length, count + 1);
+        typed.textContent = letters.slice(0, count).join("");
+        if (count < letters.length) { current.typer = setTimeout(tick, step); return; }
+        current.typer = setTimeout(() => box.querySelector(".ai-moment-caret")?.remove(), 1200);
+        done();
+    };
+    tick();
+}
+
+/** The robot stays while its part is on screen; once the part has been gone a moment, it leaves.
+    A folded bubble stays on the page until the learner opens it, closes it or leaves the page. */
 function watchPart() {
     if (!shown) return;
     const { target } = shown;
     if (!target.isConnected || blocked()) { leave(true); return; }
+    if (shown.minimized) return;
     const box = target.getBoundingClientRect();
     const away = box.bottom < 64 || box.top > window.innerHeight - 40;
     if (away && !shown.away) shown.away = setTimeout(() => leave(), AWAY_MS);
@@ -286,9 +395,10 @@ function watchPart() {
     (at once when the page changes or a question was sent). */
 function leave(now = false) {
     if (!shown) return;
-    const { element, target, timer, away } = shown;
+    const { element, target, timer, away, typer } = shown;
     clearTimeout(timer);
     clearTimeout(away);
+    clearTimeout(typer);
     shown = null;
     window.removeEventListener("scroll", watchPart, { capture: true });
     target.classList.remove("ai-spotlight");

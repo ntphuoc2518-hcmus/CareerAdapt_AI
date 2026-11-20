@@ -3676,5 +3676,15 @@
 "Về:": "About:",
 "Xem phần này": "Show this part",
 "“{0}” chưa đạt mức JD yêu cầu. Muốn mình chỉ cách bù khoảng cách này?": "“{0}” is below the level the JD asks for. Shall I show you how to close the gap?",
-"“{0}” còn thiếu so với mức JD. Muốn mình chỉ cách bù phần này?": "“{0}” is short of the JD level. Shall I show you how to make it up?"
+"“{0}” còn thiếu so với mức JD. Muốn mình chỉ cách bù phần này?": "“{0}” is short of the JD level. Shall I show you how to make it up?",
+"Gợi ý": "Suggestion",
+"Hỗ trợ": "Support",
+"Tổng kết": "Summary",
+"Thu gọn gợi ý": "Fold the suggestion",
+"Không hiện gợi ý này nữa": "Don't show this suggestion again",
+"Tắt tất cả gợi ý": "Turn off all suggestions",
+"Mở lại gợi ý của Trợ lý AI": "Open the AI Assistant suggestion again",
+"Đã ẩn gợi ý này. Hiện lại trong Hồ sơ, mục Nhắc nhở.": "This suggestion is hidden. Show it again in Profile, under Reminders.",
+"Hiện lại các gợi ý đã ẩn": "Show hidden suggestions again",
+"Đã hiện lại các gợi ý đã ẩn.": "Hidden suggestions will show again."
 }

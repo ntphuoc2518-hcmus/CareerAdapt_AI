@@ -3368,10 +3368,14 @@ button.rd-flag:hover { text-decoration: underline; }
    springs up from the edge with a light burst and sparks, the bubble unfolds out of it, the words sweep in as if
    typed and the questions slide in one by one. Leaving folds the bubble back and the robot sinks. On a phone the same
    corner becomes a strip. With reduced motion it simply appears and goes. --- */
-.ai-moment { position: fixed; right: 18px; bottom: 88px; z-index: var(--z-float); display: flex; align-items: flex-end; width: min(372px, calc(100vw - 24px)); pointer-events: none; }
+.ai-moment { --mood: var(--brand); position: fixed; right: 18px; bottom: 88px; z-index: var(--z-float); display: flex; align-items: flex-end; justify-content: flex-end; width: min(380px, calc(100vw - 24px)); pointer-events: none; }
+.ai-moment[data-mood="encouraging"] { --mood: #D97706; }
+.ai-moment[data-mood="proud"] { --mood: #059669; }
+:root[data-theme="dark"] .ai-moment[data-mood="encouraging"] { --mood: #FBBF24; }
+:root[data-theme="dark"] .ai-moment[data-mood="proud"] { --mood: #34D399; }
 .ai-moment > * { pointer-events: auto; }
-.ai-moment-bubble { position: relative; flex: 1; min-width: 0; padding: 12px 14px 10px; border: 1px solid color-mix(in srgb, var(--brand) 26%, var(--border)); border-radius: 18px 18px 6px 18px; background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--text); box-shadow: var(--shadow-lg), 0 0 0 4px color-mix(in srgb, var(--brand) 6%, transparent); opacity: 0; transform: translate(18px, 14px) scale(.55); transform-origin: 100% 100%; filter: blur(6px); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-5) var(--ease-spring), filter var(--dur-4) var(--ease-out); }
-.ai-moment-bubble::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, color-mix(in srgb, #5EEAD4 22%, transparent), transparent 40%, color-mix(in srgb, #A78BFA 18%, transparent)); }
+.ai-moment-bubble { position: relative; flex: 1; min-width: 0; padding: 12px 14px 12px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--brand) 26%, var(--border)); border-radius: 18px 18px 6px 18px; background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--text); box-shadow: var(--shadow-lg), 0 0 0 4px color-mix(in srgb, var(--brand) 6%, transparent); opacity: 0; transform: translate(18px, 14px) scale(.55); transform-origin: 100% 100%; filter: blur(6px); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-5) var(--ease-spring), filter var(--dur-4) var(--ease-out); }
+.ai-moment-bubble::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, color-mix(in srgb, var(--mood) 20%, transparent), transparent 42%, color-mix(in srgb, #A78BFA 16%, transparent)); }
 .ai-moment.is-open .ai-moment-bubble { opacity: 1; transform: none; filter: none; }
 .ai-moment-bot { position: relative; order: 2; flex: none; width: 74px; height: 64px; margin: 0 -4px -10px 4px; opacity: 0; pointer-events: none; }
 .ai-moment-halo { position: absolute; inset: -8px -6px -2px; border-radius: 50%; background: radial-gradient(circle at 50% 55%, rgba(96, 165, 250, .5), transparent 66%); }
@@ -3384,27 +3388,48 @@ button.rd-flag:hover { text-decoration: underline; }
 .ai-moment-sparks i:nth-child(4) { width: 4px; height: 4px; }
 .ai-moment-sparks i:nth-child(5) { width: 5px; height: 5px; background: #A5F3FC; }
 .ai-moment.is-in .ai-moment-bot { opacity: 1; }
-.ai-moment-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--brand); font-size: var(--fs-xs); }
+.ai-moment-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--mood); font-size: var(--fs-xs); }
 .ai-moment-meta .ic { width: 14px; height: 14px; }
-.ai-moment-meta strong { flex: 1; color: var(--text); font-weight: var(--fw-bold); }
-:root[data-theme="dark"] .ai-moment-meta { color: var(--navy-600); }
-.ai-moment-close { display: grid; flex: none; width: 26px; height: 26px; margin: -4px -6px -4px 0; place-items: center; border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--muted); cursor: pointer; transition: background-color var(--dur-2), color var(--dur-2); }
-.ai-moment-close:hover { background: var(--chip); color: var(--text); }
-.ai-moment-close .ic { width: 15px; height: 15px; }
+.ai-moment-meta strong { color: var(--text); font-weight: var(--fw-bold); }
+.ai-moment-mood { flex: 1; min-width: 0; color: var(--mood); font-weight: var(--fw-semibold); }
+.ai-moment-mood::before { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 6px 2px 0; border-radius: 50%; background: var(--muted); vertical-align: middle; }
+:is(.ai-moment-close, .ai-moment-min) { display: grid; flex: none; width: 26px; height: 26px; margin: -4px 0; place-items: center; border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--muted); cursor: pointer; transition: background-color var(--dur-2), color var(--dur-2); }
+:is(.ai-moment-close, .ai-moment-min):hover { background: var(--chip); color: var(--text); }
+:is(.ai-moment-close, .ai-moment-min) .ic { width: 15px; height: 15px; }
+.ai-moment-close { margin-right: -6px; }
 .ai-moment-about { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; margin-bottom: 6px; padding: 3px 9px 3px 7px; border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border)); border-radius: var(--radius-pill); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); color: var(--text-2); cursor: pointer; font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-semibold); transition: background-color var(--dur-2), border-color var(--dur-2); }
 .ai-moment-about:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
-.ai-moment-about .ic { width: 13px; height: 13px; color: var(--brand); }
+.ai-moment-about .ic { width: 13px; height: 13px; color: var(--mood); }
 .ai-moment-about-name { overflow: hidden; color: var(--text); text-overflow: ellipsis; white-space: nowrap; }
 .ai-moment-text { min-height: 22px; color: var(--text); font-size: var(--fs-base); line-height: 1.45; }
 .ai-moment-typing { display: inline-flex; gap: 4px; padding: 7px 0; }
+.ai-moment-caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 2px; border-radius: 1px; background: var(--mood); vertical-align: -.15em; }
 .ai-moment-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); opacity: .35; }
-.ai-moment-asks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
-.ai-moment-ask { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 5px 11px; border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border)); border-radius: var(--radius-pill); background: var(--surface); color: var(--text); cursor: pointer; font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold); text-align: left; opacity: 0; transition: background-color var(--dur-2), border-color var(--dur-2), transform var(--dur-2); }
+.ai-moment-asks { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 10px; }
+.ai-moment-ask { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 10px 6px 12px; border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border)); border-radius: var(--radius-md); background: var(--surface); color: var(--text); cursor: pointer; font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold); text-align: left; opacity: 0; transition: background-color var(--dur-2), border-color var(--dur-2), color var(--dur-2), transform var(--dur-2), box-shadow var(--dur-2); }
 .ai-moment.is-said .ai-moment-ask { opacity: 1; }
-.ai-moment-ask .ic { width: 15px; height: 15px; color: var(--brand); }
+.ai-moment-ask .ic { flex: none; width: 15px; height: 15px; color: var(--brand); }
+.ai-moment-ask > span { flex: 1; min-width: 0; }
+.ai-moment-ask .ai-moment-go { width: 14px; height: 14px; opacity: .55; transition: transform var(--dur-3) var(--ease-spring), opacity var(--dur-2); }
 .ai-moment-ask:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); transform: translateY(-1px); }
-.ai-moment-off { display: block; margin-top: 8px; padding: 2px 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: inherit; font-size: var(--fs-xs); text-decoration: underline; text-underline-offset: 2px; }
-.ai-moment-off:hover { color: var(--text); }
+.ai-moment-ask:hover .ai-moment-go { opacity: 1; transform: translateX(3px); }
+.ai-moment-ask.is-primary { border-color: transparent; background: var(--brand); color: var(--on-brand); box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 30%, transparent); }
+.ai-moment-ask.is-primary .ic { color: currentColor; }
+.ai-moment-ask.is-primary:hover { background: var(--brand-strong); }
+.ai-moment-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 9px; }
+:is(.ai-moment-mute, .ai-moment-off) { display: inline-flex; align-items: center; gap: 4px; padding: 2px 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: inherit; font-size: var(--fs-xs); }
+:is(.ai-moment-mute, .ai-moment-off):hover { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.ai-moment-mute .ic { width: 13px; height: 13px; }
+.ai-moment-timer { position: absolute; right: 14px; bottom: 0; left: 14px; height: 2px; overflow: hidden; border-radius: 2px; background: color-mix(in srgb, var(--mood) 12%, transparent); }
+.ai-moment-timer i { display: block; height: 100%; background: var(--mood); transform-origin: 0 50%; opacity: .7; }
+.ai-moment.is-held .ai-moment-timer i { opacity: .35; }
+.ai-moment-dock { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; min-height: 36px; margin-bottom: 8px; padding: 6px 12px; border: 1px solid color-mix(in srgb, var(--mood) 35%, var(--border)); border-radius: var(--radius-pill); background: color-mix(in srgb, var(--surface) 92%, transparent); color: var(--text); box-shadow: var(--shadow-md); cursor: pointer; font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.ai-moment-dock[hidden] { display: none; }
+.ai-moment-dock .ic { flex: none; width: 15px; height: 15px; color: var(--mood); }
+.ai-moment-dock-name { overflow: hidden; color: var(--muted); font-weight: var(--fw-regular); text-overflow: ellipsis; white-space: nowrap; }
+.ai-moment-dock:hover { border-color: var(--mood); }
+.ai-moment.is-min .ai-moment-bubble { display: none; }
+.ai-moment.is-min .ai-moment-head { transform: scale(.84); }
 .ai-moment.is-out .ai-moment-bubble { opacity: 0; transform: translate(18px, 14px) scale(.55); filter: blur(6px); transition-duration: var(--dur-3); }
 .ai-spotlight { outline: 2px solid color-mix(in srgb, var(--brand) 45%, transparent); outline-offset: 4px; transition: outline-color var(--dur-4), outline-offset var(--dur-4); }
 .has-ai-moment .fx-top { opacity: 0; pointer-events: none; }
@@ -3413,7 +3438,7 @@ button.rd-flag:hover { text-decoration: underline; }
 .assistant-fab.is-away .ai-avatar-fab { opacity: .5; transform: scale(.76); }
 .assistant-fab.is-away:is(:hover, :focus-visible) .ai-avatar-fab { opacity: 1; transform: none; }
 @media (max-width: 719px) { .ai-moment { right: 12px; left: 12px; width: auto; } }
-@media (pointer: coarse) { .ai-moment-ask { min-height: var(--touch); } .ai-moment-close { width: 40px; height: 40px; } }
+@media (pointer: coarse) { .ai-moment-ask, .ai-moment-dock { min-height: var(--touch); } :is(.ai-moment-close, .ai-moment-min) { width: 40px; height: 40px; } :is(.ai-moment-mute, .ai-moment-off) { min-height: 32px; } }
 @media (prefers-reduced-motion: no-preference) {
     .assistant-fab:not([hidden]) { animation: fab-in .5s var(--ease-spring) backwards; }
     .assistant-fab.is-launching .ai-avatar-fab { animation: fab-launch .55s var(--ease-out) both; }
@@ -3430,7 +3455,10 @@ button.rd-flag:hover { text-decoration: underline; }
     .ai-moment.is-in .ai-moment-sparks i:nth-child(5) { --sx: 4px; --sy: -46px; animation-delay: .68s; }
     .ai-moment-halo { animation: hero-halo 3s ease-in-out infinite; }
     .ai-moment.is-said .ai-moment-head { animation: ai-moment-bob 3.2s ease-in-out .3s infinite; }
-    .ai-moment.is-said .ai-moment-text { animation: ai-type .7s steps(14, end) both; }
+    .ai-moment-caret { animation: ai-caret 1s steps(1, end) infinite; }
+    .ai-moment.is-back:not(.is-min) .ai-moment-bubble { animation: ai-bubble-back .42s var(--ease-spring) both; }
+    .ai-moment.is-min .ai-moment-dock { animation: ai-chip-in .4s var(--ease-spring) both; }
+    .ai-moment-head { transition: transform var(--dur-4) var(--ease-spring); }
     .ai-moment.is-said .ai-moment-ask { animation: ai-chip-in .45s var(--ease-spring) both; animation-delay: calc(.35s + var(--i, 0) * .1s); }
     .ai-moment-typing i { animation: chat-dot 1s ease-in-out infinite; }
     .ai-moment-typing i:nth-child(2) { animation-delay: .15s; }
@@ -3438,7 +3466,7 @@ button.rd-flag:hover { text-decoration: underline; }
     .ai-moment.is-out .ai-moment-bot { animation: ai-bot-out .5s var(--ease-in) .14s both; }
     .ai-spotlight { animation: ai-spot 1.4s ease-out 2; }
 }
-@media (prefers-reduced-motion: reduce) { .ai-moment-bubble, .ai-moment-ask { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .ai-moment-bubble, .ai-moment-ask { transition: none; } .ai-moment-timer { display: none; } }
 @media print { .ai-moment { display: none !important; } .ai-spotlight { outline: 0; } }
 @keyframes ai-bot-in { 0% { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 46px)) scale(.6); } 16% { opacity: 1; } 60% { transform: translateY(-10px) scale(1.07) rotate(4deg); } 82% { transform: translateY(2px) scale(.98) rotate(-2deg); } 100% { opacity: 1; transform: none; } }
 @keyframes ai-bot-out { 0% { opacity: 1; transform: none; } 30% { transform: translateY(-8px) scale(1.04) rotate(-3deg); } 86% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 46px)) scale(.55); } }
@@ -3449,8 +3477,11 @@ button.rd-flag:hover { text-decoration: underline; }
 @keyframes fab-ring-in { 0% { opacity: 0; transform: scale(2); } 60% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
 @keyframes ai-burst { 0% { opacity: .9; transform: scale(.35); } 100% { opacity: 0; transform: scale(2.3); } }
 @keyframes ai-spark { 0% { opacity: 0; transform: translate(0, 0) scale(.4); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--sx, 0), var(--sy, -30px)) scale(1); } }
-@keyframes ai-type { from { -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%); mask-image: linear-gradient(90deg, #000 45%, transparent 55%); -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%); mask-image: linear-gradient(90deg, #000 45%, transparent 55%); -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-position: 0 0; mask-position: 0 0; } }
+@keyframes ai-caret { 50% { opacity: 0; } }
+@keyframes ai-bubble-back { from { opacity: 0; transform: translate(14px, 12px) scale(.7); } to { opacity: 1; transform: none; } }
 @keyframes ai-chip-in { from { opacity: 0; transform: translateY(8px) scale(.92); } to { opacity: 1; transform: none; } }
 @keyframes ai-moment-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-3px) rotate(3deg); } }
 @keyframes ai-spot { 0% { outline-color: color-mix(in srgb, var(--brand) 0%, transparent); outline-offset: 10px; } 40% { outline-color: color-mix(in srgb, var(--brand) 70%, transparent); outline-offset: 4px; } 100% { outline-color: color-mix(in srgb, var(--brand) 45%, transparent); outline-offset: 4px; } }
 .pf-ai-moments { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--border); }
+.pf-ai-unmute { margin-top: var(--sp-3); }
+.pf-ai-unmute .badge { margin-left: 2px; }
